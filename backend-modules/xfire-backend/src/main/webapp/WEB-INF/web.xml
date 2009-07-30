@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+  <servlet>
+    <servlet-name>XFire</servlet-name>
+    <display-name>XFire Servlet</display-name>
+    <servlet-class>org.codehaus.xfire.transport.http.XFireConfigurableServlet</servlet-class>
+    <!-- override default location of config file with the config param -->
+    <!--		<init-param>-->
+    <!--			<param-name>config</param-name>-->
+    <!--			<param-value>xfire/services.xml</param-value>-->
+    <!--		</init-param>-->
+  </servlet>
+  <servlet>
+    <servlet-name>XFireServlet</servlet-name>
+    <servlet-class>org.codehaus.xfire.transport.http.XFireConfigurableServlet</servlet-class>
+    <load-on-startup>0</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>XFire</servlet-name>
+    <url-pattern>/servlet/XFireServlet/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>XFire</servlet-name>
+    <url-pattern>/services/*</url-pattern>
+  </servlet-mapping>
+</web-app>
+

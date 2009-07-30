@@ -1,0 +1,65 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<artifactId>frontend-modules</artifactId>
+		<groupId>org.vpac.grisu</groupId>
+		<version>0.3-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.vpac.grisu</groupId>
+	<artifactId>xfire-frontend</artifactId>
+	<name>XFire backend</name>
+	<version>0.3-SNAPSHOT</version>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.codehaus.xfire</groupId>
+			<artifactId>xfire-java5</artifactId>
+			<version>1.2.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.xfire</groupId>
+			<artifactId>xfire-annotations</artifactId>
+			<version>1.2.6</version>
+		</dependency>
+		<dependency>
+			<groupId>external.grisu-client-xfire</groupId>
+			<artifactId>not-yet-commons-ssl</artifactId>
+			<version>0.3.9</version>
+		</dependency>
+		<dependency>
+			<groupId>org.vpac.grisu</groupId>
+			<artifactId>grisu-xfire-interface</artifactId>
+			<version>0.3-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.vpac.grisu</groupId>
+			<artifactId>grisu-commons</artifactId>
+			<version>0.3-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

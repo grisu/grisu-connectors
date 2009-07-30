@@ -1,0 +1,53 @@
+<beans xmlns="http://xfire.codehaus.org/config/1.0">
+
+	<service>
+		<name>grisu</name>
+		<serviceClass>
+			org.vpac.grisu.control.XFireServiceInterface
+		</serviceClass>
+		<implementationClass>
+			org.vpac.grisu.control.serviceInterfaces.WsServiceInterface
+		</implementationClass>
+		<serviceFactory>
+			org.codehaus.xfire.annotations.AnnotationServiceFactory
+		</serviceFactory>
+		<namespace>http://grisu.vpac.org/grisu-ws</namespace>
+
+		<inHandlers>
+			<handler handlerClass="org.vpac.grisu.view.ws.login.MyProxyAuthHandler" />
+		</inHandlers>
+		<properties>
+			<property key="mtom-enabled">true</property>
+		</properties>
+			
+
+		<!--		<properties>-->
+		<!--			<property key="mtom-enabled">true</property>-->
+		<!--		</properties>-->
+
+
+		<!--		<inHandlers>-->
+		<!--			<handler-->
+		<!--				handlerClass="org.codehaus.xfire.util.dom.DOMInHandler" />-->
+		<!--			<bean-->
+		<!--				class="org.codehaus.xfire.security.wss4j.WSS4JInHandler" xmlns="">-->
+		<!--				<property name="properties">-->
+		<!---->
+		<!--					<props>-->
+		<!--						<prop key="action">UsernameToken</prop>-->
+		<!--						<prop key="passwordCallbackClass">-->
+		<!--							org.vpac.nw.view.ws.login.PasswordHandler-->
+		<!--						</prop>-->
+		<!--					</props>-->
+		<!--				</property>-->
+		<!--			</bean>-->
+		<!--			<handler-->
+		<!--				handlerClass="org.vpac.nw.view.ws.login.ValidateMyProxyHandler" />-->
+		<!--		</inHandlers>-->
+
+		<style>wrapped</style>
+		<use>literal</use>
+		<scope>session</scope>
+	</service>
+
+</beans>

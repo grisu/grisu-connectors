@@ -1,0 +1,2 @@
+http\://cxf.apache.org/transports/http/configuration=org.apache.cxf.transport.http.spring.NamespaceHandler
+http\://cxf.apache.org/bindings/soap=org.apache.cxf.binding.soap.spring.NamespaceHandler

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<url>http://projects.arcs.org.au/trac/grisu/wiki/GrisuWs
+	</url>
+	<parent>
+		<artifactId>backend-modules</artifactId>
+		<groupId>org.vpac.grisu</groupId>
+		<version>0.3-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.vpac.grisu</groupId>
+	<artifactId>xfire-backend</artifactId>
+	<packaging>war</packaging>
+	<name>grisu webservice interface</name>
+	<version>0.3-SNAPSHOT</version>
+	
+	<description>xfire-backend publishes the XFireServiceInterface interface
+		via web services and it
+		uses the xfire ws libraries for that. 
+	</description>
+		
+
+	<dependencies>
+		<dependency>
+			<groupId>org.codehaus.xfire</groupId>
+			<artifactId>xfire-spring</artifactId>
+			<version>1.2.6</version>
+                        <exclusions>
+                        <exclusion>
+                                <groupId>xmlbeans</groupId>
+                                <artifactId>xbean</artifactId>
+                        </exclusion>
+                        </exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.codehaus.xfire</groupId>
+			<artifactId>xfire-java5</artifactId>
+			<version>1.2.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.codehaus.xfire</groupId>
+			<artifactId>xfire-annotations</artifactId>
+			<version>1.2.6</version>
+		</dependency>
+
+		<!--    <dependency>
+			<groupId>org.codehaus.xfire</groupId>
+			<artifactId>xfire-ws-security</artifactId>
+			<version>1.2.6</version>
+			</dependency>
+		-->
+
+		<dependency>
+			<groupId>org.vpac.grisu</groupId>
+			<artifactId>grisu-core</artifactId>
+			<version>0.3-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.vpac.grisu</groupId>
+			<artifactId>xfire-interface</artifactId>
+			<version>0.3-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.4</version>
+		</dependency>
+		
+<!--		<dependency>-->
+<!--			<groupId>mysql</groupId>-->
+<!--			<artifactId>mysql-connector-java</artifactId>-->
+<!--			<version>5.0.5</version>-->
+<!--		</dependency>-->
+
+  </dependencies>
+      	<build>
+            <finalName>xfire-backend</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
