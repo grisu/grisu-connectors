@@ -10,6 +10,7 @@
 	<api-import pattern="org.vpac.grisu.model.MountPoint" />
 	<api-import pattern="org.vpac.grisu.model.dto.*" />
 	<api-import pattern="org.vpac.grisu.frontend.**" />
+	<api-import pattern="org.vpac.grisu.control.EnunciateServiceInterface" />
 	<modules>
 
 		<jaxws-client disabled="false" jarName="grisu-client-jaxws.jar">

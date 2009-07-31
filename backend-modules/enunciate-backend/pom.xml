@@ -132,6 +132,12 @@
 			<classifier>sources</classifier>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.vpac.grisu</groupId>
+			<artifactId>enunciate-interface</artifactId>
+			<version>0.3-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 	<inceptionYear>2009</inceptionYear>
