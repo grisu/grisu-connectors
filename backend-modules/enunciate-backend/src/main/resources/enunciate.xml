@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<enunciate label="Grisu" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://enunciate.codehaus.org/schemas/enunciate-1.13.xsd">
+	<deployment host="ngportal.vpac.org" context="api" />
+	<namespaces>
+		<namespace id="api" uri="http://api.grisu.arcs.org.au/" />
+		<namespace id="dto" uri="http://api.grisu.arcs.org.au/dto" />
+	</namespaces>
+
+	<api-import pattern="org.vpac.grisu.model.MountPoint" />
+	<api-import pattern="org.vpac.grisu.model.dto.*" />
+	<api-import pattern="org.vpac.grisu.frontend.**" />
+	<modules>
+
+		<jaxws-client disabled="false" jarName="grisu-client-jaxws.jar">
+			<server-side-type pattern="org.vpac.grisu.model.dto.*" />
+			<server-side-type pattern="org.vpac.grisu.frontend.**" />
+			<server-side-type pattern="org.vpac.grisu.model.MountPoint" />
+		</jaxws-client>
+<!--		<csharp disabled="false" compileExecutable="gmcs2"></csharp>-->
+		<csharp disabled="false"></csharp>
+		<xfire-client disabled="false" disable14Client="false"
+			jarName="grisu-client-xfire.jar">
+		</xfire-client>
+		<cxf disabled="true" />
+<!--		<gwt disabled="false" rpcModuleName="org.vpac.grisu.gwt.ServiceInterfaceModule" gwtHome="/opt/gwt" enforceNamespaceConformance="false">-->
+<!--		</gwt>-->
+
+		<spring-app enableSecurity="true">
+			<security>
+				<userDetailsService className="org.vpac.grisu.control.GrisuUserDetailsImpl" />
+			</security>
+		</spring-app>
+
+		<docs splashPackage="org.vpac.grisu.control" title="Grisu API"
+			copyright="arcs.org.au">
+			<download name="BasicJavaJob" file="javaJob.jsdl"
+				description="Sample jsdl file to submit a simple java job to a fixed submission location." />
+			<download name="License" file="LICENSE-2.0.txt"
+				description="The license file governing the use of this API." />
+		</docs>
+
+	</modules>
+</enunciate>

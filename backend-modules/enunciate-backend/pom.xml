@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<parent>
+		<artifactId>backend-modules</artifactId>
+		<groupId>org.vpac.grisu</groupId>
+		<version>0.3-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.vpac.grisu</groupId>
+	<artifactId>enunciate-backend</artifactId>
+	<packaging>war</packaging>
+	<name>Grisu-API</name>
+	<version>0.3-SNAPSHOT</version>
+	<description>A module that takes care of creating SOAP, REst &amp;
+		GWT-RPC endpoints for a Grisu backend. It also automatically creates
+		Java, C# and Ruby client stubs.</description>
+	<url>http://maven.apache.org</url>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>org.codehaus.enunciate</groupId>
+			<artifactId>enunciate-rt</artifactId>
+			<version>1.13</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.enunciate</groupId>
+			<artifactId>enunciate-jaxws-ri-rt</artifactId>
+			<version>1.13</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core-tiger</artifactId>
+			<version>2.0.1</version>
+			<exclusions>
+				<!--we'll depend on enunciate's version of these artifacts.-->
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-aop</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-beans</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-dao</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-context</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-core</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
+			<version>2.0.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-web</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>2.5.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>1.5.4</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.vpac.grisu</groupId>
+			<artifactId>grisu-commons</artifactId>
+			<version>0.3-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.vpac.grisu</groupId>
+			<artifactId>grisu-commons</artifactId>
+			<version>0.3-SNAPSHOT</version>
+			<classifier>sources</classifier>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.vpac.grisu</groupId>
+			<artifactId>grisu-core</artifactId>
+			<version>0.3-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-core</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.vpac.grisu</groupId>
+			<artifactId>grisu-client</artifactId>
+			<version>0.3-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.vpac.grisu</groupId>
+			<artifactId>grisu-client</artifactId>
+			<version>0.3-SNAPSHOT</version>
+			<classifier>sources</classifier>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
+
+	<inceptionYear>2009</inceptionYear>
+	<organization>
+		<name>ARCS</name>
+		<url>http://www.arcs.org.au</url>
+	</organization>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.enunciate</groupId>
+				<artifactId>maven-enunciate-plugin</artifactId>
+				<version>1.13</version>
+
+				<configuration>
+					<configFile>src/main/resources/enunciate.xml</configFile>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>assemble</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>deploy-client-classes-jaxws</id>
+						<phase>install</phase>
+						<goals>
+							<goal>deploy-file</goal>
+						</goals>
+						<configuration>
+							<!--
+								the enunciate-generated client jar can be "exported" to a known
+								place on the filesystem.
+							-->
+							<file>target/enunciate/build/jaxws-client/grisu-client-jaxws.jar
+							</file>
+							<!-- use this project's repository url -->
+							<url>${project.distributionManagementArtifactRepository.url}</url>
+							<!-- use this project's repository id -->
+							<repositoryId>${project.distributionManagementArtifactRepository.id}</repositoryId>
+
+							<groupId>org.vpac.grisu</groupId>
+							<artifactId>grisu-client-jaxws</artifactId>
+							<!-- use this project's version -->
+							<version>${project.version}</version>
+							<packaging>jar</packaging>
+
+							<!--
+								we can't use a unique version for the case of snapshots else the
+								(generated, unique) versions won't match between the classes jar
+								and the sources jar.
+							-->
+							<uniqueVersion>false</uniqueVersion>
+							<pomFile>client-jaxws.pom</pomFile>
+						</configuration>
+					</execution>
+					<execution>
+						<id>deploy-client-sources-jaxws</id>
+						<phase>install</phase>
+						<goals>
+							<goal>deploy-file</goal>
+						</goals>
+						<configuration>
+							<!--
+								the enunciate-generated client jar can be "exported" to a known
+								place on the filesystem.
+							-->
+							<file>target/enunciate/build/jaxws-client/grisu-client-jaxws-src.jar
+							</file>
+							<!-- use this project's repository url -->
+							<url>${project.distributionManagementArtifactRepository.url}</url>
+							<!-- use this project's repository id -->
+							<repositoryId>${project.distributionManagementArtifactRepository.id}</repositoryId>
+
+							<groupId>org.vpac.grisu</groupId>
+							<artifactId>grisu-client-jaxws</artifactId>
+							<!-- use this project's version -->
+							<version>${project.version}</version>
+							<packaging>jar</packaging>
+							<classifier>sources</classifier>
+							<!--
+								we can't use a unique version for the case of snapshots else the
+								(generated, unique) versions won't match between the classes jar
+								and the sources jar.
+							-->
+							<uniqueVersion>false</uniqueVersion>
+							<pomFile>client-jaxws.pom</pomFile>
+						</configuration>
+					</execution>
+					<execution>
+						<id>deploy-client-classes-xfire</id>
+						<phase>install</phase>
+						<goals>
+							<goal>deploy-file</goal>
+						</goals>
+						<configuration>
+							<!--
+								the enunciate-generated client jar can be "exported" to a known
+								place on the filesystem.
+							-->
+							<file>target/enunciate/build/xfire-client/grisu-client-xfire-1.4.jar
+							</file>
+							<!-- use this project's repository url -->
+							<url>${project.distributionManagementArtifactRepository.url}</url>
+							<!-- use this project's repository id -->
+							<repositoryId>${project.distributionManagementArtifactRepository.id}</repositoryId>
+
+							<groupId>org.vpac.grisu</groupId>
+							<artifactId>grisu-client-xfire</artifactId>
+							<!-- use this project's version -->
+							<version>${project.version}</version>
+							<packaging>jar</packaging>
+
+							<!--
+								we can't use a unique version for the case of snapshots else the
+								(generated, unique) versions won't match between the classes jar
+								and the sources jar.
+							-->
+							<uniqueVersion>false</uniqueVersion>
+							<pomFile>client-xfire.pom</pomFile>
+						</configuration>
+					</execution>
+					<execution>
+						<id>deploy-client-sources-xfire</id>
+						<phase>install</phase>
+						<goals>
+							<goal>deploy-file</goal>
+						</goals>
+						<configuration>
+							<!--
+								the enunciate-generated client jar can be "exported" to a known
+								place on the filesystem.
+							-->
+							<file>target/enunciate/build/xfire-client/grisu-client-xfire-1.4-src.jar
+							</file>
+							<!-- use this project's repository url -->
+							<url>${project.distributionManagementArtifactRepository.url}</url>
+							<!-- use this project's repository id -->
+							<repositoryId>${project.distributionManagementArtifactRepository.id}</repositoryId>
+
+							<groupId>org.vpac.grisu</groupId>
+							<artifactId>grisu-client-xfire</artifactId>
+							<!-- use this project's version -->
+							<version>${project.version}</version>
+							<packaging>jar</packaging>
+							<description>The client-side classes for our api.</description>
+							<classifier>sources</classifier>
+							<!--
+								we can't use a unique version for the case of snapshots else the
+								(generated, unique) versions won't match between the classes jar
+								and the sources jar.
+							-->
+							<uniqueVersion>false</uniqueVersion>
+							<pomFile>client-xfire.pom</pomFile>
+						</configuration>
+					</execution>
+				</executions>
+				<configuration>
+					<!--
+						BE CAREFUL when using the global configuration because any
+						configuration elements in here will be applied to the "deploy" of
+						this project's artifact(s) IN ADDITION TO the client-side
+						artifacts. Prefer the execution-specific configuration elements.
+					-->
+				</configuration>
+			</plugin>
+
+
+		</plugins>
+	</build>
+
+</project>

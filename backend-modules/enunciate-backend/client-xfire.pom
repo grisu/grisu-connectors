@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.vpac.grisu</groupId>
+	<artifactId>grisu-client-jaxws</artifactId>
+	<version>0.3-SNAPSHOT</version>
+	<description>
+	The client-side classes for the Grisu API.
+	This one uses the xfire libraries to access the web service and works with java 5.
+	</description>
+
+	<repositories>
+		<repository>
+			<id>ARCS</id>
+			<url>http://code.arcs.org.au/nexus/content/groups/public</url>
+		</repository>
+		<repository>
+			<id>ARCS Snapshots</id>
+			<url>http://code.arcs.org.au/nexus/content/groups/public-snapshots
+			</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.vpac.grisu</groupId>
+			<artifactId>grisu-client</artifactId>
+			<version>0.3-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+  			<groupId>org.codehaus.enunciate</groupId>
+  			<artifactId>enunciate-xfire-client-tools</artifactId>
+  			<version>1.7</version>
+  			<type>jar</type>
+  			<scope>compile</scope>
+  		</dependency>
+
+	</dependencies>
+
+</project>

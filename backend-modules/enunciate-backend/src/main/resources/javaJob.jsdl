@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<JobDefinition xmlns="http://schemas.ggf.org/jsdl/2005/11/jsdl">
+	<JobDescription>
+		<GrisuTemplate xmlns="http://arcs.org.au/jsdl/jsdl-grisu">
+			<Email sendOnJobFinish="false" sendOnJobStart="false" />
+		</GrisuTemplate>
+
+		<JobIdentification>
+			<JobName>javajob</JobName>
+		</JobIdentification>
+
+		<Application>
+			<ApplicationName>java</ApplicationName>
+			<ApplicationVersion>1.6.0-06</ApplicationVersion>
+			<POSIXApplication xmlns="http://schemas.ggf.org/jsdl/2005/11/jsdl-posix">
+				<Executable>java</Executable>
+				<Argument>-version</Argument>
+				<WorkingDirectory filesystemName="localExecutionHostFs">
+				</WorkingDirectory>
+				<Output>stdout.txt</Output>
+				<Input />
+				<Error>stderr.txt</Error>
+			</POSIXApplication>
+			<TotalCPUTime>60</TotalCPUTime>
+			<!--
+				use this value and divide with no. of cpus to get actual walltime
+			-->
+			<TotalCPUCount>
+				<exact>1</exact>
+			</TotalCPUCount>
+		</Application>
+		<Resources>
+			<CandidateHosts>
+				<HostName>dque@tango-m:ng2.vpac.org</HostName>
+			</CandidateHosts>
+
+			<FileSystem name="localExecutionHostFs">
+			</FileSystem>
+		</Resources>
+
+	</JobDescription>
+</JobDefinition>
