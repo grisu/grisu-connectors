@@ -1,15 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.vpac.grisu</groupId>
-  <artifactId>grisu-connectors</artifactId>
-  <packaging>pom</packaging>
-  <version>0.3-SNAPSHOT</version>
-  <name>grisu-connectors Multi Project</name>
-  <url>http://maven.apache.org</url>
-  <modules>
-    <module>frontend-modules</module>
-    <module>backend-modules</module>
-    <module>interfaces</module>
-  </modules>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.vpac.grisu</groupId>
+	<artifactId>grisu-connectors</artifactId>
+	<packaging>pom</packaging>
+	<version>0.3-SNAPSHOT</version>
+	<name>grisu-connectors Multi Project</name>
+	<url>http://maven.apache.org</url>
+
+	<repositories>
+		<repository>
+			<id>ARCS</id>
+			<url>http://code.arcs.org.au/nexus/content/groups/public</url>
+		</repository>
+		<repository>
+			<id>ARCS Snapshots</id>
+			<url>http://code.arcs.org.au/nexus/content/groups/public-snapshots</url>
+		</repository>
+	</repositories>
+
+	<distributionManagement>
+		<repository>
+			<id>arcs.release</id>
+			<name>ARCS Release Repository</name>
+			<url>http://code.arcs.org.au/nexus/content/repositories/releases</url>
+			<uniqueVersion>false</uniqueVersion>
+		</repository>
+		<snapshotRepository>
+			<id>arcs.snapshot</id>
+			<name>ARCS SNAPSHOT Repository</name>
+			<url>http://code.arcs.org.au/nexus/content/repositories/snapshots</url>
+			<uniqueVersion>false</uniqueVersion>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<modules>
+		<module>frontend-modules</module>
+		<module>backend-modules</module>
+		<module>interfaces</module>
+	</modules>
 </project>

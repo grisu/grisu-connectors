@@ -14,5 +14,6 @@
   <modules>
   	<module>xfire-interface</module>
   	<module>cxf-interface</module>
+  	<module>enunciate-interface</module>
   </modules>
 </project>
