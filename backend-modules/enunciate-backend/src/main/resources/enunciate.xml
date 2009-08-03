@@ -20,7 +20,7 @@
 		</jaxws-client>
 <!--		<csharp disabled="false" compileExecutable="gmcs2"></csharp>-->
 		<csharp disabled="false"></csharp>
-		<xfire-client disabled="false" disable14Client="false"
+		<xfire-client disabled="false" disable14Client="true" disable15Client="false"
 			jarName="grisu-client-xfire.jar">
 		</xfire-client>
 		<cxf disabled="true" />
