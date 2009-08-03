@@ -260,7 +260,7 @@
 								the enunciate-generated client jar can be "exported" to a known
 								place on the filesystem.
 							-->
-							<file>target/enunciate/build/xfire-client/grisu-client-xfire-1.4.jar
+							<file>target/enunciate/build/xfire-client/grisu-client-xfire-1.5.jar
 							</file>
 							<!-- use this project's repository url -->
 							<url>${project.distributionManagementArtifactRepository.url}</url>
@@ -293,7 +293,7 @@
 								the enunciate-generated client jar can be "exported" to a known
 								place on the filesystem.
 							-->
-							<file>target/enunciate/build/xfire-client/grisu-client-xfire-1.4-src.jar
+							<file>target/enunciate/build/xfire-client/grisu-client-xfire-1.5-src.jar
 							</file>
 							<!-- use this project's repository url -->
 							<url>${project.distributionManagementArtifactRepository.url}</url>
