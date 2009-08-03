@@ -1333,6 +1333,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface,
 				datasource = new FileContentDataSourceConnector(source
 						.getContent());
 				if ( datasource == null ) {
+					myLogger.error("Datasource for file "+source.getName().toString()+" is null.");
 					throw new RemoteFileSystemException("Datasource for file "+source.getName().toString()+" is null.");
 				}
 			} catch (FileSystemException e) {
