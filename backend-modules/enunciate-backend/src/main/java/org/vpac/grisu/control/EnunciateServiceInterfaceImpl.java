@@ -524,7 +524,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface,
 			throws JobPropertiesException {
 
 		JobSubmissionObjectImpl jso = new JobSubmissionObjectImpl(jobProperties
-				.getPropertiesAsMap());
+				.propertiesAsMap());
 
 		return createJob(jso.getJobDescriptionDocument(), fqan,
 				jobCreationMethod);
@@ -1608,7 +1608,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface,
 
 		Job job = getJob(jobname);
 
-		job.addJobProperties(properties.getPropertiesAsMap());
+		job.addJobProperties(properties.propertiesAsMap());
 		jobdao.saveOrUpdate(job);
 
 		myLogger.debug("Added " + properties.getProperties().size()
