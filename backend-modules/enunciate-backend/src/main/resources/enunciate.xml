@@ -24,8 +24,8 @@
 			jarName="grisu-client-xfire.jar">
 		</xfire-client>
 		<cxf disabled="true" />
-<!--		<gwt disabled="false" rpcModuleName="org.vpac.grisu.gwt.ServiceInterfaceModule" gwtHome="/opt/gwt" enforceNamespaceConformance="false">-->
-<!--		</gwt>-->
+		<gwt disabled="false" rpcModuleName="org.vpac.grisu.gwt.ServiceInterfaceModule" gwtHome="/opt/gwt" enforceNamespaceConformance="false">
+		</gwt>
 
 		<spring-app enableSecurity="true">
 			<security>

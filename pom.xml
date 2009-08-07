@@ -19,6 +19,25 @@
 			<url>http://code.arcs.org.au/nexus/content/groups/public-snapshots</url>
 		</repository>
 	</repositories>
+	
+	<pluginRepositories>
+		<pluginRepository>
+			<id>ARCS plugin</id>
+			<url>http://code.arcs.org.au/nexus/content/groups/public</url>
+			<layout>default</layout>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	    <pluginRepository>
+			<id>ARCS plugin Snapshots</id>
+			<url>http://code.arcs.org.au/nexus/content/groups/public-snapshots</url>
+			<layout>default</layout>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 
 	<distributionManagement>
 		<repository>

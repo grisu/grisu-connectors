@@ -91,6 +91,7 @@ import au.org.arcs.jcommons.utils.JsdlHelpers;
 import au.org.arcs.jcommons.utils.SubmissionLocationHelpers;
 
 import com.sun.xml.ws.developer.StreamingAttachment;
+import com.sun.xml.ws.developer.StreamingDataHandler;
 
 /**
  * This abstract class implements most of the methods of the
@@ -114,7 +115,7 @@ import com.sun.xml.ws.developer.StreamingAttachment;
 @Path("/grisu")
 @WebService(endpointInterface = "org.vpac.grisu.control.EnunciateServiceInterface")
 @MTOM(enabled = true)
-@StreamingAttachment(parseEagerly = true, memoryThreshold = 40000L)
+//@StreamingAttachment(parseEagerly = true, memoryThreshold = 40000L)
 public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface, ServiceInterface {
 
 	static final Logger myLogger = Logger
@@ -1337,6 +1338,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface,
 					throw new RemoteFileSystemException("Datasource for file "+source.getName().toString()+" is null.");
 				}
 			} catch (FileSystemException e) {
+				e.printStackTrace();
 				throw new RemoteFileSystemException(
 						"Could not find or read file: " + filenames[i] + ": "
 								+ e.getMessage());
@@ -2299,7 +2301,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface,
 		Map<JobSubmissionProperty, String> converterMap = new HashMap<JobSubmissionProperty, String>();
 		for (DtoJobProperty jp : jobProperties.getProperties()) {
 			converterMap
-					.put(JobSubmissionProperty.fromString(jp.key), jp.value);
+					.put(JobSubmissionProperty.fromString(jp.getKey()), jp.getValue());
 		}
 
 		List<GridResource> resources = matchmaker.findMatchingResources(
