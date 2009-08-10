@@ -115,7 +115,7 @@ import com.sun.xml.ws.developer.StreamingAttachment;
 @Path("/grisu")
 @WebService(endpointInterface = "org.vpac.grisu.control.EnunciateServiceInterface")
 @MTOM(enabled = true)
-@StreamingAttachment(parseEagerly = true, memoryThreshold = 40000L)
+//@StreamingAttachment(parseEagerly = true, memoryThreshold = 40000L)
 public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface, ServiceInterface {
 
 	static final Logger myLogger = Logger
