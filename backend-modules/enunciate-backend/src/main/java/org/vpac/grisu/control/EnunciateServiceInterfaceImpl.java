@@ -91,7 +91,7 @@ import au.org.arcs.jcommons.utils.JsdlHelpers;
 import au.org.arcs.jcommons.utils.SubmissionLocationHelpers;
 
 import com.sun.xml.ws.developer.StreamingAttachment;
-import com.sun.xml.ws.developer.StreamingDataHandler;
+
 
 /**
  * This abstract class implements most of the methods of the
@@ -115,7 +115,7 @@ import com.sun.xml.ws.developer.StreamingDataHandler;
 @Path("/grisu")
 @WebService(endpointInterface = "org.vpac.grisu.control.EnunciateServiceInterface")
 @MTOM(enabled = true)
-//@StreamingAttachment(parseEagerly = true, memoryThreshold = 40000L)
+@StreamingAttachment(parseEagerly = true, memoryThreshold = 40000L)
 public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface, ServiceInterface {
 
 	static final Logger myLogger = Logger
@@ -1344,7 +1344,18 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface,
 								+ e.getMessage());
 			}
 			datasources[i] = datasource;
-			datahandlers[i] = new DataHandler(datasources[i]);
+			datahandlers[i] = new DataHandler(datasource);
+//			ContentType ct = new ContentType("application/octet-stream");
+//	        String boundary = ct.getParameter("boundary");
+//
+//			MIMEMessage message = null;
+//			try {
+//				message = new MIMEMessage(datasource.getInputStream(), boundary);
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			datahandlers[i] = new StreamingDataHandler(message.getPart(0));
 		}
 
 		return datahandlers;
