@@ -21,12 +21,12 @@
 		<dependency>
 			<groupId>org.codehaus.enunciate</groupId>
 			<artifactId>enunciate-rt</artifactId>
-			<version>1.14-RC1</version>
+			<version>1.14-RC2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.enunciate</groupId>
 			<artifactId>enunciate-jaxws-ri-rt</artifactId>
-			<version>1.14-RC1</version>
+			<version>1.14-RC2</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
@@ -157,7 +157,7 @@
 			<plugin>
 				<groupId>org.codehaus.enunciate</groupId>
 				<artifactId>maven-enunciate-plugin</artifactId>
-				<version>1.14-RC1</version>
+				<version>1.14-RC2</version>
 
 				<configuration>
 					<configFile>src/main/resources/enunciate.xml</configFile>

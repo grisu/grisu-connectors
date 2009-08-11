@@ -20,7 +20,7 @@
 		<dependency>
 			<groupId>org.codehaus.enunciate</groupId>
 			<artifactId>enunciate-core-annotations</artifactId>
-			<version>1.14-RC1</version>
+			<version>1.14-RC2</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
