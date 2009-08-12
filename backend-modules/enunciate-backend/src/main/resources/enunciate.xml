@@ -17,6 +17,7 @@
 			<server-side-type pattern="org.vpac.grisu.model.dto.*" />
 			<server-side-type pattern="org.vpac.grisu.frontend.**" />
 			<server-side-type pattern="org.vpac.grisu.model.MountPoint" />
+<!--			<server-side-type pattern="org.vpac.grisu.control.exceptions.**" />-->
 		</jaxws-client>
 <!--		<csharp disabled="false" compileExecutable="gmcs2"></csharp>-->
 		<csharp disabled="false"></csharp>

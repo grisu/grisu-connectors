@@ -136,8 +136,6 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	 */
 	protected ProxyCredential getCredential() {
 
-		System.out.println("AUTH!!!!!!!!!!!!!!!!!!!!!!!!!");
-
 		HttpServletRequest req = HTTPRequestContext.get().getRequest();
 
 		ProxyCredential sessionProxy = (ProxyCredential) (req.getSession()
@@ -145,12 +143,12 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 
 		if (sessionProxy != null && sessionProxy.isValid()) {
 
-			System.out.println("Using old proxy!!");
+			myLogger.debug("Auth: Using old proxy!!");
 			return sessionProxy;
 
 		} else {
 
-			System.out.println("No Proxy in session. Creating new one.");
+			myLogger.debug("Auth: No Proxy in session. Creating new one.");
 			String auth_head = req.getHeader("authorization");
 
 			if (auth_head != null && auth_head.startsWith("Basic")) {
@@ -171,13 +169,13 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 
 				if (proxy == null || !proxy.isValid()) {
 					success = false;
-					System.out.println("AUTH not successful!!!!!!!!!!!!!!!!!1");
+					myLogger.debug("Auth: authentication not successful!");
 					return null;
 				}
 
 				req.getSession().setAttribute("credential", proxy);
 
-				System.out.println("AUTH successful!!!!!!!!!!!!!!!!!!!!!");
+				myLogger.debug("Auth: Authentication successful!");
 
 				return proxy;
 			} else {
@@ -303,16 +301,12 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 
 	private FileSystemStructureToXMLConverter fsconverter = null;
 
-	// protected ExecutorService executor = Executors.newFixedThreadPool(2);
-
 	private MatchMaker matchmaker = new MatchMakerImpl(Environment
 			.getGrisuDirectory().toString());
 
 	public String getInterfaceVersion() {
 		return ServiceInterface.INTERFACE_VERSION;
 	}
-
-	private Map<String, RemoteFileTransferObject> fileTransfers = new HashMap<String, RemoteFileTransferObject>();
 
 	private String currentStatus = null;
 
