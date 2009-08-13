@@ -417,7 +417,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 				|| Constants.FORCE_NAME_METHOD.equals(jobnameCreationMethod)) {
 
 			if (jobname == null) {
-				throw new JobPropertiesException(JobSubmissionProperty.JOBNAME,
+				throw new JobPropertiesException(JobSubmissionProperty.JOBNAME.toString() +": " +
 						"Jobname not specified and job creation method is force-name.");
 			}
 
@@ -425,7 +425,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 			Arrays.sort(allJobnames);
 			if (Arrays.binarySearch(allJobnames, jobname) >= 0) {
 				throw new JobPropertiesException(
-						JobSubmissionProperty.JOBNAME,
+						JobSubmissionProperty.JOBNAME.toString() +": " +
 						"Jobname "
 								+ jobname
 								+ " already exists and job creation method is force-name.");
@@ -461,7 +461,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 			jobname = temp;
 
 		} else {
-			throw new JobPropertiesException(JobSubmissionProperty.JOBNAME,
+			throw new JobPropertiesException(JobSubmissionProperty.JOBNAME.toString() +": " +
 					"Jobname creation method " + jobnameCreationMethod
 							+ " not supported.");
 		}
@@ -475,7 +475,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 		try {
 			myLogger.debug("Trying to get job that shouldn't exist...");
 			job = getJob(jobname);
-			throw new JobPropertiesException(JobSubmissionProperty.JOBNAME,
+			throw new JobPropertiesException(JobSubmissionProperty.JOBNAME.toString() +": " +
 					"Jobname \"" + jobname
 							+ "\" already taken. Could not create job.");
 		} catch (NoSuchJobException e1) {
@@ -591,7 +591,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 			submissionLocation = jobSubmissionObject.getSubmissionLocation();
 			if (StringUtils.isBlank(submissionLocation)) {
 				throw new JobPropertiesException(
-						JobSubmissionProperty.SUBMISSIONLOCATION,
+						JobSubmissionProperty.SUBMISSIONLOCATION.toString() +": " +
 						"No submission location specified. Since application is of type \"generic\" Grisu can't auto-calculate one.");
 			}
 
@@ -602,7 +602,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 			int i = Arrays.binarySearch(allSubLocs, submissionLocation);
 			if (i < 0) {
 				throw new JobPropertiesException(
-						JobSubmissionProperty.SUBMISSIONLOCATION,
+						JobSubmissionProperty.SUBMISSIONLOCATION.toString() +": " +
 						"Specified submissionlocation " + submissionLocation
 								+ " not valid for VO " + job.getFqan());
 			}
@@ -643,7 +643,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 				if (jobSubmissionObject.getApplication() == null
 						|| jobSubmissionObject.getApplication().length() == 0) {
 					throw new JobPropertiesException(
-							JobSubmissionProperty.APPLICATIONNAME,
+							JobSubmissionProperty.APPLICATIONNAME.toString() +": " +
 							"No application specified and could not find one in the grid that matches the executable.");
 				}
 
@@ -692,7 +692,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 									.debug("Specified version is not available on this grid resource: "
 											+ submissionLocation);
 							throw new JobPropertiesException(
-									JobSubmissionProperty.APPLICATIONVERSION,
+									JobSubmissionProperty.APPLICATIONVERSION.toString() +": " +
 									"Version: "
 											+ jobSubmissionObject
 													.getApplicationVersion()
@@ -726,7 +726,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 								// jobSubmissionObject.setApplicationVersion(resource.getAvailableApplicationVersion().get(0));
 							} else {
 								throw new JobPropertiesException(
-										JobSubmissionProperty.APPLICATIONVERSION,
+										JobSubmissionProperty.APPLICATIONVERSION.toString() +": " +
 										"Could not find any installed version for application "
 												+ jobSubmissionObject
 														.getApplication()
@@ -747,7 +747,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 							.error("Could not find a matching grid resource object for submissionlocation: "
 									+ submissionLocation);
 					throw new JobPropertiesException(
-							JobSubmissionProperty.SUBMISSIONLOCATION,
+							JobSubmissionProperty.SUBMISSIONLOCATION.toString() +": " +
 							"Submissionlocation " + submissionLocation
 									+ " not available for this kind of job");
 				}
@@ -757,7 +757,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 				if (matchingResources == null || matchingResources.size() == 0) {
 					myLogger.error("No matching grid resources found.");
 					throw new JobPropertiesException(
-							JobSubmissionProperty.SUBMISSIONLOCATION,
+							JobSubmissionProperty.SUBMISSIONLOCATION.toString() +": " +
 							"Could not find any matching resource to run this kind of job on");
 				}
 				// find the best submissionlocation and set it.
@@ -791,7 +791,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 						myLogger
 								.error("Could not find any version of the specified application grid-wide.");
 						throw new JobPropertiesException(
-								JobSubmissionProperty.APPLICATIONVERSION,
+								JobSubmissionProperty.APPLICATIONVERSION.toString() +": " +
 								"Could not find any version for this application grid-wide. That is probably an error in the mds info.");
 					}
 				} else {
@@ -815,7 +815,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 						myLogger
 								.error("Could not find a grid resource with the specified version...");
 						throw new JobPropertiesException(
-								JobSubmissionProperty.APPLICATIONVERSION,
+								JobSubmissionProperty.APPLICATIONVERSION.toString() +": " +
 								"Could not find desired version: "
 										+ jobSubmissionObject
 												.getApplicationVersion()
@@ -834,7 +834,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					throw new JobPropertiesException(
-							JobSubmissionProperty.SUBMISSIONLOCATION,
+							JobSubmissionProperty.SUBMISSIONLOCATION.toString() +": " +
 							"Jsdl document malformed. No candidate hosts element.");
 				}
 			}
@@ -851,7 +851,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 					.error("No staging filesystem found for submissionlocation: "
 							+ submissionLocation);
 			throw new JobPropertiesException(
-					JobSubmissionProperty.SUBMISSIONLOCATION,
+					JobSubmissionProperty.SUBMISSIONLOCATION.toString() +": " +
 					"Could not find staging filesystem for submissionlocation "
 							+ submissionLocation);
 		}
@@ -888,7 +888,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 					.error("Could not find a staging filesystem that is accessible for the user for submissionlocation "
 							+ submissionLocation);
 			throw new JobPropertiesException(
-					JobSubmissionProperty.SUBMISSIONLOCATION,
+					JobSubmissionProperty.SUBMISSIONLOCATION.toString() +": " +
 					"Could not find stagingfilesystem for submission location: "
 							+ submissionLocation);
 		}

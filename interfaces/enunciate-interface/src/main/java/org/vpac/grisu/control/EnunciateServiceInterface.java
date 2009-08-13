@@ -46,7 +46,8 @@ import au.org.arcs.mds.JobSubmissionProperty;
  * 
  */
 @WebService (
-		targetNamespace = "http://api.grisu.arcs.org.au/"
+		targetNamespace = "http://api.grisu.arcs.org.au/",
+			serviceName="GrisuService"
 )
 public interface EnunciateServiceInterface extends ServiceInterface {
 
