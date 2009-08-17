@@ -38,6 +38,7 @@ import org.globus.myproxy.MyProxy;
 import org.globus.myproxy.MyProxyException;
 import org.ietf.jgss.GSSCredential;
 import org.vpac.grisu.backend.hibernate.JobDAO;
+import org.vpac.grisu.backend.hibernate.MultiPartJobDAO;
 import org.vpac.grisu.backend.hibernate.UserDAO;
 import org.vpac.grisu.backend.model.ProxyCredential;
 import org.vpac.grisu.backend.model.RemoteFileTransferObject;
@@ -45,6 +46,7 @@ import org.vpac.grisu.backend.model.User;
 import org.vpac.grisu.backend.model.job.Job;
 import org.vpac.grisu.backend.model.job.JobSubmissionManager;
 import org.vpac.grisu.backend.model.job.JobSubmitter;
+import org.vpac.grisu.backend.model.job.MultiPartJob;
 import org.vpac.grisu.backend.model.job.gt4.GT4DummySubmitter;
 import org.vpac.grisu.backend.model.job.gt4.GT4Submitter;
 import org.vpac.grisu.backend.utils.CertHelpers;
@@ -70,6 +72,8 @@ import org.vpac.grisu.model.dto.DtoJob;
 import org.vpac.grisu.model.dto.DtoJobProperty;
 import org.vpac.grisu.model.dto.DtoJobs;
 import org.vpac.grisu.model.dto.DtoMountPoints;
+import org.vpac.grisu.model.dto.DtoMultiPartJob;
+import org.vpac.grisu.model.dto.DtoMultiPartJobs;
 import org.vpac.grisu.model.dto.DtoSubmissionLocations;
 import org.vpac.grisu.model.job.JobSubmissionObjectImpl;
 import org.vpac.grisu.settings.Environment;
@@ -290,6 +294,8 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	private UserDAO userdao = new UserDAO();
 
 	protected JobDAO jobdao = new JobDAO();
+	
+	protected MultiPartJobDAO multiPartJobDao = new MultiPartJobDAO();
 
 	private MountPoint[] mountPointsForThisSession = null;
 
@@ -2451,6 +2457,114 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 
 	private void setCurrentStatus(final String status) {
 		this.currentStatus = status;
+	}
+	
+	/**
+	 * Returns all multipart jobs for this user.
+	 * 
+	 * @return all the multipartjobs of the user
+	 */
+	public DtoMultiPartJobs psMulti() {
+		
+		List<MultiPartJob> jobs = multiPartJobDao.findMultiPartJobByDN(getUser().getDn());
+
+		DtoMultiPartJobs dtoJobs = new DtoMultiPartJobs();
+		for (MultiPartJob job : jobs) {
+			DtoMultiPartJob dtojob = new DtoMultiPartJob(job.getMultiPartJobId());
+			dtoJobs.addJob(dtojob);
+		}
+
+		return dtoJobs;
+	}
+	
+	/**
+	 * Adds the specified job to the mulitpartJob.
+	 * 
+	 * @param multipartJobId the multipartjobid
+	 * @param jobname the jobname
+	 * @throws NoSuchJobException 
+	 */
+	public void addJobToMultiPartJob(String multipartJobId, String jobname) throws NoSuchJobException {
+		
+		MultiPartJob multiJob = getMultiPartJob(multipartJobId);
+		multiJob.addJob(getJob(jobname));
+		
+		multiPartJobDao.saveOrUpdate(multiJob);
+	}
+	
+	/**
+	 * Removes the specified job from the mulitpartJob.
+	 * 
+	 * @param multipartJobId the multipartjobid
+	 * @param jobname the jobname
+	 */
+	public void removeJobFromMultiPartJob(String multipartJobId, String jobname) throws NoSuchJobException {
+		
+		MultiPartJob multiJob = getMultiPartJob(multipartJobId);
+		multiJob.removeJob(jobname);
+		
+		multiPartJobDao.saveOrUpdate(multiJob);
+	}
+	
+	/**
+	 * Creates a multipartjob on the server.
+	 * 
+	 * A multipartjob is just a collection of jobs that belong together to make them more easily managable.
+	 * 
+	 * @param multiPartJobId the id (name) of the multipartjob
+	 * @throws JobPropertiesException 
+	 */
+	public void createMultiPartJob(String multiPartJobId) throws JobPropertiesException {
+		
+		try {
+			MultiPartJob multiJob = getMultiPartJob(multiPartJobId);
+		} catch (NoSuchJobException e) {
+			// that's good
+			MultiPartJob multiJobCreate = new MultiPartJob(getDN(), multiPartJobId);
+			multiPartJobDao.saveOrUpdate(multiJobCreate);
+			return;
+		}
+		
+		throw new JobPropertiesException("MultiPartJob with name "+multiPartJobId+" already exists.");
+	}
+	
+	/**
+	 * Removes the multipartJob from the server.
+	 * 
+	 * @param multiPartJobId the name of the multipartJob
+	 * @param deleteChildJobsAsWell whether to delete the child jobs of this multipartjob as well.
+	 */
+	public void deleteMultiPartJob(String multiPartJobId, boolean deleteChildJobsAsWell) throws NoSuchJobException {
+		
+		MultiPartJob multiJob = getMultiPartJob(multiPartJobId);
+		
+		if ( deleteChildJobsAsWell ) {
+			for ( String jobname : multiJob.getJobs().keySet() ) {
+				try {
+					kill(jobname, true);
+				} catch (RemoteFileSystemException e) {
+					myLogger.error("Can't clean jobdirectory for job: "+jobname, e);
+				}
+			}
+		}
+		
+		multiPartJobDao.delete(multiJob);
+		
+	}
+	
+	public String[] getAllMultiPartJobIds() {
+		
+		List<String> jobnames = multiPartJobDao.findJobNamesByDn(getDN());
+		
+		return jobnames.toArray(new String[]{});
+	}
+	
+	protected MultiPartJob getMultiPartJob(final String multiPartJobId) throws NoSuchJobException {
+		
+		MultiPartJob job = multiPartJobDao.findJobByDN(getUser().getCred().getDn(), multiPartJobId);
+		
+		return job;
+		
 	}
 
 

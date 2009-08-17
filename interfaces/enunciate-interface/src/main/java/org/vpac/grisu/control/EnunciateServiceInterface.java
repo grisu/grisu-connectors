@@ -15,7 +15,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.xml.bind.annotation.XmlMimeType;
-import javax.xml.ws.soap.MTOM;
 
 import org.vpac.grisu.control.exceptions.JobPropertiesException;
 import org.vpac.grisu.control.exceptions.JobSubmissionException;
@@ -33,6 +32,7 @@ import org.vpac.grisu.model.dto.DtoHostsInfo;
 import org.vpac.grisu.model.dto.DtoJob;
 import org.vpac.grisu.model.dto.DtoJobs;
 import org.vpac.grisu.model.dto.DtoMountPoints;
+import org.vpac.grisu.model.dto.DtoMultiPartJobs;
 import org.vpac.grisu.model.dto.DtoSubmissionLocations;
 
 import au.org.arcs.mds.JobSubmissionProperty;
@@ -943,5 +943,60 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	@RolesAllowed("User")
 	@Produces("text/xml")
 	String getJsdlDocument(@PathParam("jobname") String jobname) throws NoSuchJobException;
+	
+	/**
+	 * Returns all multipart jobs for this user.
+	 * 
+	 * @return all the multipartjobs of the user
+	 */
+	@RolesAllowed("User")
+	DtoMultiPartJobs psMulti();
+	
+	/**
+	 * Adds the specified job to the mulitpartJob.
+	 * 
+	 * @param multipartJobId the multipartjobid
+	 * @param jobname the jobname
+	 */
+	@RolesAllowed("User")
+	void addJobToMultiPartJob(String multipartJobId, String jobname) throws NoSuchJobException;
+	
+	/**
+	 * Removes the specified job from the mulitpartJob.
+	 * 
+	 * @param multipartJobId the multipartjobid
+	 * @param jobname the jobname
+	 */
+	@RolesAllowed("User")
+	void removeJobFromMultiPartJob(String multipartJobId, String jobname) throws NoSuchJobException;
+	
+	/**
+	 * Creates a multipartjob on the server.
+	 * 
+	 * A multipartjob is just a collection of jobs that belong together to make them more easily managable.
+	 * 
+	 * @param multiPartJobId the id (name) of the multipartjob
+	 * @throws JobPropertiesException 
+	 */
+	@RolesAllowed("User")
+	void createMultiPartJob(String multiPartJobId) throws JobPropertiesException;
+	
+	/**
+	 * Removes the multipartJob from the server.
+	 * 
+	 * @param multiPartJobId the name of the multipartJob
+	 * @param deleteChildJobsAsWell whether to delete the child jobs of this multipartjob as well.
+	 */
+	@RolesAllowed("User")
+	void deleteMultiPartJob(String multiPartJobId, boolean deleteChildJobsAsWell) throws NoSuchJobException;
+	
+	
+	/**
+	 * Returns a list of all multipart job ids that are currently stored on this backend
+	 * 
+	 * @return all multipartjobids
+	 */
+	@RolesAllowed("User")
+	String[] getAllMultiPartJobIds();
 
 }
