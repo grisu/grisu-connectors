@@ -11,6 +11,7 @@ import javax.jws.WebService;
 
 import org.vpac.grisu.control.exceptions.JobPropertiesException;
 import org.vpac.grisu.control.exceptions.JobSubmissionException;
+import org.vpac.grisu.control.exceptions.MultiJobException;
 import org.vpac.grisu.control.exceptions.NoSuchJobException;
 import org.vpac.grisu.control.exceptions.NoSuchTemplateException;
 import org.vpac.grisu.control.exceptions.NoValidCredentialException;
@@ -162,7 +163,7 @@ public interface CXFServiceInterface extends ServiceInterface{
 	int getJobStatus(String jobname);
 	@WebMethod
 	void kill(String jobname, boolean clean)
-			throws RemoteFileSystemException, NoSuchJobException;
+			throws RemoteFileSystemException, NoSuchJobException, MultiJobException;
 	@WebMethod
 	void addJobProperty(String jobname, String key, String value)
 			throws NoSuchJobException;

@@ -32,6 +32,7 @@ import org.vpac.grisu.model.dto.DtoHostsInfo;
 import org.vpac.grisu.model.dto.DtoJob;
 import org.vpac.grisu.model.dto.DtoJobs;
 import org.vpac.grisu.model.dto.DtoMountPoints;
+import org.vpac.grisu.model.dto.DtoMultiPartJob;
 import org.vpac.grisu.model.dto.DtoMultiPartJobs;
 import org.vpac.grisu.model.dto.DtoSubmissionLocations;
 
@@ -979,7 +980,7 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	 * @throws JobPropertiesException 
 	 */
 	@RolesAllowed("User")
-	void createMultiPartJob(String multiPartJobId) throws JobPropertiesException;
+	DtoMultiPartJob createMultiPartJob(String multiPartJobId) throws JobPropertiesException;
 	
 	/**
 	 * Removes the multipartJob from the server.
