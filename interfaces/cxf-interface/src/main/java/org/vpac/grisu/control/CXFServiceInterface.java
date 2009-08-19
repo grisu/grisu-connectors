@@ -1,20 +1,14 @@
 package org.vpac.grisu.control;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
 import javax.activation.DataHandler;
-import javax.activation.DataSource;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
 import org.vpac.grisu.control.exceptions.JobPropertiesException;
 import org.vpac.grisu.control.exceptions.JobSubmissionException;
-import org.vpac.grisu.control.exceptions.MultiJobException;
+import org.vpac.grisu.control.exceptions.MultiPartJobException;
 import org.vpac.grisu.control.exceptions.NoSuchJobException;
 import org.vpac.grisu.control.exceptions.NoSuchTemplateException;
-import org.vpac.grisu.control.exceptions.NoValidCredentialException;
 import org.vpac.grisu.control.exceptions.RemoteFileSystemException;
 import org.vpac.grisu.model.MountPoint;
 import org.vpac.grisu.model.dto.DtoApplicationDetails;
@@ -27,9 +21,6 @@ import org.vpac.grisu.model.dto.DtoJob;
 import org.vpac.grisu.model.dto.DtoJobs;
 import org.vpac.grisu.model.dto.DtoMountPoints;
 import org.vpac.grisu.model.dto.DtoSubmissionLocations;
-import org.w3c.dom.Document;
-
-import au.org.arcs.mds.GridResource;
 
 /**
    CXF version of ServiceInterface
@@ -158,12 +149,12 @@ public interface CXFServiceInterface extends ServiceInterface{
 	String createJobUsingJsdl(String jsdl, String fqan,
 			String jobnameCreationMethod) throws JobPropertiesException;
 	@WebMethod
-	void submitJob(String jobname) throws JobSubmissionException;
+	void submitJob(String jobname) throws JobSubmissionException, NoSuchJobException;
 	@WebMethod
 	int getJobStatus(String jobname);
 	@WebMethod
 	void kill(String jobname, boolean clean)
-			throws RemoteFileSystemException, NoSuchJobException, MultiJobException;
+			throws RemoteFileSystemException, NoSuchJobException, MultiPartJobException;
 	@WebMethod
 	void addJobProperty(String jobname, String key, String value)
 			throws NoSuchJobException;

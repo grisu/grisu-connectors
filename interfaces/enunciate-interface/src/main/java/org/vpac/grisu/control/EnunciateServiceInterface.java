@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlMimeType;
 
 import org.vpac.grisu.control.exceptions.JobPropertiesException;
 import org.vpac.grisu.control.exceptions.JobSubmissionException;
+import org.vpac.grisu.control.exceptions.MultiPartJobException;
 import org.vpac.grisu.control.exceptions.NoSuchJobException;
 import org.vpac.grisu.control.exceptions.NoSuchTemplateException;
 import org.vpac.grisu.control.exceptions.NoValidCredentialException;
@@ -980,7 +981,7 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	 * @throws JobPropertiesException 
 	 */
 	@RolesAllowed("User")
-	DtoMultiPartJob createMultiPartJob(String multiPartJobId) throws JobPropertiesException;
+	DtoMultiPartJob createMultiPartJob(String multiPartJobId) throws MultiPartJobException;
 	
 	/**
 	 * Removes the multipartJob from the server.

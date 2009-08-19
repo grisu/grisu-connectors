@@ -6,7 +6,7 @@ import javax.jws.WebService;
 
 import org.vpac.grisu.control.exceptions.JobPropertiesException;
 import org.vpac.grisu.control.exceptions.JobSubmissionException;
-import org.vpac.grisu.control.exceptions.MultiJobException;
+import org.vpac.grisu.control.exceptions.MultiPartJobException;
 import org.vpac.grisu.control.exceptions.NoSuchJobException;
 import org.vpac.grisu.control.exceptions.NoSuchTemplateException;
 import org.vpac.grisu.control.exceptions.RemoteFileSystemException;
@@ -149,12 +149,12 @@ public interface XFireServiceInterface extends ServiceInterface{
 	String createJobUsingJsdl(String jsdl, String fqan,
 			String jobnameCreationMethod) throws JobPropertiesException;
 	@WebMethod
-	void submitJob(String jobname) throws JobSubmissionException;
+	void submitJob(String jobname) throws JobSubmissionException, NoSuchJobException;
 	@WebMethod
 	int getJobStatus(String jobname);
 	@WebMethod
 	void kill(String jobname, boolean clean)
-			throws RemoteFileSystemException, NoSuchJobException, MultiJobException;
+			throws RemoteFileSystemException, NoSuchJobException, MultiPartJobException;
 	@WebMethod
 	void addJobProperty(String jobname, String key, String value)
 			throws NoSuchJobException;
