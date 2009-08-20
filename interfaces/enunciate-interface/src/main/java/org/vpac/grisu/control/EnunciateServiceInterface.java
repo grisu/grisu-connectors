@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.annotation.security.RolesAllowed;
+import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -825,11 +826,13 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	 *            the jobname
 	 * @throws JobSubmissionException
 	 *             if the job could not submitted
+	 * @throws NoSuchJobException
+	 * 			   if no such job exists
 	 */
 	@POST
 	@Path("actions/submitJob/{jobname}")
 	@RolesAllowed("User")
-	void submitJob(@PathParam("jobname") String jobname) throws JobSubmissionException;
+	void submitJob(@PathParam("jobname") String jobname) throws JobSubmissionException, NoSuchJobException;
 
 	/**
 	 * Method to query the status of a job. The String representation of the
@@ -858,12 +861,13 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	 * @throws RemoteFileSystemException
 	 *             if the files can't be deleted
 	 * @throws NoSuchJobException if no such job exists
+	 * @throws MultiPartJobException if the job is part of a multipartjob
 	 */
 	@POST
 	@Path("actions/kill/{jobname}")
 	@RolesAllowed("User")
 	void kill(@PathParam("jobname") String jobname, @QueryParam("clean") boolean clean)
-			throws RemoteFileSystemException, NoSuchJobException;
+			throws RemoteFileSystemException, NoSuchJobException, MultiPartJobException;
 
 	/**
 	 * If you want to store certain values along with the job which can be used
@@ -947,14 +951,6 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	String getJsdlDocument(@PathParam("jobname") String jobname) throws NoSuchJobException;
 	
 	/**
-	 * Returns all multipart jobs for this user.
-	 * 
-	 * @return all the multipartjobs of the user
-	 */
-	@RolesAllowed("User")
-	DtoMultiPartJobs psMulti();
-	
-	/**
 	 * Adds the specified job to the mulitpartJob.
 	 * 
 	 * @param multipartJobId the multipartjobid
@@ -1000,5 +996,84 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	 */
 	@RolesAllowed("User")
 	String[] getAllMultiPartJobIds();
+	
+
+
+
+	
+	
+	/**
+	 * Returns all multipart jobs for this user.
+	 * 
+	 * @return all the multipartjobs of the user
+	 */
+	@RolesAllowed("User")
+	DtoMultiPartJob getMultiPartJob(String multiJobPartId, boolean refresh) throws NoSuchJobException;
+	
+
+
+	
+
+
+	/**
+	 * Distributes an input file to all the filesystems that are used in this multipartjob.
+	 * 
+	 * You need to reverence to the input file using relative paths in the commandline you specify in the jobs that need this inputfile.
+	 * Use this after you created all jobs for this multipartjob.
+	 * 
+	 * @param multiPartJobId the id of the multipartjob
+	 * @param inputFile the inputfile
+	 */
+	@RolesAllowed("User")
+	void uploadMultiPartJobInputFile(String multiPartJobId, DataHandler inputFile, String relativePath) throws RemoteFileSystemException, NoSuchJobException;
+	
+	/**
+	 * Distributes a remote input file to all the filesystems that are used in this multipartjob.
+	 * 
+	 * Use this after you created all jobs for this multipartjob.
+	 * 
+	 * @param multiPartJobId the id of the multipartJob
+	 * @param inputFile the url of the inputfile
+	 * @param filename the target filename
+	 * @throws RemoteFileSystemException if there is a problem copying / accessing the file
+	 * @throws NoSuchJobException if the specified multipartjob doesn't exist
+	 */
+	@RolesAllowed("User")
+	void copyMultiPartJobInputFile(String multiPartJobId, String inputFile,	String filename) throws RemoteFileSystemException, NoSuchJobException;
+
+	/**
+	 * Submits all jobs that belong to this multipartjob.
+	 * 
+	 * @param multipartjobid the id of the multipartjob
+	 * @param waitForSubmissionsToFinish whether to wait for all submissions to finish before returning from method
+	 * @throws JobSubmissionException if one of the jobsubmission failed. 
+	 * @throws NoSuchJobException if no multipartjob with this id exists
+	 */
+	@RolesAllowed("User")
+	void submitMultiPartJob(String multipartjobid, boolean waitForSubmissionsToFinish) throws JobSubmissionException, NoSuchJobException;
+	
+
+
+
+	
+	/**
+	 * Resubmit a job. Kills the old one if it's still running.
+	 * 
+	 * This uses the same job properties as the old job. If you want some of the properties changed, you need
+	 * to provide an updated jsdl file. Be aware that not all properties can be changed (for example you can't
+	 * change the filesystem the job runs on or the fqan). Have a look at the implemenation of this method to find 
+	 * out what can't be changed and what not. Anyway, use this
+	 * with caution and prefer to just submit a new job if possible.
+	 * 
+	 * @param jobname the name of the job
+	 * @param changedJsdl the updated jsdl or null (if you want to re-run the same job)
+	 * @throws JobSubmissionException if the job could not be resubmitted
+	 * @throws NoSuchJobException if no job with the specified jobname exists
+	 */
+	@RolesAllowed("User")
+	void restartJob(final String jobname, String changedJsdl) throws JobSubmissionException, NoSuchJobException;
+		
+
+
 
 }
