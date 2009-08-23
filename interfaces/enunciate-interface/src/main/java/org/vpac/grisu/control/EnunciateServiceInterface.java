@@ -25,6 +25,7 @@ import org.vpac.grisu.control.exceptions.NoSuchTemplateException;
 import org.vpac.grisu.control.exceptions.NoValidCredentialException;
 import org.vpac.grisu.control.exceptions.RemoteFileSystemException;
 import org.vpac.grisu.model.MountPoint;
+import org.vpac.grisu.model.dto.DtoActionStatus;
 import org.vpac.grisu.model.dto.DtoApplicationDetails;
 import org.vpac.grisu.model.dto.DtoApplicationInfo;
 import org.vpac.grisu.model.dto.DtoDataLocations;
@@ -166,7 +167,7 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	 *            jobname or a filetransfer handle
 	 * @return the current status of any backend activity
 	 */
-	String getCurrentStatusMessage(String handle);
+	DtoActionStatus getActionStatus(String handle);
 
 	// ---------------------------------------------------------------------------------------------------
 	// 
@@ -957,7 +958,7 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	 * @param jobname the jobname
 	 */
 	@RolesAllowed("User")
-	void addJobToMultiPartJob(String multipartJobId, String jobname) throws NoSuchJobException;
+	String addJobToMultiPartJob(String multipartJobId, String jobname) throws NoSuchJobException;
 	
 	/**
 	 * Removes the specified job from the mulitpartJob.

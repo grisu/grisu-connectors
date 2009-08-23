@@ -15,6 +15,7 @@ import org.vpac.grisu.control.exceptions.NoSuchTemplateException;
 import org.vpac.grisu.control.exceptions.NoValidCredentialException;
 import org.vpac.grisu.control.exceptions.RemoteFileSystemException;
 import org.vpac.grisu.model.MountPoint;
+import org.vpac.grisu.model.dto.DtoActionStatus;
 import org.vpac.grisu.model.dto.DtoApplicationDetails;
 import org.vpac.grisu.model.dto.DtoApplicationInfo;
 import org.vpac.grisu.model.dto.DtoDataLocations;
@@ -134,7 +135,7 @@ public interface CXFServiceInterface extends ServiceInterface{
 	 * @return the current status of any backend activity
 	 */
 	@WebMethod
-	String getCurrentStatusMessage(String handle);
+	DtoActionStatus getActionStatus(String handle);
 
 	// ---------------------------------------------------------------------------------------------------
 	// 
@@ -696,7 +697,7 @@ public interface CXFServiceInterface extends ServiceInterface{
 	 * @param jobname the jobname
 	 */
 	@WebMethod
-	void addJobToMultiPartJob(String multipartJobId, String jobname) throws NoSuchJobException;
+	String addJobToMultiPartJob(String multipartJobId, String jobname) throws NoSuchJobException, JobPropertiesException;
 	
 	/**
 	 * Removes the specified job from the mulitpartJob.
@@ -716,7 +717,7 @@ public interface CXFServiceInterface extends ServiceInterface{
 	 * @throws JobPropertiesException 
 	 */
 	@WebMethod
-	DtoMultiPartJob createMultiPartJob(String multiPartJobId) throws MultiPartJobException;
+	DtoMultiPartJob createMultiPartJob(String multiPartJobId, String fqan) throws MultiPartJobException;
 	
 	/**
 	 * Removes the multipartJob from the server.
@@ -781,34 +782,34 @@ public interface CXFServiceInterface extends ServiceInterface{
 	@WebMethod
 	String[] getAllMultiPartJobIds();
 
-	/**
-	 * Creates a job using the jobProperties that are specified in the map and
-	 * the vo that should be used to submit the job.
-	 * 
-	 * Internally, this validates all the jobproperties, tries to auto-fill
-	 * properties that are not specified (maybe version or submissionlocation).
-	 * For a list of valid job property keynames have a look here:
-	 * {@link JobSubmissionProperty}. If not all required job properties can be
-	 * calculated, this method throws a {@link JobPropertiesException}.
-	 * 
-	 * @param jobProperties
-	 *            a map of all job properties
-	 * @param fqan
-	 *            the vo to use to submit the job
-	 * @param jobnameCreationMethod
-	 *            the method to use to (possibly) auto-calculate the jobname (if
-	 *            one with the specfied jobname in the jobProperties already
-	 *            exists). This defaults to "force-name" if you specify null.
-	 * @return the name of the job (auto-calculated or not) which is used as a
-	 *         handle
-	 * @throws JobPropertiesException
-	 *             if the job could not be created (maybe because the jobname
-	 *             already exists and force-jobname is specified as jobname
-	 *             creation method).
-	 */
-	@WebMethod
-	String createJobUsingMap(DtoJob job, String fqan,
-			String jobnameCreationMethod) throws JobPropertiesException;
+//	/**
+//	 * Creates a job using the jobProperties that are specified in the map and
+//	 * the vo that should be used to submit the job.
+//	 * 
+//	 * Internally, this validates all the jobproperties, tries to auto-fill
+//	 * properties that are not specified (maybe version or submissionlocation).
+//	 * For a list of valid job property keynames have a look here:
+//	 * {@link JobSubmissionProperty}. If not all required job properties can be
+//	 * calculated, this method throws a {@link JobPropertiesException}.
+//	 * 
+//	 * @param jobProperties
+//	 *            a map of all job properties
+//	 * @param fqan
+//	 *            the vo to use to submit the job
+//	 * @param jobnameCreationMethod
+//	 *            the method to use to (possibly) auto-calculate the jobname (if
+//	 *            one with the specfied jobname in the jobProperties already
+//	 *            exists). This defaults to "force-name" if you specify null.
+//	 * @return the name of the job (auto-calculated or not) which is used as a
+//	 *         handle
+//	 * @throws JobPropertiesException
+//	 *             if the job could not be created (maybe because the jobname
+//	 *             already exists and force-jobname is specified as jobname
+//	 *             creation method).
+//	 */
+//	@WebMethod
+//	String createJobUsingMap(DtoJob job, String fqan,
+//			String jobnameCreationMethod) throws JobPropertiesException;
 
 	/**
 	 * This method calls {@link #createJobUsingMap(Map, String, String)} internally with
