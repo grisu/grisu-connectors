@@ -763,7 +763,7 @@ public interface CXFServiceInterface extends ServiceInterface{
 	 * @throws NoSuchJobException if no multipartjob with this id exists
 	 */
 	@WebMethod
-	void submitMultiPartJob(String multipartjobid, boolean waitForSubmissionsToFinish) throws JobSubmissionException, NoSuchJobException;
+	void submitMultiPartJob(String multipartjobid) throws JobSubmissionException, NoSuchJobException;
 	
 	/**
 	 * Returns a list of all jobnames that are currently stored on this backend.
