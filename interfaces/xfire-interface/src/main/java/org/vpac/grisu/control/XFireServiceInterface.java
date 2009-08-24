@@ -738,7 +738,7 @@ public interface XFireServiceInterface extends ServiceInterface{
 	 * @param inputFile the inputfile
 	 */
 	@WebMethod
-	void uploadMultiPartJobInputFile(String multiPartJobId, DataHandler inputFile, String relativePath) throws RemoteFileSystemException, NoSuchJobException;
+	void uploadInputFile(String multiPartJobId, DataHandler inputFile, String relativePath) throws RemoteFileSystemException, NoSuchJobException;
 	
 	/**
 	 * Distributes a remote input file to all the filesystems that are used in this multipartjob.
@@ -831,13 +831,13 @@ public interface XFireServiceInterface extends ServiceInterface{
 	 *             creation method).
 	 */
 	@WebMethod
-	String createJobUsingJsdl(String jsdl, String fqan,
+	String createJob(String jsdl, String fqan,
 			String jobnameCreationMethod) throws JobPropertiesException;
 
 	/**
 	 * Submits the job that was prepared before using
 	 * {@link #createJobUsingMap(Map, String, String)} or
-	 * {@link #createJobUsingJsdl(String, String, String)} to the specified submission
+	 * {@link #createJob(String, String, String)} to the specified submission
 	 * location.
 	 * 
 	 * @param jobname

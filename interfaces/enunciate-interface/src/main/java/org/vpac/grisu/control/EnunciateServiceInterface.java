@@ -814,13 +814,13 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	@POST
 	@Path("actions/createJobUsingJsdl")
 	@RolesAllowed("User")
-	String createJobUsingJsdl(@QueryParam("jsdl") String jsdl, @QueryParam("fqan") String fqan,
+	String createJob(@QueryParam("jsdl") String jsdl, @QueryParam("fqan") String fqan,
 			@QueryParam("method") String jobnameCreationMethod) throws JobPropertiesException;
 
 	/**
 	 * Submits the job that was prepared before using
 	 * {@link #createJobUsingMap(Map, String, String)} or
-	 * {@link #createJobUsingJsdl(String, String, String)} to the specified submission
+	 * {@link #createJob(String, String, String)} to the specified submission
 	 * location.
 	 * 
 	 * @param jobname
@@ -1026,7 +1026,7 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	 * @param inputFile the inputfile
 	 */
 	@RolesAllowed("User")
-	void uploadMultiPartJobInputFile(String multiPartJobId, DataHandler inputFile, String relativePath) throws RemoteFileSystemException, NoSuchJobException;
+	void uploadInputFile(String multiPartJobId, DataHandler inputFile, String relativePath) throws RemoteFileSystemException, NoSuchJobException;
 	
 	/**
 	 * Distributes a remote input file to all the filesystems that are used in this multipartjob.
