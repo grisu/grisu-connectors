@@ -1052,10 +1052,6 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	@RolesAllowed("User")
 	void submitMultiPartJob(String multipartjobid) throws JobSubmissionException, NoSuchJobException;
 	
-
-
-
-	
 	/**
 	 * Resubmit a job. Kills the old one if it's still running.
 	 * 
