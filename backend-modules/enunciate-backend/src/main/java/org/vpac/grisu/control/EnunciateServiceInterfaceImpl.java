@@ -36,6 +36,7 @@ import org.apache.commons.vfs.FileType;
 import org.apache.commons.vfs.FileTypeSelector;
 import org.apache.log4j.Logger;
 import org.codehaus.enunciate.modules.spring_app.HTTPRequestContext;
+import org.codehaus.xfire.annotations.EnableMTOM;
 import org.globus.myproxy.CredentialInfo;
 import org.globus.myproxy.MyProxy;
 import org.globus.myproxy.MyProxyException;
@@ -65,6 +66,7 @@ import org.vpac.grisu.control.exceptions.RemoteFileSystemException;
 import org.vpac.grisu.control.info.CachedMdsInformationManager;
 import org.vpac.grisu.control.serviceInterfaces.LocalServiceInterface;
 import org.vpac.grisu.model.MountPoint;
+import org.vpac.grisu.model.dto.DtoActionStatus;
 import org.vpac.grisu.model.dto.DtoApplicationDetails;
 import org.vpac.grisu.model.dto.DtoApplicationInfo;
 import org.vpac.grisu.model.dto.DtoDataLocations;
@@ -124,6 +126,7 @@ import com.sun.xml.ws.developer.StreamingAttachment;
 @WebService(endpointInterface = "org.vpac.grisu.control.EnunciateServiceInterface")
 @MTOM(enabled = true)
 @StreamingAttachment(parseEagerly = true, memoryThreshold = 40000L)
+@EnableMTOM
 public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface {
 
 	static final Logger myLogger = Logger
@@ -286,19 +289,6 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	private UserDAO userdao = new UserDAO();
 
 	protected JobDAO jobdao = new JobDAO();
@@ -325,8 +315,6 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	}
 
 	private Map<String, RemoteFileTransferObject> fileTransfers = new HashMap<String, RemoteFileTransferObject>();
-
-	private String currentStatus = null;
 
 	/**
 	 * Gets the user of the current session. Also connects the default
@@ -419,7 +407,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 		return manager;
 	}
 
-	public String createJobUsingJsdl(String jsdlString, final String fqan,
+	public String createJob(String jsdlString, final String fqan,
 			final String jobnameCreationMethod) throws JobPropertiesException {
 
 		Document jsdl;
@@ -503,6 +491,13 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 			throw new RuntimeException(
 					"Jobname is null. This should never happen. Please report to markus.binsteiner@arcs.org.au");
 		}
+		
+		try {
+			MultiPartJob mpj = getMultiPartJobFromDatabase(jobname);
+			throw new JobPropertiesException("Could not create job with jobname "+jobname+". Multipart job with this id already exists...");
+		} catch (NoSuchJobException e) {
+			// that's good
+		}
 
 		Job job;
 		try {
@@ -566,16 +561,16 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 
 	}
 
-	public String createJobUsingMap(final DtoJob jobProperties,
-			final String fqan, final String jobCreationMethod)
-			throws JobPropertiesException {
-
-		JobSubmissionObjectImpl jso = new JobSubmissionObjectImpl(jobProperties
-				.propertiesAsMap());
-
-		return createJob(jso.getJobDescriptionDocument(), fqan,
-				jobCreationMethod);
-	}
+//	public String createJobUsingMap(final DtoJob jobProperties,
+//			final String fqan, final String jobCreationMethod)
+//			throws JobPropertiesException {
+//
+//		JobSubmissionObjectImpl jso = new JobSubmissionObjectImpl(jobProperties
+//				.propertiesAsMap());
+//
+//		return createJob(jso.getJobDescriptionDocument(), fqan,
+//				jobCreationMethod);
+//	}
 
 	private void setVO(final Job job, final String fqan)
 			throws NoSuchJobException, JobPropertiesException {
@@ -1000,8 +995,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 		myLogger.debug("Preparing job done.");
 	}
 
-	public void submitMultiPartJob(final String multiPartJobId,
-			boolean waitForSubmissionsToFinish) throws JobSubmissionException,
+	public void submitMultiPartJob(final String multiPartJobId) throws JobSubmissionException,
 			NoSuchJobException {
 
 		ExecutorService executor = Executors
@@ -1013,8 +1007,14 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 		// final Collection<String> failedJobs = CollectionUtils
 		// .synchronizedCollection(new TreeSet<String>());
 
-		for (final Job job : multiJob.getJobs()) {
+		Job[] currentlyCreatedJobs = multiJob.getJobs().toArray(new Job[]{});
+		Arrays.sort(currentlyCreatedJobs);
+		
+		for (final Job job : currentlyCreatedJobs ) {
 
+			if ( job.getStatus() != JobConstants.READY_TO_SUBMIT ) {
+				continue;
+			}
 			Thread thread = new Thread() {
 				public void run() {
 
@@ -1039,23 +1039,22 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				myLogger.error(e);
 			}
 			executor.execute(thread);
 		}
 		executor.shutdown();
 
-		if (waitForSubmissionsToFinish) {
-
-			try {
-				executor.awaitTermination(3600 * 24, TimeUnit.SECONDS);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				throw new RuntimeException(e);
-			}
-		}
+//		if (waitForSubmissionsToFinish) {
+//
+//			try {
+//				executor.awaitTermination(3600 * 24, TimeUnit.SECONDS);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//				throw new RuntimeException(e);
+//			}
+//		}
 		//
 		// if (failedJobs.size() > 0) {
 		// throw new JobSubmissionException(
@@ -1065,23 +1064,22 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 
 	}
 
-	private void addLogMessageToPossibleMultiPartJobParent(Job job,
+	private synchronized void addLogMessageToPossibleMultiPartJobParent(Job job,
 			String message) {
 
-		String mpjName = job.getJobProperty(Constants.MULTIJOB_NAME);
+			String mpjName = job.getJobProperty(Constants.MULTIJOB_NAME);
 
-		if (mpjName != null) {
-			MultiPartJob mpj = null;
-			try {
-				mpj = getMultiPartJobFromDatabase(mpjName);
-			} catch (NoSuchJobException e) {
-				myLogger.error(e);
-				return;
+			if (mpjName != null) {
+				MultiPartJob mpj = null;
+				try {
+					mpj = getMultiPartJobFromDatabase(mpjName);
+				} catch (NoSuchJobException e) {
+					myLogger.error(e);
+					return;
+				}
+				mpj.addLogMessage(message);
+				multiPartJobDao.saveOrUpdate(mpj);
 			}
-			mpj.addLogMessage(message);
-			multiPartJobDao.saveOrUpdate(mpj);
-		}
-
 	}
 
 	private void submitJob(final Job job, boolean stageFiles)
@@ -1094,8 +1092,8 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 					"Starting job submission for job: " + job.getJobname());
 			prepareJobEnvironment(job);
 			if (stageFiles) {
-				job.addLogMessage("Staging files.");
-				myLogger.debug("Staging files...");
+				job.addLogMessage("Staging possible input files.");
+				myLogger.debug("Staging possible input files...");
 				stageFiles(job);
 				job.addLogMessage("File staging finished.");
 			}
@@ -1174,7 +1172,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 
 		job.addLogMessage("Restarting job...");
 		job.addLogMessage("Killing possibly running job...");
-		kill(jobname);
+		kill(job);
 
 		job.setStatus(JobConstants.READY_TO_SUBMIT);
 
@@ -1185,7 +1183,8 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 
 		if (StringUtils.isNotBlank(possibleMultiPartJob)) {
 			MultiPartJob mpj = getMultiPartJobFromDatabase(possibleMultiPartJob);
-			mpj.addLogMessage("Re-submitting job " + jobname);
+			addLogMessageToPossibleMultiPartJobParent(job, "Re-submitting job "
+					+ jobname);
 			mpj.removeFailedJob(job.getJobname());
 			multiPartJobDao.saveOrUpdate(mpj);
 		}
@@ -1247,7 +1246,8 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 
 	}
 
-	public void submitJob(final String jobname) throws JobSubmissionException, NoSuchJobException {
+	public void submitJob(final String jobname) throws JobSubmissionException,
+			NoSuchJobException {
 
 		myLogger.info("Submitting job: " + jobname + " for user " + getDN());
 		Job job;
@@ -1269,14 +1269,14 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	 *            the name of the job
 	 * @return the new status of the job
 	 */
-	protected int kill(final String jobname) {
+	protected int kill(final Job job) {
 
-		Job job;
-		try {
-			job = jobdao.findJobByDN(getUser().getDn(), jobname);
-		} catch (NoSuchJobException e) {
-			return JobConstants.NO_SUCH_JOB;
-		}
+//		Job job;
+//		try {
+//			job = jobdao.findJobByDN(getUser().getDn(), jobname);
+//		} catch (NoSuchJobException e) {
+//			return JobConstants.NO_SUCH_JOB;
+//		}
 
 		job.addLogMessage("Trying to kill job...");
 		int new_status = Integer.MIN_VALUE;
@@ -1327,6 +1327,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	 */
 	public int getJobStatus(final String jobname) {
 
+		myLogger.debug("Start getting status for job: "+jobname);
 		Job job;
 		try {
 			job = getJob(jobname);
@@ -1347,6 +1348,15 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 			return old_status;
 		}
 
+		Date lastCheck = job.getLastStatusCheck();
+		Date now = new Date();
+		
+		if ( now.getTime() < lastCheck.getTime() + (ServerPropertiesManager.getWaitTimeBetweenJobStatusChecks()*1000) ) {
+			myLogger.debug("Last check was: "+lastCheck.toString()+". Too early to check job status again. Returning old status...");
+			return job.getStatus();
+		}
+
+
 		ProxyCredential cred = job.getCredential();
 		boolean changedCred = false;
 		// TODO check whether cred is stored in the database in that case? also,
@@ -1356,14 +1366,20 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 			changedCred = true;
 		}
 
+		myLogger.debug("Getting status for job from submission manager: "+jobname);
+
 		status = getSubmissionManager().getJobStatus(job);
+		myLogger.debug("Status for job"+jobname+" from submission manager: "+status);
 		if (changedCred) {
 			job.setCredential(null);
 		}
 		if (old_status != status) {
 			job.setStatus(status);
-			String message = "Job status for job: "+job.getJobname()+" changed since last check ("+job.getLastStatusCheck().toString()+") from: \""+JobConstants.translateStatus(old_status)+
-					"\" to: \""+JobConstants.translateStatus(status)+"\"";
+			String message = "Job status for job: " + job.getJobname()
+					+ " changed since last check ("
+					+ job.getLastStatusCheck().toString() + ") from: \""
+					+ JobConstants.translateStatus(old_status) + "\" to: \""
+					+ JobConstants.translateStatus(status) + "\"";
 			job.addLogMessage(message);
 			addLogMessageToPossibleMultiPartJobParent(job, message);
 			if (status >= JobConstants.FINISHED_EITHER_WAY
@@ -1379,12 +1395,9 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 					try {
 						MultiPartJob mpj = getMultiPartJobFromDatabase(multiPartJobParent);
 						mpj.addFailedJob(job.getJobname());
-						mpj
-								.addLogMessage("Job: "
-										+ job.getJobname()
-										+ " failed. Status: "
-										+ JobConstants.translateStatus(job
-												.getStatus()));
+						addLogMessageToPossibleMultiPartJobParent(job, "Job: "
+								+ job.getJobname() + " failed. Status: "
+								+ JobConstants.translateStatus(job.getStatus()));
 						multiPartJobDao.saveOrUpdate(mpj);
 					} catch (NoSuchJobException e) {
 						// well
@@ -1446,7 +1459,10 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 					.newFixedThreadPool(ServerPropertiesManager
 							.getConcurrentJobStatusThreadsPerUser());
 
-			for (final Job job : multiPartJob.getJobs()) {
+			Job[] currentJobs = multiPartJob.getJobs().toArray(new Job[]{});
+			Arrays.sort(currentJobs);
+			
+			for (final Job job : currentJobs) {
 				Thread thread = new Thread() {
 					public void run() {
 						getJobStatus(job.getJobname());
@@ -1474,14 +1490,23 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	 * @param jobname
 	 *            the jobname
 	 * @throws NoSuchJobException
+	 * @throws JobPropertiesException 
+	 * @throws NoSuchJobException 
 	 */
-	public void addJobToMultiPartJob(String multipartJobId, String jobname)
-			throws NoSuchJobException {
+	public String addJobToMultiPartJob(String multipartJobId, String jsdlString)
+			throws JobPropertiesException, NoSuchJobException {
 
 		MultiPartJob multiJob = getMultiPartJobFromDatabase(multipartJobId);
+		
+		//TODO calculate resulting jobname and check whether one already exists?
+		
+		String jobname = createJob(jsdlString, multiJob.getFqan(), "force-name");
+
 		multiJob.addJob(jobname);
 
 		multiPartJobDao.saveOrUpdate(multiJob);
+		
+		return jobname;
 	}
 
 	/**
@@ -1512,15 +1537,23 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	 *            the id (name) of the multipartjob
 	 * @throws JobPropertiesException
 	 */
-	public DtoMultiPartJob createMultiPartJob(String multiPartJobId)
+	public DtoMultiPartJob createMultiPartJob(String multiPartJobId, String fqan)
 			throws MultiPartJobException {
 
+		
+		try {
+			Job possibleJob = getJob(multiPartJobId);
+			throw new MultiPartJobException("Can't create multipartjob with id: "+multiPartJobId+". Non-multipartjob with this id already exists...");
+		} catch (NoSuchJobException e) {
+			// that's good
+		}
+		
 		try {
 			MultiPartJob multiJob = getMultiPartJobFromDatabase(multiPartJobId);
 		} catch (NoSuchJobException e) {
 			// that's good
 			MultiPartJob multiJobCreate = new MultiPartJob(getDN(),
-					multiPartJobId);
+					multiPartJobId, fqan);
 			multiJobCreate.addJobProperty(Constants.RELATIVE_PATH_FROM_JOBDIR,
 					"../../"
 							+ ServerPropertiesManager
@@ -1560,6 +1593,27 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 
 		MultiPartJob multiJob = getMultiPartJobFromDatabase(multiPartJobId);
 
+
+
+		final Job[] jobs = multiJob.getJobs().toArray(new Job[]{});
+
+		if (deleteChildJobsAsWell) {
+			for (Job job : jobs) {
+
+				try {
+					job.addJobProperty(Constants.MULTIJOB_NAME, null);
+					multiJob.removeJob(job);
+					multiPartJobDao.saveOrUpdate(multiJob);
+					kill(job, true, true);
+				} catch (RemoteFileSystemException e) {
+					myLogger.error("Can't clean jobdirectory for job: "
+							+ job.getJobname(), e);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
 		for (String mpRoot : multiJob.getAllUsedMountPoints()) {
 
 			String url = mpRoot
@@ -1573,26 +1627,10 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 			}
 
 		}
-
-		final Set<Job> jobs = multiJob.getJobs();
-
+		
 		multiPartJobDao.delete(multiJob);
 
-		if (deleteChildJobsAsWell) {
-			for (Job job : jobs) {
 
-				try {
-					job.addJobProperty(Constants.MULTIJOB_NAME, null);
-					kill(job.getJobname(), true, true);
-				} catch (RemoteFileSystemException e) {
-					myLogger.error("Can't clean jobdirectory for job: "
-							+ job.getJobname(), e);
-				} catch (MultiPartJobException e) {
-					// should never happen
-					e.printStackTrace();
-				}
-			}
-		}
 
 	}
 
@@ -2087,7 +2125,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 
 	}
 
-	public void uploadMultiPartJobInputFile(String multipartjobid,
+	public void uploadInputFile(String multipartjobid,
 			DataHandler source, String targetFilename)
 			throws RemoteFileSystemException, NoSuchJobException {
 
@@ -2680,18 +2718,23 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	public void kill(final String jobname, final boolean clear)
 			throws RemoteFileSystemException, NoSuchJobException,
 			MultiPartJobException {
-		kill(jobname, clear, false);
+		
+		Job job;
+		
+		job = jobdao.findJobByDN(getUser().getDn(), jobname);
+		
+		kill(job, clear, false);
 	}
 
-	private void kill(final String jobname, final boolean clear,
+	private void kill(final Job job, final boolean clear,
 			final boolean clearMultiJob) throws RemoteFileSystemException,
 			NoSuchJobException, MultiPartJobException {
 
-		Job job;
+//		Job job;
+//
+//		job = jobdao.findJobByDN(getUser().getDn(), jobname);
 
-		job = jobdao.findJobByDN(getUser().getDn(), jobname);
-
-		kill(jobname);
+		kill(job);
 
 		if (clear) {
 			String mpjid = job.getJobProperty(Constants.MULTIJOB_NAME);
@@ -3132,15 +3175,13 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 		return getSite(contactString);
 	}
 
-	public String getCurrentStatusMessage(final String handle) {
-		return this.currentStatus;
+	public DtoActionStatus getActionStatus(final String handle) {
+
+		return getUser().getActionStatus(handle);
 	}
-
-	private void setCurrentStatus(final String status) {
-		this.currentStatus = status;
-	}
-
-
-
+	
+	
+	
+	
 
 }

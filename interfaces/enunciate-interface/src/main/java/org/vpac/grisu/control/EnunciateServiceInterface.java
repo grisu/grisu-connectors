@@ -761,36 +761,36 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	 */
 	String[] getAllJobnames();
 
-	/**
-	 * Creates a job using the jobProperties that are specified in the map and
-	 * the vo that should be used to submit the job.
-	 * 
-	 * Internally, this validates all the jobproperties, tries to auto-fill
-	 * properties that are not specified (maybe version or submissionlocation).
-	 * For a list of valid job property keynames have a look here:
-	 * {@link JobSubmissionProperty}. If not all required job properties can be
-	 * calculated, this method throws a {@link JobPropertiesException}.
-	 * 
-	 * @param jobProperties
-	 *            a map of all job properties
-	 * @param fqan
-	 *            the vo to use to submit the job
-	 * @param jobnameCreationMethod
-	 *            the method to use to (possibly) auto-calculate the jobname (if
-	 *            one with the specfied jobname in the jobProperties already
-	 *            exists). This defaults to "force-name" if you specify null.
-	 * @return the name of the job (auto-calculated or not) which is used as a
-	 *         handle
-	 * @throws JobPropertiesException
-	 *             if the job could not be created (maybe because the jobname
-	 *             already exists and force-jobname is specified as jobname
-	 *             creation method).
-	 */
-	@POST
-	@Path("actions/createJobUsingJobProperties")
-	@RolesAllowed("User")
-	String createJobUsingMap(@QueryParam("job") DtoJob job, @QueryParam("fqan") String fqan,
-			@QueryParam("method") String jobnameCreationMethod) throws JobPropertiesException;
+//	/**
+//	 * Creates a job using the jobProperties that are specified in the map and
+//	 * the vo that should be used to submit the job.
+//	 * 
+//	 * Internally, this validates all the jobproperties, tries to auto-fill
+//	 * properties that are not specified (maybe version or submissionlocation).
+//	 * For a list of valid job property keynames have a look here:
+//	 * {@link JobSubmissionProperty}. If not all required job properties can be
+//	 * calculated, this method throws a {@link JobPropertiesException}.
+//	 * 
+//	 * @param jobProperties
+//	 *            a map of all job properties
+//	 * @param fqan
+//	 *            the vo to use to submit the job
+//	 * @param jobnameCreationMethod
+//	 *            the method to use to (possibly) auto-calculate the jobname (if
+//	 *            one with the specfied jobname in the jobProperties already
+//	 *            exists). This defaults to "force-name" if you specify null.
+//	 * @return the name of the job (auto-calculated or not) which is used as a
+//	 *         handle
+//	 * @throws JobPropertiesException
+//	 *             if the job could not be created (maybe because the jobname
+//	 *             already exists and force-jobname is specified as jobname
+//	 *             creation method).
+//	 */
+//	@POST
+//	@Path("actions/createJobUsingJobProperties")
+//	@RolesAllowed("User")
+//	String createJobUsingMap(@QueryParam("job") DtoJob job, @QueryParam("fqan") String fqan,
+//			@QueryParam("method") String jobnameCreationMethod) throws JobPropertiesException;
 
 	/**
 	 * This method calls {@link #createJobUsingMap(Map, String, String)} internally with
@@ -958,7 +958,7 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	 * @param jobname the jobname
 	 */
 	@RolesAllowed("User")
-	String addJobToMultiPartJob(String multipartJobId, String jobname) throws NoSuchJobException;
+	String addJobToMultiPartJob(String multipartJobId, String jobname) throws NoSuchJobException, JobPropertiesException;
 	
 	/**
 	 * Removes the specified job from the mulitpartJob.
@@ -975,10 +975,11 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	 * A multipartjob is just a collection of jobs that belong together to make them more easily managable.
 	 * 
 	 * @param multiPartJobId the id (name) of the multipartjob
+	 * @param fqan the vo to use
 	 * @throws JobPropertiesException 
 	 */
 	@RolesAllowed("User")
-	DtoMultiPartJob createMultiPartJob(String multiPartJobId) throws MultiPartJobException;
+	DtoMultiPartJob createMultiPartJob(String multiPartJobId, String fqan) throws MultiPartJobException;
 	
 	/**
 	 * Removes the multipartJob from the server.

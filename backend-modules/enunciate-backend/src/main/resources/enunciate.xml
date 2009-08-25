@@ -11,20 +11,22 @@
 	<api-import pattern="org.vpac.grisu.model.dto.*" />
 	<api-import pattern="org.vpac.grisu.frontend.**" />
 	<api-import pattern="org.vpac.grisu.control.EnunciateServiceInterface" />
+	<api-import pattern="org.vpac.grisu.control.JobConstants" />
 	<modules>
-
-		<jaxws-client disabled="false" jarName="grisu-client-jaxws.jar">
+	
+		<csharp disabled="true" ></csharp>
+		<jaxws-ri disabled="true"/>
+		<xfire disabled="false"/>
+		<cxf disabled="true" />
+		
+		<jaxws-client disabled="true" jarName="grisu-client-jaxws.jar">
 			<server-side-type pattern="org.vpac.grisu.model.dto.*" />
 			<server-side-type pattern="org.vpac.grisu.frontend.**" />
 			<server-side-type pattern="org.vpac.grisu.model.MountPoint" />
-<!--			<server-side-type pattern="org.vpac.grisu.control.exceptions.**" />-->
 		</jaxws-client>
-<!--		<csharp disabled="true" compileExecutable="gmcs2"></csharp>-->
-		<csharp disabled="false"></csharp>
 		<xfire-client disabled="false" disable14Client="true" disable15Client="false"
 			jarName="grisu-client-xfire.jar">
 		</xfire-client>
-		<cxf disabled="true" />
 		<gwt disabled="false" rpcModuleName="org.vpac.grisu.gwt.ServiceInterfaceModule" gwtHome="/opt/gwt" enforceNamespaceConformance="false">
 		</gwt>
 
