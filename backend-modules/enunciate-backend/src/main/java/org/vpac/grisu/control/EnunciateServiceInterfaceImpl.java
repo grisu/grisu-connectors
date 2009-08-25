@@ -39,6 +39,7 @@ import org.codehaus.enunciate.modules.spring_app.HTTPRequestContext;
 import org.codehaus.xfire.MessageContext;
 import org.codehaus.xfire.annotations.EnableMTOM;
 import org.codehaus.xfire.service.invoker.AbstractInvoker;
+import org.codehaus.xfire.transport.http.XFireServletController;
 import org.globus.myproxy.CredentialInfo;
 import org.globus.myproxy.MyProxy;
 import org.globus.myproxy.MyProxyException;
@@ -138,6 +139,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	private InformationManager informationManager = CachedMdsInformationManager
 			.getDefaultCachedMdsInformationManager(Environment
 					.getGrisuDirectory().toString());
+	
 
 	/**
 	 * This method has to be implemented by the endpoint specific
@@ -148,40 +150,21 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	 * @return the proxy credential that is used to contact the grid
 	 */
 	protected synchronized ProxyCredential getCredential() {
-		try {
-			return getCredentialXfire();
-		} catch (Exception e) {
-			return getCredentialJaxWs();
-		}
-	}
-	
-	private ProxyCredential credential = null;
-	
-	/**
-	 * Gets the credential from memory or the session context if the one from memory is already expired or about to expire.
-	 * 
-	 * @return the credential
-	 * @throws NoValidCredentialException
-	 */
-	protected synchronized ProxyCredential getCredentialXfire() throws NoValidCredentialException {
-
-		MessageContext context = AbstractInvoker.getContext();
-//		MessageContext context = MessageContextHelper.getContext();
 		
 		if ( this.credential == null || ! this.credential.isValid() ) {
 			myLogger.debug("No valid credential in memory. Fetching it from session context...");
-			this.credential = (ProxyCredential)(context.getSession().get("credential")); 
+			this.credential = getCredentialJaxWs(); 
 			if ( this.credential == null || ! this.credential.isValid() ) {
 				throw new NoValidCredentialException("Could not get credential from session context.");
 			}
 			getUser().cleanCache();
-		} else
+		} else {
 			// check whether min lifetime as configured in server config file is reached
 			try {
 				long oldLifetime = this.credential.getGssCredential().getRemainingLifetime();
 				if ( oldLifetime < ServerPropertiesManager.getMinProxyLifetimeBeforeGettingNewProxy() ) {
 					myLogger.debug("Credential reached minimum lifetime. Getting new one from session. Old lifetime: "+oldLifetime);
-					this.credential = (ProxyCredential)(context.getSession().get("credential")); 
+					this.credential = getCredentialJaxWs();
 					if ( this.credential == null || ! this.credential.isValid() ) {
 						throw new NoValidCredentialException("Could not get credential from session context.");
 					}
@@ -193,12 +176,58 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 				if ( this.credential == null || ! this.credential.isValid() ) {
 					throw new NoValidCredentialException("Could not get credential from session context.");
 				}
-				this.credential = (ProxyCredential)(context.getSession().get("credential")); 
+				this.credential = getCredentialJaxWs(); 
 				getUser().cleanCache();
 			}
-		
-		return this.credential;
+			
+		}
+			
+		return credential;
 	}
+	
+	private ProxyCredential credential = null;
+	
+//	/**
+//	 * Gets the credential from memory or the session context if the one from memory is already expired or about to expire.
+//	 * 
+//	 * @return the credential
+//	 * @throws NoValidCredentialException
+//	 */
+//	protected synchronized ProxyCredential getCredentialXfire() throws NoValidCredentialException {
+//
+//		MessageContext context = AbstractInvoker.getContext();
+//		
+//		if ( this.credential == null || ! this.credential.isValid() ) {
+//			myLogger.debug("No valid credential in memory. Fetching it from session context...");
+//			this.credential = (ProxyCredential)(context.getSession().get("credential")); 
+//			if ( this.credential == null || ! this.credential.isValid() ) {
+//				throw new NoValidCredentialException("Could not get credential from session context.");
+//			}
+//			getUser().cleanCache();
+//		} else
+//			// check whether min lifetime as configured in server config file is reached
+//			try {
+//				long oldLifetime = this.credential.getGssCredential().getRemainingLifetime();
+//				if ( oldLifetime < ServerPropertiesManager.getMinProxyLifetimeBeforeGettingNewProxy() ) {
+//					myLogger.debug("Credential reached minimum lifetime. Getting new one from session. Old lifetime: "+oldLifetime);
+//					this.credential = (ProxyCredential)(context.getSession().get("credential")); 
+//					if ( this.credential == null || ! this.credential.isValid() ) {
+//						throw new NoValidCredentialException("Could not get credential from session context.");
+//					}
+//					getUser().cleanCache();
+//					myLogger.debug("Success. New lifetime: "+this.credential.getGssCredential().getRemainingLifetime());
+//				}
+//			} catch (GSSException e) {
+//				myLogger.error("Could not read remaining lifetime from GSSCredential. Retrieving new one from session context.");
+//				if ( this.credential == null || ! this.credential.isValid() ) {
+//					throw new NoValidCredentialException("Could not get credential from session context.");
+//				}
+//				this.credential = (ProxyCredential)(context.getSession().get("credential")); 
+//				getUser().cleanCache();
+//			}
+//		
+//		return this.credential;
+//	}
 	
 	protected ProxyCredential getCredentialJaxWs() {
 
@@ -1085,6 +1114,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 		Job[] currentlyCreatedJobs = multiJob.getJobs().toArray(new Job[]{});
 		Arrays.sort(currentlyCreatedJobs);
 		
+		
 		for (final Job job : currentlyCreatedJobs ) {
 
 			if ( job.getStatus() != JobConstants.READY_TO_SUBMIT ) {
@@ -1179,6 +1209,8 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 							+ e.getLocalizedMessage());
 		}
 
+		if ( job.getCredential() == null ) {
+		
 		if (job.getFqan() != null) {
 			VO vo = VOManagement.getVO(getUser().getFqans().get(job.getFqan()));
 			try {
@@ -1194,6 +1226,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 					.addLogMessage("Setting credential using fqan: "
 							+ job.getFqan());
 			job.setCredential(getCredential());
+		}
 		}
 
 		String handle = null;

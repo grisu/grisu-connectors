@@ -28,13 +28,6 @@
       <groupId>org.codehaus.enunciate</groupId>
       <artifactId>enunciate-xfire-rt</artifactId>
       <version>1.14</version>
-      			<exclusions>
-				<!--we'll depend on enunciate's version of these artifacts.-->
-				<exclusion>
-					<groupId>org.codehaus.xfire</groupId>
-					<artifactId>xfire-all</artifactId>
-				</exclusion>
-				</exclusions>
     </dependency>
 		
 		
@@ -169,13 +162,13 @@
 			<classifier>sources</classifier>
 			<scope>compile</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.codehaus.xfire</groupId>
-			<artifactId>xfire-all</artifactId>
-			<version>1.2.6</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.codehaus.xfire</groupId>-->
+<!--			<artifactId>xfire-all</artifactId>-->
+<!--			<version>1.2.6</version>-->
+<!--			<type>jar</type>-->
+<!--			<scope>compile</scope>-->
+<!--		</dependency>-->
 	</dependencies>
 
 	<inceptionYear>2009</inceptionYear>
