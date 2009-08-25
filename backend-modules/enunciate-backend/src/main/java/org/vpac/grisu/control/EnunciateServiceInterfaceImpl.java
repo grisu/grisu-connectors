@@ -36,11 +36,14 @@ import org.apache.commons.vfs.FileType;
 import org.apache.commons.vfs.FileTypeSelector;
 import org.apache.log4j.Logger;
 import org.codehaus.enunciate.modules.spring_app.HTTPRequestContext;
+import org.codehaus.xfire.MessageContext;
 import org.codehaus.xfire.annotations.EnableMTOM;
+import org.codehaus.xfire.service.invoker.AbstractInvoker;
 import org.globus.myproxy.CredentialInfo;
 import org.globus.myproxy.MyProxy;
 import org.globus.myproxy.MyProxyException;
 import org.ietf.jgss.GSSCredential;
+import org.ietf.jgss.GSSException;
 import org.vpac.grisu.backend.hibernate.JobDAO;
 import org.vpac.grisu.backend.hibernate.MultiPartJobDAO;
 import org.vpac.grisu.backend.hibernate.UserDAO;
@@ -144,9 +147,64 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	 * 
 	 * @return the proxy credential that is used to contact the grid
 	 */
-	protected ProxyCredential getCredential() {
+	protected synchronized ProxyCredential getCredential() {
+		try {
+			return getCredentialXfire();
+		} catch (Exception e) {
+			return getCredentialJaxWs();
+		}
+	}
+	
+	private ProxyCredential credential = null;
+	
+	/**
+	 * Gets the credential from memory or the session context if the one from memory is already expired or about to expire.
+	 * 
+	 * @return the credential
+	 * @throws NoValidCredentialException
+	 */
+	protected synchronized ProxyCredential getCredentialXfire() throws NoValidCredentialException {
 
-		HttpServletRequest req = HTTPRequestContext.get().getRequest();
+		MessageContext context = AbstractInvoker.getContext();
+//		MessageContext context = MessageContextHelper.getContext();
+		
+		if ( this.credential == null || ! this.credential.isValid() ) {
+			myLogger.debug("No valid credential in memory. Fetching it from session context...");
+			this.credential = (ProxyCredential)(context.getSession().get("credential")); 
+			if ( this.credential == null || ! this.credential.isValid() ) {
+				throw new NoValidCredentialException("Could not get credential from session context.");
+			}
+			getUser().cleanCache();
+		} else
+			// check whether min lifetime as configured in server config file is reached
+			try {
+				long oldLifetime = this.credential.getGssCredential().getRemainingLifetime();
+				if ( oldLifetime < ServerPropertiesManager.getMinProxyLifetimeBeforeGettingNewProxy() ) {
+					myLogger.debug("Credential reached minimum lifetime. Getting new one from session. Old lifetime: "+oldLifetime);
+					this.credential = (ProxyCredential)(context.getSession().get("credential")); 
+					if ( this.credential == null || ! this.credential.isValid() ) {
+						throw new NoValidCredentialException("Could not get credential from session context.");
+					}
+					getUser().cleanCache();
+					myLogger.debug("Success. New lifetime: "+this.credential.getGssCredential().getRemainingLifetime());
+				}
+			} catch (GSSException e) {
+				myLogger.error("Could not read remaining lifetime from GSSCredential. Retrieving new one from session context.");
+				if ( this.credential == null || ! this.credential.isValid() ) {
+					throw new NoValidCredentialException("Could not get credential from session context.");
+				}
+				this.credential = (ProxyCredential)(context.getSession().get("credential")); 
+				getUser().cleanCache();
+			}
+		
+		return this.credential;
+	}
+	
+	protected ProxyCredential getCredentialJaxWs() {
+
+		HttpServletRequest req = null;
+		req = HTTPRequestContext.get().getRequest();
+
 
 		ProxyCredential sessionProxy = (ProxyCredential) (req.getSession()
 				.getAttribute("credential"));
@@ -287,6 +345,23 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	}
 
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	private UserDAO userdao = new UserDAO();
@@ -1098,6 +1173,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 				job.addLogMessage("File staging finished.");
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new JobSubmissionException(
 					"Could not access remote filesystem: "
 							+ e.getLocalizedMessage());
@@ -1351,7 +1427,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 		Date lastCheck = job.getLastStatusCheck();
 		Date now = new Date();
 		
-		if ( now.getTime() < lastCheck.getTime() + (ServerPropertiesManager.getWaitTimeBetweenJobStatusChecks()*1000) ) {
+		if ( old_status != JobConstants.EXTERNAL_HANDLE_READY && (now.getTime() < lastCheck.getTime() + (ServerPropertiesManager.getWaitTimeBetweenJobStatusChecks()*1000)) ) {
 			myLogger.debug("Last check was: "+lastCheck.toString()+". Too early to check job status again. Returning old status...");
 			return job.getStatus();
 		}
@@ -3178,10 +3254,8 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	public DtoActionStatus getActionStatus(final String handle) {
 
 		return getUser().getActionStatus(handle);
+	
 	}
-	
-	
-	
 	
 
 }
