@@ -30,7 +30,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.vpac.grisu</groupId>
-			<artifactId>grisu-cxf-interface</artifactId>
+			<artifactId>cxf-interface</artifactId>
 			<version>0.3-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
