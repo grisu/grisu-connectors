@@ -23,11 +23,6 @@
 
 	<dependencies>
 
-		<dependency>
-			<groupId>org.vpac.grisu</groupId>
-			<artifactId>grisu-client</artifactId>
-			<version>0.3-SNAPSHOT</version>
-		</dependency>
 		
 		<dependency>
   			<groupId>org.codehaus.enunciate</groupId>

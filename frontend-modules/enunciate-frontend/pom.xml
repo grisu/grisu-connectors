@@ -1,29 +1,54 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<artifactId>interfaces</artifactId>
+		<artifactId>frontend-modules</artifactId>
 		<groupId>org.vpac.grisu</groupId>
 		<version>0.3-SNAPSHOT</version>
 	</parent>
-	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.vpac.grisu</groupId>
-	<artifactId>xfire-interface</artifactId>
-	<name>XFire interface</name>
+	<artifactId>enunciate-frontend</artifactId>
 	<version>0.3-SNAPSHOT</version>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.vpac.grisu</groupId>
+			<artifactId>enunciate-interface</artifactId>
+			<version>0.3-SNAPSHOT</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.codehaus.xfire</groupId>
+			<artifactId>xfire-java5</artifactId>
+			<version>1.2.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.xfire</groupId>
+			<artifactId>xfire-annotations</artifactId>
+			<version>1.2.6</version>
+		</dependency>
+		<dependency>
+			<groupId>external.grisu-client-xfire</groupId>
+			<artifactId>not-yet-commons-ssl</artifactId>
+			<version>0.3.9</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.vpac.grisu</groupId>
 			<artifactId>grisu-commons</artifactId>
 			<version>0.3-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4</version>
+			<type>jar</type>
+			<scope>compile</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>xfire</groupId>
-			<artifactId>xfire-jsr181-api</artifactId>
-			<version>1.0-M1</version>
-		</dependency>
 	</dependencies>
 
 	<build>
@@ -41,7 +66,7 @@
 				<configuration>
 
 					<descriptors>
-						<descriptor>grisu-xfire-frontend.assembly.xml</descriptor>
+						<descriptor>grisu-xfire-client.assembly.xml</descriptor>
 					</descriptors>
 					<finalName>grisu</finalName>
 
