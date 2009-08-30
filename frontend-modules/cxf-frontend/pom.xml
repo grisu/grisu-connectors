@@ -54,7 +54,7 @@
 					<descriptors>
 						<descriptor>grisu-cxf-frontend.assembly.xml</descriptor>
 					</descriptors>
-					<finalName>grisu</finalName>
+					<finalName>cxf</finalName>
 				</configuration>
 			</plugin>
 		</plugins>

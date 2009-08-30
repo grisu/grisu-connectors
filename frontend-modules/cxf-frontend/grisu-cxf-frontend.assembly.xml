@@ -1,5 +1,5 @@
 <assembly>
-	<id>cxf-frontend</id>
+	<id>frontend</id>
 	<formats>
 		<format>jar</format>
 	</formats>
