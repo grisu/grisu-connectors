@@ -48,6 +48,15 @@
 					<target>1.5</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptors>
+						<descriptor>grisu-cxf-frontend.assembly.xml</descriptor>
+					</descriptors>
+					<finalName>grisu</finalName>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
