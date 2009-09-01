@@ -380,7 +380,7 @@ public interface XFireServiceInterface extends ServiceInterface{
 	 */
 	@WebMethod
 	DtoGridResources findMatchingSubmissionLocationsUsingJsdl(String jsdl,
-			String fqan);
+			String fqan, boolean exclude);
 
 	/**
 	 * Takes a jsdl template and returns a list of submission locations that
@@ -396,7 +396,7 @@ public interface XFireServiceInterface extends ServiceInterface{
 	 */
 	@WebMethod
 	DtoGridResources findMatchingSubmissionLocationsUsingMap(
-			DtoJob jobProperties, String fqan);
+			DtoJob jobProperties, String fqan, boolean exclude);
 
 	// ---------------------------------------------------------------------------------------------------
 	// 

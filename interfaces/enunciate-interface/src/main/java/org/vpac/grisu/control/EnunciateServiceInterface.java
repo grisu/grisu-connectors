@@ -419,7 +419,7 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	@POST
 	@Path("info/submissionlocations/forJsdlAndFqan")
 	DtoGridResources findMatchingSubmissionLocationsUsingJsdl(@QueryParam("jsdl") String jsdl,
-			@QueryParam("fqan") String fqan);
+			@QueryParam("fqan") String fqan, @QueryParam("exclude") boolean exclude);
 
 	/**
 	 * Takes a jsdl template and returns a list of submission locations that
@@ -436,7 +436,7 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	@POST
 	@Path("info/submissionlocations/forJobPropertiesAndFqan")
 	DtoGridResources findMatchingSubmissionLocationsUsingMap(
-			@QueryParam("jobProperties") DtoJob jobProperties, @QueryParam("fqan") String fqan);
+			@QueryParam("jobProperties") DtoJob jobProperties, @QueryParam("fqan") String fqan, @QueryParam("exclude") boolean exclude);
 
 	// ---------------------------------------------------------------------------------------------------
 	// 
