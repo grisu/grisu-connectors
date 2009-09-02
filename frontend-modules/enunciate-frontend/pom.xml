@@ -61,25 +61,25 @@
 					<target>1.5</target>
 				</configuration>
 			</plugin>
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<configuration>
-
-							<descriptors>
-								<descriptor>grisu-xfire-client.assembly.xml</descriptor>
-							</descriptors>
-							<finalName>grisu</finalName>
-
-						</configuration>
-						<goals>
-							<goal>attached</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+<!--			<plugin>-->
+<!--				<artifactId>maven-assembly-plugin</artifactId>-->
+<!--				<executions>-->
+<!--					<execution>-->
+<!--						<phase>package</phase>-->
+<!--						<configuration>-->
+<!---->
+<!--							<descriptors>-->
+<!--								<descriptor>grisu-xfire-client.assembly.xml</descriptor>-->
+<!--							</descriptors>-->
+<!--							<finalName>grisu</finalName>-->
+<!---->
+<!--						</configuration>-->
+<!--						<goals>-->
+<!--							<goal>attached</goal>-->
+<!--						</goals>-->
+<!--					</execution>-->
+<!--				</executions>-->
+<!--			</plugin>-->
 		</plugins>
 	</build>
 

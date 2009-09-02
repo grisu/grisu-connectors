@@ -1,5 +1,5 @@
 <assembly>
-	<id>frontend-connector</id>
+	<id>cxf-connector</id>
 	<formats>
 		<format>jar</format>
 	</formats>

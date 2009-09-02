@@ -68,7 +68,7 @@
 							<descriptors>
 								<descriptor>grisu-xfire-frontend.assembly.xml</descriptor>
 							</descriptors>
-							<finalName>xfire</finalName>
+							<finalName>grisu</finalName>
 						</configuration>
 						<goals>
 							<goal>attached</goal>
