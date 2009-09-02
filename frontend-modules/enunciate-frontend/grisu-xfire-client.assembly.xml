@@ -1,5 +1,5 @@
 <assembly>
-	<id>xfire-client</id>
+	<id>enunciate-xfire-connector</id>
 	<formats>
 		<format>jar</format>
 	</formats>

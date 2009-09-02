@@ -63,14 +63,22 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<configuration>
 
-					<descriptors>
-						<descriptor>grisu-xfire-client.assembly.xml</descriptor>
-					</descriptors>
-					<finalName>grisu</finalName>
+							<descriptors>
+								<descriptor>grisu-xfire-client.assembly.xml</descriptor>
+							</descriptors>
+							<finalName>grisu</finalName>
 
-				</configuration>
+						</configuration>
+						<goals>
+							<goal>attached</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

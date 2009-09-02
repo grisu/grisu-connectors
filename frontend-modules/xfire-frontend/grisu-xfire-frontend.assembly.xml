@@ -1,5 +1,5 @@
 <assembly>
-	<id>frontend</id>
+	<id>xfire-connector</id>
 	<formats>
 		<format>jar</format>
 	</formats>

@@ -50,12 +50,20 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<descriptors>
-						<descriptor>grisu-cxf-frontend.assembly.xml</descriptor>
-					</descriptors>
-					<finalName>cxf</finalName>
-				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<configuration>
+							<descriptors>
+								<descriptor>grisu-cxf-frontend.assembly.xml</descriptor>
+							</descriptors>
+							<finalName>cxf</finalName>
+						</configuration>
+						<goals>
+							<goal>attached</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

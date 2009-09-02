@@ -61,12 +61,20 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<descriptors>
-						<descriptor>grisu-xfire-frontend.assembly.xml</descriptor>
-					</descriptors>
-					<finalName>xfire</finalName>
-				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<configuration>
+							<descriptors>
+								<descriptor>grisu-xfire-frontend.assembly.xml</descriptor>
+							</descriptors>
+							<finalName>xfire</finalName>
+						</configuration>
+						<goals>
+							<goal>attached</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
