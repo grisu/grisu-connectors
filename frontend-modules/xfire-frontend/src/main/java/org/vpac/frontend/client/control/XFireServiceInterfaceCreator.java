@@ -1,4 +1,4 @@
-package org.vpac.grisu.client.control;
+package org.vpac.frontend.client.control;
 
 import java.net.URL;
 import java.util.Arrays;
@@ -16,7 +16,7 @@ import org.codehaus.xfire.service.Service;
 import org.codehaus.xfire.service.binding.ObjectServiceFactory;
 import org.codehaus.xfire.transport.http.CommonsHttpMessageSender;
 import org.codehaus.xfire.transport.http.HttpTransport;
-import org.vpac.grisu.client.control.xfire.ClientAuthenticationHandler;
+import org.vpac.frontend.client.control.xfire.ClientAuthenticationHandler;
 import org.vpac.grisu.control.ServiceInterface;
 import org.vpac.grisu.control.ServiceInterfaceCreator;
 import org.vpac.grisu.control.exceptions.NoValidCredentialException;

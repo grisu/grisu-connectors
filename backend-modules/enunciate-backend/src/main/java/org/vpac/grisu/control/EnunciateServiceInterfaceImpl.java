@@ -3,6 +3,7 @@ package org.vpac.grisu.control;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.Arrays;
@@ -36,10 +37,7 @@ import org.apache.commons.vfs.FileType;
 import org.apache.commons.vfs.FileTypeSelector;
 import org.apache.log4j.Logger;
 import org.codehaus.enunciate.modules.spring_app.HTTPRequestContext;
-import org.codehaus.xfire.MessageContext;
 import org.codehaus.xfire.annotations.EnableMTOM;
-import org.codehaus.xfire.service.invoker.AbstractInvoker;
-import org.codehaus.xfire.transport.http.XFireServletController;
 import org.globus.myproxy.CredentialInfo;
 import org.globus.myproxy.MyProxy;
 import org.globus.myproxy.MyProxyException;
@@ -104,6 +102,8 @@ import au.org.arcs.jcommons.interfaces.InformationManager;
 import au.org.arcs.jcommons.utils.JsdlHelpers;
 import au.org.arcs.jcommons.utils.SubmissionLocationHelpers;
 
+import com.google.gwt.user.server.rpc.SerializationPolicy;
+import com.google.gwt.user.server.rpc.SerializationPolicyLoader;
 import com.sun.xml.ws.developer.StreamingAttachment;
 
 
@@ -139,8 +139,11 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	private InformationManager informationManager = CachedMdsInformationManager
 			.getDefaultCachedMdsInformationManager(Environment
 					.getGrisuDirectory().toString());
-	
 
+
+	private String username;
+	private char[] password;
+	
 	/**
 	 * This method has to be implemented by the endpoint specific
 	 * ServiceInterface. Since there are a few different ways to get a proxy
@@ -150,6 +153,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	 * @return the proxy credential that is used to contact the grid
 	 */
 	protected synchronized ProxyCredential getCredential() {
+		
 		
 		if ( this.credential == null || ! this.credential.isValid() ) {
 			myLogger.debug("No valid credential in memory. Fetching it from session context...");
@@ -231,9 +235,20 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	
 	protected ProxyCredential getCredentialJaxWs() {
 
+		if ( username != null && password != null ) {
+			
+			ProxyCredential proxy = createProxyCredential(username, new String(password),
+					MyProxyServerParams.getMyProxyServer(),
+					MyProxyServerParams.getMyProxyPort(),
+					ServerPropertiesManager.getMyProxyLifetime());
+			
+			return proxy;
+			
+		}
+		
+		
 		HttpServletRequest req = null;
 		req = HTTPRequestContext.get().getRequest();
-
 
 		ProxyCredential sessionProxy = (ProxyCredential) (req.getSession()
 				.getAttribute("credential"));
@@ -358,7 +373,13 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 
 	public void login(String username, String password) {
 
+		this.username = username;
+		this.password = password.toCharArray();
+		
 		getCredential();
+		
+
+		
 
 	}
 
@@ -1851,6 +1872,22 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	 * @see org.vpac.grisu.control.ServiceInterface#df()
 	 */
 	public synchronized DtoMountPoints df() {
+		
+		System.out.println("Df called.");
+		
+		try {
+			InputStream in =
+			     EnunciateServiceInterfaceImpl.class.getResourceAsStream( "/29F4EA1240F157649C12466F01F46F60.gwt.rpc" );
+			SerializationPolicy serializationPolicy =
+			    SerializationPolicyLoader.loadFromStream( in );
+			in = EnunciateServiceInterfaceImpl.class.getResourceAsStream( "/94345F39BF782334E4F896CAA8F37E9E.gwt.rpc" );
+			serializationPolicy =
+			    SerializationPolicyLoader.loadFromStream( in );
+			
+			System.out.println("SUCCESS!!!!!!!!");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
 		return DtoMountPoints.createMountpoints(df_internal());
 	}

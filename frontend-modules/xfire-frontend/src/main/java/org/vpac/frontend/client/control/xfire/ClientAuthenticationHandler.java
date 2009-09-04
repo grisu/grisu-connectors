@@ -1,6 +1,6 @@
 
 
-package org.vpac.grisu.client.control.xfire;
+package org.vpac.frontend.client.control.xfire;
 
 import org.codehaus.xfire.MessageContext;
 import org.codehaus.xfire.handler.AbstractHandler;

@@ -1,4 +1,4 @@
-package org.vpac.grisu.client.control.cxf;
+package org.vpac.grisu.frontend.control.cxf;
 
 import org.vpac.grisu.cxf.MyProxyCredentials;
 
