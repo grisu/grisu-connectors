@@ -26,6 +26,7 @@ import org.vpac.grisu.model.dto.DtoJob;
 import org.vpac.grisu.model.dto.DtoJobs;
 import org.vpac.grisu.model.dto.DtoMountPoints;
 import org.vpac.grisu.model.dto.DtoMultiPartJob;
+import org.vpac.grisu.model.dto.DtoStringList;
 import org.vpac.grisu.model.dto.DtoSubmissionLocations;
 
 import au.org.arcs.jcommons.constants.JobSubmissionProperty;
@@ -276,7 +277,7 @@ public interface XFireServiceInterface extends ServiceInterface{
 	 * @return the supported versions
 	 */
 	@WebMethod
-	String[] getVersionsOfApplicationOnSubmissionLocation(
+	DtoStringList getVersionsOfApplicationOnSubmissionLocation(
 			String application, String submissionLocation);
 
 	//	
@@ -293,7 +294,7 @@ public interface XFireServiceInterface extends ServiceInterface{
 	 * @return the gridftp servers
 	 */
 	@WebMethod
-	String[] getStagingFileSystemForSubmissionLocation(String subLoc);
+	DtoStringList getStagingFileSystemForSubmissionLocation(String subLoc);
 
 	/**
 	 * Returns all fqans of the user for the vo's that are configured on the
@@ -302,7 +303,7 @@ public interface XFireServiceInterface extends ServiceInterface{
 	 * @return all fqans of the user
 	 */
 	@WebMethod
-	String[] getFqans();
+	DtoStringList getFqans();
 
 	/**
 	 * Checks the current certificate and returns its' dn.
@@ -320,7 +321,7 @@ public interface XFireServiceInterface extends ServiceInterface{
 	 * @return all sites
 	 */
 	@WebMethod
-	String[] getAllSites();
+	DtoStringList getAllSites();
 
 	/**
 	 * Returns all applications that are available grid-wide or at certain
@@ -331,7 +332,7 @@ public interface XFireServiceInterface extends ServiceInterface{
 	 * @return all applications
 	 */
 	@WebMethod
-	String[] getAllAvailableApplications(String[] sites);
+	DtoStringList getAllAvailableApplications(DtoStringList sites);
 
 	/**
 	 * Returns all the details that are know about this version of the
@@ -597,7 +598,7 @@ public interface XFireServiceInterface extends ServiceInterface{
 	 *             if the folder can't be accessed/read
 	 */
 	@WebMethod
-	String[] getChildrenFileNames(String folder, boolean onlyFiles)
+	DtoStringList getChildrenFileNames(String folder, boolean onlyFiles)
 			throws RemoteFileSystemException;
 
 	/**
@@ -662,7 +663,7 @@ public interface XFireServiceInterface extends ServiceInterface{
 	 *             if the filesystem could not be accessed
 	 */
 	@WebMethod
-	void deleteFiles(String[] files) throws RemoteFileSystemException;
+	void deleteFiles(DtoStringList files) throws RemoteFileSystemException;
 
 	// ---------------------------------------------------------------------------------------------------
 	// 
@@ -770,7 +771,7 @@ public interface XFireServiceInterface extends ServiceInterface{
 	 * @return all jobnames
 	 */
 	@WebMethod
-	String[] getAllJobnames();
+	DtoStringList getAllJobnames();
 	
 	
 	/**
@@ -779,7 +780,7 @@ public interface XFireServiceInterface extends ServiceInterface{
 	 * @return all multipartjobids
 	 */
 	@WebMethod
-	String[] getAllMultiPartJobIds();
+	DtoStringList getAllMultiPartJobIds();
 
 //	/**
 //	 * Creates a job using the jobProperties that are specified in the map and

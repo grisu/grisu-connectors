@@ -3,7 +3,6 @@ package org.vpac.grisu.control;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.Arrays;
@@ -81,6 +80,7 @@ import org.vpac.grisu.model.dto.DtoJobProperty;
 import org.vpac.grisu.model.dto.DtoJobs;
 import org.vpac.grisu.model.dto.DtoMountPoints;
 import org.vpac.grisu.model.dto.DtoMultiPartJob;
+import org.vpac.grisu.model.dto.DtoStringList;
 import org.vpac.grisu.model.dto.DtoSubmissionLocations;
 import org.vpac.grisu.model.job.JobSubmissionObjectImpl;
 import org.vpac.grisu.settings.Environment;
@@ -102,8 +102,6 @@ import au.org.arcs.jcommons.interfaces.InformationManager;
 import au.org.arcs.jcommons.utils.JsdlHelpers;
 import au.org.arcs.jcommons.utils.SubmissionLocationHelpers;
 
-import com.google.gwt.user.server.rpc.SerializationPolicy;
-import com.google.gwt.user.server.rpc.SerializationPolicyLoader;
 import com.sun.xml.ws.developer.StreamingAttachment;
 
 
@@ -413,7 +411,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	
 	
 	public static final int DEFAULT_JOB_SUBMISSION_RETRIES = 5;
-	
+
 	private UserDAO userdao = new UserDAO();
 
 	protected JobDAO jobdao = new JobDAO();
@@ -566,7 +564,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 								+ "Jobname not specified and job creation method is force-name.");
 			}
 
-			String[] allJobnames = getAllJobnames();
+			String[] allJobnames = getAllJobnames().asArray();
 			Arrays.sort(allJobnames);
 			if (Arrays.binarySearch(allJobnames, jobname) >= 0) {
 				throw new JobPropertiesException(
@@ -584,7 +582,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 			}
 		} else if (Constants.TIMESTAMP_METHOD.equals(jobnameCreationMethod)) {
 
-			String[] allJobnames = getAllJobnames();
+			String[] allJobnames = getAllJobnames().asArray();
 			Arrays.sort(allJobnames);
 
 			String temp;
@@ -1092,11 +1090,12 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 				.getRootUrl());
 		job.addJobProperty(Constants.STAGING_FILE_SYSTEM_KEY,
 				stagingFilesystemToUse);
+
 		job.addJobProperty(Constants.WORKINGDIRECTORY_KEY, workingDirectory);
 		String submissionSite = informationManager
-				.getSiteForHostOrUrl(stagingFilesystemToUse);
+				.getSiteForHostOrUrl(SubmissionLocationHelpers.extractHost(submissionLocation));
 		myLogger.debug("Calculated submissionSite: " + submissionSite);
-		job.addJobProperty("submissionSite", submissionSite);
+		job.addJobProperty(Constants.SUBMISSION_SITE_KEY, submissionSite);
 		// job.setJob_directory(stagingFilesystemToUse + workingDirectory);
 		job.getJobProperties().put(Constants.JOBDIRECTORY_KEY,
 				stagingFilesystemToUse + workingDirectory);
@@ -1581,11 +1580,11 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 		return dtoJobs;
 	}
 
-	public String[] getAllJobnames() {
+	public DtoStringList getAllJobnames() {
 
 		List<String> jobnames = jobdao.findJobNamesByDn(getUser().getDn());
 
-		return jobnames.toArray(new String[] {});
+		return DtoStringList.fromStringList(jobnames);
 	}
 
 	/**
@@ -1778,11 +1777,11 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 
 	}
 
-	public String[] getAllMultiPartJobIds() {
+	public DtoStringList getAllMultiPartJobIds() {
 
 		List<String> jobnames = multiPartJobDao.findJobNamesByDn(getDN());
 
-		return jobnames.toArray(new String[] {});
+		return DtoStringList.fromStringList(jobnames);
 	}
 
 	/**
@@ -1850,7 +1849,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 			// getUser().removeAutoMountedMountpoints();
 			// userdao.attachClean(getUser());
 
-			getUser().setAutoMountedMountPoints(df_auto_mds(getAllSites()));
+			getUser().setAutoMountedMountPoints(df_auto_mds(getAllSites().asArray()));
 
 			Set<MountPoint> mps = getUser().getAllMountPoints();
 
@@ -1872,22 +1871,6 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	 * @see org.vpac.grisu.control.ServiceInterface#df()
 	 */
 	public synchronized DtoMountPoints df() {
-		
-		System.out.println("Df called.");
-		
-		try {
-			InputStream in =
-			     EnunciateServiceInterfaceImpl.class.getResourceAsStream( "/29F4EA1240F157649C12466F01F46F60.gwt.rpc" );
-			SerializationPolicy serializationPolicy =
-			    SerializationPolicyLoader.loadFromStream( in );
-			in = EnunciateServiceInterfaceImpl.class.getResourceAsStream( "/94345F39BF782334E4F896CAA8F37E9E.gwt.rpc" );
-			serializationPolicy =
-			    SerializationPolicyLoader.loadFromStream( in );
-			
-			System.out.println("SUCCESS!!!!!!!!");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 
 		return DtoMountPoints.createMountpoints(df_internal());
 	}
@@ -1949,7 +1932,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 
 		// for ( String site : sites ) {
 
-		for (String fqan : getFqans()) {
+		for (String fqan : getFqans().getStringList()) {
 			Date start = new Date();
 			Map<String, String[]> mpUrl = informationManager
 					.getDataLocationsForVO(fqan);
@@ -2425,7 +2408,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	 * 
 	 * @see org.vpac.grisu.control.ServiceInterface#getFqans()
 	 */
-	public String[] getFqans() {
+	public DtoStringList getFqans() {
 
 		if (currentFqans == null) {
 
@@ -2436,7 +2419,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 
 			currentFqans = fqans.toArray(new String[fqans.size()]);
 		}
-		return currentFqans;
+		return DtoStringList.fromStringArray(currentFqans);
 	}
 
 	/*
@@ -2448,10 +2431,10 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 		return getUser().getDn();
 	}
 
-	public String[] getAllSites() {
+	public DtoStringList getAllSites() {
 
 		// if ( ServerPropertiesManager.getMDSenabled() ) {
-		return informationManager.getAllSites();
+		return DtoStringList.fromStringArray(informationManager.getAllSites());
 		// return MountPointManager.getAllSitesFromMDS();
 		// can't enable the mds version right now until the datadirectory thing
 		// works...
@@ -2475,12 +2458,19 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	public void addJobProperty(final String jobname, final String key,
 			final String value) throws NoSuchJobException {
 
-		Job job = getJob(jobname);
+		try {
+			Job job = getJob(jobname);
+			job.addJobProperty(key, value);
+			jobdao.saveOrUpdate(job);
+			myLogger.debug("Added job property: " + key);
+		} catch (NoSuchJobException e) {
+			MultiPartJob job = getMultiPartJobFromDatabase(jobname);
+			job.addJobProperty(key, value);
+			multiPartJobDao.saveOrUpdate(job);
+			myLogger.debug("Added multijob property: "+key);
+		}
 
-		job.addJobProperty(key, value);
-		jobdao.saveOrUpdate(job);
 
-		myLogger.debug("Added job property: " + key);
 	}
 
 	/*
@@ -2500,7 +2490,6 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 
 		myLogger.debug("Added " + properties.getProperties().size()
 				+ " job properties.");
-
 	}
 
 	/*
@@ -2543,9 +2532,14 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	public String getJobProperty(final String jobname, final String key)
 			throws NoSuchJobException {
 
-		Job job = getJob(jobname);
+		try {
+			Job job = getJob(jobname);
 
-		return job.getJobProperty(key);
+			return job.getJobProperty(key);
+		} catch (NoSuchJobException e) {
+			MultiPartJob mpj = getMultiPartJobFromDatabase(jobname);
+			return mpj.getJobProperty(key);
+		}
 	}
 
 	/*
@@ -2605,7 +2599,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	 * org.vpac.grisu.control.ServiceInterface#getChildrenFiles(java.lang.String
 	 * , boolean)
 	 */
-	public String[] getChildrenFileNames(final String folder,
+	public DtoStringList getChildrenFileNames(final String folder,
 			final boolean onlyFiles) throws RemoteFileSystemException {
 
 		String[] result = null;
@@ -2629,7 +2623,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 					+ folder + ": " + e.getMessage());
 		}
 
-		return result;
+		return DtoStringList.fromStringArray(result);
 
 	}
 
@@ -2737,11 +2731,11 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	 * @see
 	 * org.vpac.grisu.control.ServiceInterface#deleteFiles(java.lang.String[])
 	 */
-	public void deleteFiles(final String[] files)
+	public void deleteFiles(final DtoStringList files)
 			throws RemoteFileSystemException {
 
 		// ArrayList<String> filesNotDeleted = new ArrayList<String>();
-		for (String file : files) {
+		for (String file : files.getStringList()) {
 			try {
 				deleteFile(file);
 			} catch (Exception e) {
@@ -3044,10 +3038,10 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 
 	}
 
-	public String[] getVersionsOfApplicationOnSubmissionLocation(
+	public DtoStringList getVersionsOfApplicationOnSubmissionLocation(
 			final String application, final String submissionLocation) {
-		return informationManager.getVersionsOfApplicationOnSubmissionLocation(
-				application, submissionLocation);
+		return DtoStringList.fromStringArray(informationManager.getVersionsOfApplicationOnSubmissionLocation(
+				application, submissionLocation));
 	}
 
 	public DtoApplicationInfo getSubmissionLocationsPerVersionOfApplication(
@@ -3247,17 +3241,17 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	 * org.vpac.grisu.control.ServiceInterface#getAllAvailableApplications(java
 	 * .lang.String[])
 	 */
-	public String[] getAllAvailableApplications(final String[] sites) {
+	public DtoStringList getAllAvailableApplications(final DtoStringList sites) {
 		Set<String> siteList = new TreeSet<String>();
 
 		if (sites == null) {
-			return informationManager.getAllApplicationsOnGrid();
+			return DtoStringList.fromStringArray(informationManager.getAllApplicationsOnGrid());
 		}
-		for (int i = 0; i < sites.length; i++) {
-			siteList.addAll(Arrays.asList(informationManager
-					.getAllApplicationsAtSite(sites[i])));
+		for ( String site : sites.getStringList() ) {
+			siteList.addAll(Arrays.asList(informationManager.getAllApplicationsAtSite(site)));
 		}
-		return siteList.toArray(new String[] {});
+
+		return DtoStringList.fromStringArray(siteList.toArray(new String[]{}));
 
 	}
 
@@ -3267,10 +3261,10 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	 * @seeorg.vpac.grisu.control.ServiceInterface#
 	 * getStagingFileSystemForSubmissionLocation(java.lang.String)
 	 */
-	public String[] getStagingFileSystemForSubmissionLocation(
+	public DtoStringList getStagingFileSystemForSubmissionLocation(
 			final String subLoc) {
-		return informationManager
-				.getStagingFileSystemForSubmissionLocation(subLoc);
+		return DtoStringList.fromStringArray(informationManager
+				.getStagingFileSystemForSubmissionLocation(subLoc));
 	}
 
 	/**

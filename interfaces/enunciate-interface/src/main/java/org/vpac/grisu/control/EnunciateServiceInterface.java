@@ -6,7 +6,6 @@ import java.util.Map;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.annotation.security.RolesAllowed;
-import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -36,10 +35,8 @@ import org.vpac.grisu.model.dto.DtoJob;
 import org.vpac.grisu.model.dto.DtoJobs;
 import org.vpac.grisu.model.dto.DtoMountPoints;
 import org.vpac.grisu.model.dto.DtoMultiPartJob;
-import org.vpac.grisu.model.dto.DtoMultiPartJobs;
+import org.vpac.grisu.model.dto.DtoStringList;
 import org.vpac.grisu.model.dto.DtoSubmissionLocations;
-
-import au.org.arcs.mds.JobSubmissionProperty;
 
 /**
  * This is the central interface of grisu. These are the methods the web service
@@ -317,8 +314,10 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	 *            the site
 	 * @return the supported versions
 	 */
-	String[] getVersionsOfApplicationOnSubmissionLocation(
-			String application, String submissionLocation);
+	@GET
+	@Path("info/application/{application}/{submissionLocation}/versions")
+	DtoStringList getVersionsOfApplicationOnSubmissionLocation(
+			@PathParam("application")String application, @PathParam("submissionLocation") String submissionLocation);
 
 	/**
 	 * Returns an array of the gridftp servers for the specified submission
@@ -329,7 +328,9 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	 *            (queuename@cluster:contactstring#jobmanager)
 	 * @return the gridftp servers
 	 */
-	String[] getStagingFileSystemForSubmissionLocation(String subLoc);
+	@GET
+	@Path("info/stagingfilesystems/{subloc}")
+	DtoStringList getStagingFileSystemForSubmissionLocation(@PathParam("subloc") String subLoc);
 
 	/**
 	 * Returns all fqans of the user for the vo's that are configured on the
@@ -337,7 +338,10 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	 * 
 	 * @return all fqans of the user
 	 */
-	String[] getFqans();
+	@GET
+	@Path("user/fqans")
+	@RolesAllowed("User")
+	DtoStringList getFqans();
 
 	/**
 	 * Checks the current certificate and returns its' dn.
@@ -357,7 +361,9 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	 * 
 	 * @return all sites
 	 */
-	String[] getAllSites();
+	@GET
+	@Path("info/allSites")
+	DtoStringList getAllSites();
 
 	/**
 	 * Returns all applications that are available grid-wide or at certain
@@ -367,7 +373,9 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	 *            all the sites you want to query or null for a grid-wide search
 	 * @return all applications
 	 */
-	String[] getAllAvailableApplications(String[] sites);
+	@POST
+	@Path("info/applications")
+	DtoStringList getAllAvailableApplications(@QueryParam("sites") DtoStringList sites);
 
 	/**
 	 * Returns all the details that are know about this version of the
@@ -660,7 +668,7 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	@RolesAllowed("User")
 	@POST
 	@Path("user/files/childrenfilenames")
-	String[] getChildrenFileNames(@QueryParam("url") String url, @QueryParam("onlyFiles") boolean onlyFiles)
+	DtoStringList getChildrenFileNames(@QueryParam("url") String url, @QueryParam("onlyFiles") boolean onlyFiles)
 			throws RemoteFileSystemException;
 
 	/**
@@ -732,7 +740,10 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	 * @throws RemoteFileSystemException
 	 *             if the filesystem could not be accessed
 	 */
-	void deleteFiles(String[] files) throws RemoteFileSystemException;
+	@RolesAllowed("User")
+	@POST
+	@Path("actions/deleteFiles")
+	void deleteFiles(@QueryParam("urls") DtoStringList files) throws RemoteFileSystemException;
 
 	// ---------------------------------------------------------------------------------------------------
 	// 
@@ -759,7 +770,9 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	 * 
 	 * @return all jobnames
 	 */
-	String[] getAllJobnames();
+	@GET
+	@Path("user/alljobnames")
+	DtoStringList getAllJobnames();
 
 //	/**
 //	 * Creates a job using the jobProperties that are specified in the map and
@@ -997,7 +1010,7 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	 * @return all multipartjobids
 	 */
 	@RolesAllowed("User")
-	String[] getAllMultiPartJobIds();
+	DtoStringList getAllMultiPartJobIds();
 	
 
 
