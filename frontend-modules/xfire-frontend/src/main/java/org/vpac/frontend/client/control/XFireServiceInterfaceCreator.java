@@ -28,6 +28,11 @@ public class XFireServiceInterfaceCreator implements ServiceInterfaceCreator {
 
 	static final Logger myLogger = Logger
 			.getLogger(XFireServiceInterfaceCreator.class.getName());
+	
+	// for package auto-download
+	public Integer getPackageVersion() {
+		return 1;
+	}
 
 	public static String DEFAULT_SERVICE_INTERFACE = "https://grisu.vpac.org/grisu-ws/services/grisu";
 
