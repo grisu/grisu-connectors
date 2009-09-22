@@ -341,30 +341,14 @@ public interface CXFServiceInterface extends ServiceInterface{
 	 *            the name of the application
 	 * @param version
 	 *            the version of the application
-	 * @param site
-	 *            the site where you want to run the application
+	 * @param subLoc
+	 *            the submissionLocation
 	 * @return details about the applications
 	 */
 	@WebMethod
-	DtoApplicationDetails getApplicationDetailsForVersionAndSite(String application,
-			String version, String site);
+	DtoApplicationDetails getApplicationDetailsForVersionAndSubmissionLocation(String application,
+			String version, String subLoc);
 
-	/**
-	 * Returns all the details that are know about the default version of the
-	 * application. The return will look something like this: module=namd/2
-	 * executable=/usr/local/bin/namd2 or whatever.
-	 * 
-	 * @param application
-	 *            the name of the application
-	 * @param site_or_submissionLocation
-	 *            the site where you want to run the application, you can also
-	 *            specify a submissionlocation (but this will be slower
-	 *            possibly)
-	 * @return details about the applications
-	 */
-	@WebMethod
-	DtoApplicationDetails getApplicationDetailsForSite(String application,
-			String site_or_submissionLocation);
 
 	/**
 	 * Takes a jsdl template and returns a list of submission locations that
@@ -753,16 +737,6 @@ public interface CXFServiceInterface extends ServiceInterface{
 	@WebMethod
 	void copyMultiPartJobInputFile(String multiPartJobId, String inputFile,	String filename) throws RemoteFileSystemException, NoSuchJobException;
 
-	/**
-	 * Submits all jobs that belong to this multipartjob.
-	 * 
-	 * @param multipartjobid the id of the multipartjob
-	 * @param waitForSubmissionsToFinish whether to wait for all submissions to finish before returning from method
-	 * @throws JobSubmissionException if one of the jobsubmission failed. 
-	 * @throws NoSuchJobException if no multipartjob with this id exists
-	 */
-	@WebMethod
-	void submitMultiPartJob(String multipartjobid) throws JobSubmissionException, NoSuchJobException;
 	
 	/**
 	 * Returns a list of all jobnames that are currently stored on this backend.

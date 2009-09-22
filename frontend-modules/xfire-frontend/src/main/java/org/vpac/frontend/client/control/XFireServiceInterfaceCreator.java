@@ -31,7 +31,7 @@ public class XFireServiceInterfaceCreator implements ServiceInterfaceCreator {
 	
 	// for package auto-download
 	public Integer getPackageVersion() {
-		return 1;
+		return 2;
 	}
 
 	public static String DEFAULT_SERVICE_INTERFACE = "https://grisu.vpac.org/grisu-ws/services/grisu";

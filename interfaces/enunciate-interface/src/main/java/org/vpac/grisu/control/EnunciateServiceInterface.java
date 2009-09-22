@@ -392,26 +392,9 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	 */
 	@GET
 	@Path("info/application/{application}/{version}/{site}")
-	DtoApplicationDetails getApplicationDetailsForVersionAndSite(@PathParam("application") String application,
+	DtoApplicationDetails getApplicationDetailsForVersionAndSubmissionLocation(@PathParam("application") String application,
 			@PathParam("version") String version, @PathParam("site") String site);
 
-	/**
-	 * Returns all the details that are know about the default version of the
-	 * application. The return will look something like this: module=namd/2
-	 * executable=/usr/local/bin/namd2 or whatever.
-	 * 
-	 * @param application
-	 *            the name of the application
-	 * @param site_or_submissionLocation
-	 *            the site where you want to run the application, you can also
-	 *            specify a submissionlocation (but this will be slower
-	 *            possibly)
-	 * @return details about the applications
-	 */
-	@GET
-	@Path("info/application/{application}/{site}")
-	DtoApplicationDetails getApplicationDetailsForSite(@PathParam("application") String application,
-			@PathParam("site") String site_or_submissionLocation);
 
 	/**
 	 * Takes a jsdl template and returns a list of submission locations that
@@ -1055,16 +1038,6 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	 */
 	@RolesAllowed("User")
 	void copyMultiPartJobInputFile(String multiPartJobId, String inputFile,	String filename) throws RemoteFileSystemException, NoSuchJobException;
-
-	/**
-	 * Submits all jobs that belong to this multipartjob.
-	 * 
-	 * @param multipartjobid the id of the multipartjob
-	 * @throws JobSubmissionException if one of the jobsubmission failed. 
-	 * @throws NoSuchJobException if no multipartjob with this id exists
-	 */
-	@RolesAllowed("User")
-	void submitMultiPartJob(String multipartjobid) throws JobSubmissionException, NoSuchJobException;
 	
 	/**
 	 * Resubmit a job. Kills the old one if it's still running.
