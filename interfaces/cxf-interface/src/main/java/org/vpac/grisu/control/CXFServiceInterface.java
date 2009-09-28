@@ -731,7 +731,7 @@ public interface CXFServiceInterface extends ServiceInterface{
 	 * @return all jobnames
 	 */
 	@WebMethod
-	DtoStringList getAllJobnames();
+	DtoStringList getAllJobnames(String application);
 	
 	
 	/**
@@ -740,7 +740,7 @@ public interface CXFServiceInterface extends ServiceInterface{
 	 * @return all multipartjobids
 	 */
 	@WebMethod
-	DtoStringList getAllMultiPartJobIds();
+	DtoStringList getAllMultiPartJobIds(String application);
 
 //	/**
 //	 * Creates a job using the jobProperties that are specified in the map and
