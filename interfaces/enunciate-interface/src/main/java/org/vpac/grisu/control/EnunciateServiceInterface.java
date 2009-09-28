@@ -741,9 +741,9 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	 * 
 	 * @return all jobnames
 	 */
-	@GET
-	@Path("user/alljobnames")
-	DtoStringList getAllJobnames(String application);
+	@POST
+	@Path("user/alljobnames/{application}")
+	DtoStringList getAllJobnames(@PathParam("application") String application);
 
 //	/**
 //	 * Creates a job using the jobProperties that are specified in the map and
