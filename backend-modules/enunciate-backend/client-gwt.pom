@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.vpac.grisu</groupId>
+	<artifactId>grisu-client-enunciate-gwt</artifactId>
+	<version>0.3-SNAPSHOT</version>
+	<description>
+		Gwt-client-side classes for the Grisu API.
+	</description>
+
+	<repositories>
+		<repository>
+			<id>ARCS</id>
+			<url>http://code.arcs.org.au/nexus/content/groups/public</url>
+		</repository>
+		<repository>
+			<id>ARCS Snapshots</id>
+			<url>http://code.arcs.org.au/nexus/content/groups/public-snapshots
+			</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+
+		
+<!--		<dependency>-->
+<!--  			<groupId>org.codehaus.enunciate</groupId>-->
+<!--  			<artifactId>enunciate-xfire-client-tools</artifactId>-->
+<!--  			<version>1.7</version>-->
+<!--  			<type>jar</type>-->
+<!--  			<scope>compile</scope>-->
+<!--  		</dependency>-->
+
+	</dependencies>
+
+</project>

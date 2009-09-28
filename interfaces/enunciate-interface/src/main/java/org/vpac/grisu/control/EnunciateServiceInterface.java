@@ -154,18 +154,6 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	@Path("user/session/credentialendtime")
 	long getCredentialEndTime();
 
-	/**
-	 * Can be used to inform the frontend what the backend is doing at the
-	 * moment and what the bloody hell is taking so long... (like
-	 * file-cross-staging...)
-	 * 
-	 * @param handle
-	 *            the name of the action to monitor. This can be either a
-	 *            jobname or a filetransfer handle
-	 * @return the current status of any backend activity
-	 */
-	DtoActionStatus getActionStatus(String handle);
-
 	// ---------------------------------------------------------------------------------------------------
 	// 
 	// Grid environment information methods
@@ -1056,7 +1044,17 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	@RolesAllowed("User")
 	void restartJob(final String jobname, String changedJsdl) throws JobSubmissionException, NoSuchJobException;
 		
-
+	/**
+	 * Returns the current status of an ongoing action. 
+	 * 
+	 * This is not stored in the database, so you can only access a status for an action that was created in the same session.
+	 * 
+	 * @param actionHandle the (unique) handle of the action (e.g. the jobname or target url)
+	 * @return the status object
+	 */
+	@RolesAllowed("User")
+	@Path("user/status/{handle}")
+	DtoActionStatus getActionStatus(@PathParam("handle") String actionHandle);
 
 
 }

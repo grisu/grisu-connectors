@@ -123,19 +123,6 @@ public interface CXFServiceInterface extends ServiceInterface{
 	@WebMethod
 	long getCredentialEndTime();
 
-	/**
-	 * Can be used to inform the frontend what the backend is doing at the
-	 * moment and what the bloody hell is taking so long... (like
-	 * file-cross-staging...)
-	 * 
-	 * @param handle
-	 *            the name of the action to monitor. This can be either a
-	 *            jobname or a filetransfer handle
-	 * @return the current status of any backend activity
-	 */
-	@WebMethod
-	DtoActionStatus getActionStatus(String handle);
-
 	// ---------------------------------------------------------------------------------------------------
 	// 
 	// Grid environment information methods
@@ -940,5 +927,16 @@ public interface CXFServiceInterface extends ServiceInterface{
 	 */
 	@WebMethod
 	String getJsdlDocument(String jobname) throws NoSuchJobException;
+	
+	/**
+	 * Returns the current status of an ongoing action. 
+	 * 
+	 * This is not stored in the database, so you can only access a status for an action that was created in the same session.
+	 * 
+	 * @param actionHandle the (unique) handle of the action (e.g. the jobname or target url)
+	 * @return the status object
+	 */
+	@WebMethod
+	DtoActionStatus getActionStatus(String actionHandle);
 	
 }

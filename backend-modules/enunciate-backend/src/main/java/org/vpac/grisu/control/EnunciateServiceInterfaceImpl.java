@@ -104,7 +104,6 @@ import au.org.arcs.jcommons.utils.SubmissionLocationHelpers;
 
 import com.sun.xml.ws.developer.StreamingAttachment;
 
-
 /**
  * This abstract class implements most of the methods of the
  * {@link ServiceInterface} interface. This way developers don't have to waste
@@ -138,10 +137,9 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 			.getDefaultCachedMdsInformationManager(Environment
 					.getGrisuDirectory().toString());
 
-
 	private String username;
 	private char[] password;
-	
+
 	/**
 	 * This method has to be implemented by the endpoint specific
 	 * ServiceInterface. Since there are a few different ways to get a proxy
@@ -151,100 +149,121 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	 * @return the proxy credential that is used to contact the grid
 	 */
 	protected synchronized ProxyCredential getCredential() {
-		
-		
-		if ( this.credential == null || ! this.credential.isValid() ) {
-			myLogger.debug("No valid credential in memory. Fetching it from session context...");
-			this.credential = getCredentialJaxWs(); 
-			if ( this.credential == null || ! this.credential.isValid() ) {
-				throw new NoValidCredentialException("Could not get credential from session context.");
+
+		if (this.credential == null || !this.credential.isValid()) {
+			myLogger
+					.debug("No valid credential in memory. Fetching it from session context...");
+			this.credential = getCredentialJaxWs();
+			if (this.credential == null || !this.credential.isValid()) {
+				throw new NoValidCredentialException(
+						"Could not get credential from session context.");
 			}
 			getUser().cleanCache();
 		} else {
-			// check whether min lifetime as configured in server config file is reached
+			// check whether min lifetime as configured in server config file is
+			// reached
 			try {
-				long oldLifetime = this.credential.getGssCredential().getRemainingLifetime();
-				if ( oldLifetime < ServerPropertiesManager.getMinProxyLifetimeBeforeGettingNewProxy() ) {
-					myLogger.debug("Credential reached minimum lifetime. Getting new one from session. Old lifetime: "+oldLifetime);
+				long oldLifetime = this.credential.getGssCredential()
+						.getRemainingLifetime();
+				if (oldLifetime < ServerPropertiesManager
+						.getMinProxyLifetimeBeforeGettingNewProxy()) {
+					myLogger
+							.debug("Credential reached minimum lifetime. Getting new one from session. Old lifetime: "
+									+ oldLifetime);
 					this.credential = getCredentialJaxWs();
-					if ( this.credential == null || ! this.credential.isValid() ) {
-						throw new NoValidCredentialException("Could not get credential from session context.");
+					if (this.credential == null || !this.credential.isValid()) {
+						throw new NoValidCredentialException(
+								"Could not get credential from session context.");
 					}
 					getUser().cleanCache();
-					myLogger.debug("Success. New lifetime: "+this.credential.getGssCredential().getRemainingLifetime());
+					myLogger.debug("Success. New lifetime: "
+							+ this.credential.getGssCredential()
+									.getRemainingLifetime());
 				}
 			} catch (GSSException e) {
-				myLogger.error("Could not read remaining lifetime from GSSCredential. Retrieving new one from session context.");
-				if ( this.credential == null || ! this.credential.isValid() ) {
-					throw new NoValidCredentialException("Could not get credential from session context.");
+				myLogger
+						.error("Could not read remaining lifetime from GSSCredential. Retrieving new one from session context.");
+				if (this.credential == null || !this.credential.isValid()) {
+					throw new NoValidCredentialException(
+							"Could not get credential from session context.");
 				}
-				this.credential = getCredentialJaxWs(); 
+				this.credential = getCredentialJaxWs();
 				getUser().cleanCache();
 			}
-			
+
 		}
-			
+
 		return credential;
 	}
-	
+
 	private ProxyCredential credential = null;
-	
-//	/**
-//	 * Gets the credential from memory or the session context if the one from memory is already expired or about to expire.
-//	 * 
-//	 * @return the credential
-//	 * @throws NoValidCredentialException
-//	 */
-//	protected synchronized ProxyCredential getCredentialXfire() throws NoValidCredentialException {
-//
-//		MessageContext context = AbstractInvoker.getContext();
-//		
-//		if ( this.credential == null || ! this.credential.isValid() ) {
-//			myLogger.debug("No valid credential in memory. Fetching it from session context...");
-//			this.credential = (ProxyCredential)(context.getSession().get("credential")); 
-//			if ( this.credential == null || ! this.credential.isValid() ) {
-//				throw new NoValidCredentialException("Could not get credential from session context.");
-//			}
-//			getUser().cleanCache();
-//		} else
-//			// check whether min lifetime as configured in server config file is reached
-//			try {
-//				long oldLifetime = this.credential.getGssCredential().getRemainingLifetime();
-//				if ( oldLifetime < ServerPropertiesManager.getMinProxyLifetimeBeforeGettingNewProxy() ) {
-//					myLogger.debug("Credential reached minimum lifetime. Getting new one from session. Old lifetime: "+oldLifetime);
-//					this.credential = (ProxyCredential)(context.getSession().get("credential")); 
-//					if ( this.credential == null || ! this.credential.isValid() ) {
-//						throw new NoValidCredentialException("Could not get credential from session context.");
-//					}
-//					getUser().cleanCache();
-//					myLogger.debug("Success. New lifetime: "+this.credential.getGssCredential().getRemainingLifetime());
-//				}
-//			} catch (GSSException e) {
-//				myLogger.error("Could not read remaining lifetime from GSSCredential. Retrieving new one from session context.");
-//				if ( this.credential == null || ! this.credential.isValid() ) {
-//					throw new NoValidCredentialException("Could not get credential from session context.");
-//				}
-//				this.credential = (ProxyCredential)(context.getSession().get("credential")); 
-//				getUser().cleanCache();
-//			}
-//		
-//		return this.credential;
-//	}
-	
+
+	// /**
+	// * Gets the credential from memory or the session context if the one from
+	// memory is already expired or about to expire.
+	// *
+	// * @return the credential
+	// * @throws NoValidCredentialException
+	// */
+	// protected synchronized ProxyCredential getCredentialXfire() throws
+	// NoValidCredentialException {
+	//
+	// MessageContext context = AbstractInvoker.getContext();
+	//		
+	// if ( this.credential == null || ! this.credential.isValid() ) {
+	// myLogger.debug("No valid credential in memory. Fetching it from session context...");
+	// this.credential =
+	// (ProxyCredential)(context.getSession().get("credential"));
+	// if ( this.credential == null || ! this.credential.isValid() ) {
+	// throw new
+	// NoValidCredentialException("Could not get credential from session context.");
+	// }
+	// getUser().cleanCache();
+	// } else
+	// // check whether min lifetime as configured in server config file is
+	// reached
+	// try {
+	// long oldLifetime =
+	// this.credential.getGssCredential().getRemainingLifetime();
+	// if ( oldLifetime <
+	// ServerPropertiesManager.getMinProxyLifetimeBeforeGettingNewProxy() ) {
+	// myLogger.debug("Credential reached minimum lifetime. Getting new one from session. Old lifetime: "+oldLifetime);
+	// this.credential =
+	// (ProxyCredential)(context.getSession().get("credential"));
+	// if ( this.credential == null || ! this.credential.isValid() ) {
+	// throw new
+	// NoValidCredentialException("Could not get credential from session context.");
+	// }
+	// getUser().cleanCache();
+	// myLogger.debug("Success. New lifetime: "+this.credential.getGssCredential().getRemainingLifetime());
+	// }
+	// } catch (GSSException e) {
+	// myLogger.error("Could not read remaining lifetime from GSSCredential. Retrieving new one from session context.");
+	// if ( this.credential == null || ! this.credential.isValid() ) {
+	// throw new
+	// NoValidCredentialException("Could not get credential from session context.");
+	// }
+	// this.credential =
+	// (ProxyCredential)(context.getSession().get("credential"));
+	// getUser().cleanCache();
+	// }
+	//		
+	// return this.credential;
+	// }
+
 	protected ProxyCredential getCredentialJaxWs() {
 
-		if ( username != null && password != null ) {
-			
-			ProxyCredential proxy = createProxyCredential(username, new String(password),
-					MyProxyServerParams.getMyProxyServer(),
+		if (username != null && password != null) {
+
+			ProxyCredential proxy = createProxyCredential(username, new String(
+					password), MyProxyServerParams.getMyProxyServer(),
 					MyProxyServerParams.getMyProxyPort(),
 					ServerPropertiesManager.getMyProxyLifetime());
-			
+
 			return proxy;
-			
+
 		}
-		
-		
+
 		HttpServletRequest req = null;
 		req = HTTPRequestContext.get().getRequest();
 
@@ -373,11 +392,8 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 
 		this.username = username;
 		this.password = password.toCharArray();
-		
-		getCredential();
-		
 
-		
+		getCredential();
 
 	}
 
@@ -392,7 +408,19 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 
 	}
 
-
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -427,14 +455,12 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 
 	private FileSystemStructureToXMLConverter fsconverter = null;
 
-	// protected ExecutorService executor = Executors.newFixedThreadPool(2);
-
 	private MatchMaker matchmaker = new MatchMakerImpl(Environment
 			.getGrisuDirectory().toString());
 
-	// private MatchMaker matchmaker = new
-	// CachedMatchMakerImpl(Environment.getGrisuDirectory().toString());
 
+	private final Map<String, DtoActionStatus> actionStatus = new HashMap<String, DtoActionStatus>();
+	
 	public String getInterfaceVersion() {
 		return ServiceInterface.INTERFACE_VERSION;
 	}
@@ -1132,16 +1158,21 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 
 	private void submitMultiPartJob(final MultiPartJob multiJob)
 			throws JobSubmissionException, NoSuchJobException {
-
+		
+		final DtoActionStatus newActionStatus = new DtoActionStatus(multiJob.getMultiPartJobId(), 100);
+		this.actionStatus.put(multiJob.getMultiPartJobId(), newActionStatus);
+		
 		ExecutorService executor = Executors
 				.newFixedThreadPool(ServerPropertiesManager
 						.getConcurrentMultiPartJobSubmitThreadsPerUser());
 
-		// final Collection<String> failedJobs = CollectionUtils
-		// .synchronizedCollection(new TreeSet<String>());
 
 		Job[] currentlyCreatedJobs = multiJob.getJobs().toArray(new Job[] {});
 		Arrays.sort(currentlyCreatedJobs);
+
+		final int totalNumberOfJobs = currentlyCreatedJobs.length;
+		newActionStatus.setTotalElements(totalNumberOfJobs);
+				
 
 		for (final Job job : currentlyCreatedJobs) {
 
@@ -1155,18 +1186,21 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 						try {
 							exc = null;
 							submitJob(job, true);
+							newActionStatus.addElement("Added job: "+job.getJobname());
 							break;
 						} catch (Exception e) {
 							myLogger.error(job.getSubmissionHost()+": Job submission for multipartjob: "
 									+ multiJob.getMultiPartJobId() + ", " + job.getJobname()
 									+ " failed: " + e.getLocalizedMessage());
 							myLogger.error("Trying again...");
+							newActionStatus.addLogMessage("Failed to submit job "+job.getJobname()+": "+e.getLocalizedMessage()+". Trying again...");
 							exc = e;
 						}
 						
 						if ( exc != null ) {
 							myLogger.error("Tried to resubmit job "+job.getJobname()+" "+DEFAULT_JOB_SUBMISSION_RETRIES+" times. Never worked. Giving up...");
 							multiJob.addFailedJob(job.getJobname());
+							newActionStatus.addElement("Tried to resubmit job "+job.getJobname()+" "+DEFAULT_JOB_SUBMISSION_RETRIES+" times. Never worked. Giving up...");
 						}
 					}
 				}
@@ -1174,7 +1208,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 			// just to get a better chance that the jobs are submitted in the
 			// right order...
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				myLogger.error(e);
 			}
@@ -3362,9 +3396,11 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 		return getSite(contactString);
 	}
 
-	public DtoActionStatus getActionStatus(final String handle) {
-
-		return getUser().getActionStatus(handle);
+	
+	public DtoActionStatus getActionStatus(String actionHandle) {
+		
+		return actionStatus.get(actionHandle);
+		
 	}
 
 }
