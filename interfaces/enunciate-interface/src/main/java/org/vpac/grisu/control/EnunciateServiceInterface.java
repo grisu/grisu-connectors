@@ -743,7 +743,7 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	 */
 	@GET
 	@Path("user/alljobnames")
-	DtoStringList getAllJobnames();
+	DtoStringList getAllJobnames(String application);
 
 //	/**
 //	 * Creates a job using the jobProperties that are specified in the map and
@@ -981,7 +981,7 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	 * @return all multipartjobids
 	 */
 	@RolesAllowed("User")
-	DtoStringList getAllMultiPartJobIds();
+	DtoStringList getAllMultiPartJobIds(String application);
 	
 
 
