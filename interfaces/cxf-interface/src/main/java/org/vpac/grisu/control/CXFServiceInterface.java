@@ -649,7 +649,7 @@ public interface CXFServiceInterface extends ServiceInterface{
 	 * @return xml formated information about all the users jobs
 	 */
 	@WebMethod
-	DtoJobs ps(boolean refreshJobStatus);
+	DtoJobs ps(String application, boolean refreshJobStatus);
 	
 	
 	/**

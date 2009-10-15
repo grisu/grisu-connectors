@@ -1602,9 +1602,14 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	 * 
 	 * @see org.vpac.grisu.control.ServiceInterface#ps()
 	 */
-	public DtoJobs ps(boolean refresh) {
-
-		List<Job> jobs = jobdao.findJobByDN(getUser().getDn());
+	public DtoJobs ps(String application, boolean refresh) {
+		
+		List<Job> jobs = null;
+		if ( StringUtils.isBlank(application) ) {
+			jobs = jobdao.findJobByDN(getUser().getDn());
+		} else {
+			jobs = jobdao.findJobByDNPerApplication(getUser().getDn(), application);
+		}
 
 		if (refresh) {
 			refreshJobStatus(jobs);

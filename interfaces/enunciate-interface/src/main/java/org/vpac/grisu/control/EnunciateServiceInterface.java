@@ -731,9 +731,9 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	 * @return xml formated information about all the users jobs
 	 */
 	@GET
-	@Path("user/alljobs/{refresh}")
+	@Path("user/alljobs/{application}/{refresh}")
 	@RolesAllowed("User")
-	DtoJobs ps(@PathParam("refresh") boolean refreshJobStatus);
+	DtoJobs ps(@PathParam("application") String application, @PathParam("refresh") boolean refreshJobStatus);
 	
 
 	/**
