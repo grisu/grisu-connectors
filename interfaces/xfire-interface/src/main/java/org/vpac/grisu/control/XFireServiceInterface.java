@@ -523,7 +523,7 @@ public interface XFireServiceInterface extends ServiceInterface{
 	 *             the remote target file system could not be written to
 	 */
 	@WebMethod
-	String cp(String source, String target, boolean overwrite,
+	String cp(DtoStringList source, String target, boolean overwrite,
 			boolean waitForFileTransferToFinish)
 			throws RemoteFileSystemException;
 

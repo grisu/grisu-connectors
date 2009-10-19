@@ -588,7 +588,7 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	@POST
 	@Path("actions/cp")
 	@RolesAllowed("User")
-	String cp(@QueryParam("source") String source, @QueryParam("target") String target, @QueryParam("overwrite") boolean overwrite,
+	String cp(@QueryParam("sources") DtoStringList sources, @QueryParam("target") String target, @QueryParam("overwrite") boolean overwrite,
 			@QueryParam("wait") boolean wait)
 			throws RemoteFileSystemException;
 
