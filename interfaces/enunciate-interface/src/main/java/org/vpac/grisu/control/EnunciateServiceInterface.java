@@ -37,6 +37,7 @@ import org.vpac.grisu.model.dto.DtoMountPoints;
 import org.vpac.grisu.model.dto.DtoMultiPartJob;
 import org.vpac.grisu.model.dto.DtoStringList;
 import org.vpac.grisu.model.dto.DtoSubmissionLocations;
+import org.vpac.grisu.model.dto.DtoUserProperties;
 
 /**
  * This is the central interface of grisu. These are the methods the web service
@@ -127,6 +128,16 @@ public interface EnunciateServiceInterface extends ServiceInterface {
 	 */
 	void submitSupportRequest(String subject, String description);
 
+	/**
+	 * Gets all the properties stored for the current user.
+	 * 
+	 * @return all userproperties
+	 */
+	@RolesAllowed("User")
+	@GET
+	@Path("user/allproperties")
+	DtoUserProperties getUserProperties();
+	
 	/**
 	 * Returns an array of strings that are associated with this key. The
 	 * developer can store all kinds of stuff he wants to associate with the

@@ -28,6 +28,7 @@ import org.vpac.grisu.model.dto.DtoMountPoints;
 import org.vpac.grisu.model.dto.DtoMultiPartJob;
 import org.vpac.grisu.model.dto.DtoStringList;
 import org.vpac.grisu.model.dto.DtoSubmissionLocations;
+import org.vpac.grisu.model.dto.DtoUserProperties;
 
 /**
    XFire version of ServiceInterface
@@ -101,6 +102,9 @@ public interface XFireServiceInterface extends ServiceInterface{
 	@WebMethod
 	void submitSupportRequest(String subject, String description);
 
+	
+	@WebMethod
+	public DtoUserProperties getUserProperties();
 	/**
 	 * Returns an array of strings that are associated with this key. The
 	 * developer can store all kinds of stuff he wants to associate with the
