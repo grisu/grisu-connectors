@@ -1189,7 +1189,12 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 					for (int i = 0; i < DEFAULT_JOB_SUBMISSION_RETRIES; i++) {
 						try {
 							exc = null;
-							submitJob(job, true);
+							
+							DtoActionStatus status = null;
+							status = new DtoActionStatus(job.getJobname(), 0);
+							actionStatus.put(job.getJobname(), status);
+							
+							submitJob(job, true, status);
 							newActionStatus.addElement("Added job: "
 									+ job.getJobname());
 
@@ -1278,28 +1283,47 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 		}
 	}
 
-	private void submitJob(final Job job, boolean stageFiles)
+	private void submitJob(final Job job, boolean stageFiles, DtoActionStatus status)
 			throws JobSubmissionException {
+		
 		try {
+			
+			int noStageins = 0;
+			
+			if ( stageFiles ) {
+				List<Element> stageIns = JsdlHelpers.getStageInElements(job
+						.getJobDescription());
+				noStageins = stageIns.size();
+			} 
+			
+			status.setTotalElements(status.getTotalElements()+4+noStageins);
+			
 			myLogger.debug("Preparing job environment...");
 			job.addLogMessage("Preparing job environment.");
 
+			status.addElement("Preparing job environment...");
+			
 			addLogMessageToPossibleMultiPartJobParent(job,
 					"Starting job submission for job: " + job.getJobname());
 			prepareJobEnvironment(job);
 			if (stageFiles) {
+				status.addLogMessage("Starting file stage-in.");
 				job.addLogMessage("Staging possible input files.");
 				myLogger.debug("Staging possible input files...");
-				stageFiles(job);
+				stageFiles(job, status);
 				job.addLogMessage("File staging finished.");
+				status.addLogMessage("File stage-in finished.");
 			}
 		} catch (Exception e) {
+			status.setFailed(true);
+			status.setFinished(true);
 			e.printStackTrace();
 			throw new JobSubmissionException(
 					"Could not access remote filesystem: "
 							+ e.getLocalizedMessage());
 		}
 
+		status.addElement("Setting credential...");
 		if (job.getFqan() != null) {
 			VO vo = VOManagement.getVO(getUser().getFqans().get(job.getFqan()));
 			try {
@@ -1312,7 +1336,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 			}
 		} else {
 			job
-					.addLogMessage("Setting credential using fqan: "
+					.addLogMessage("Setting non-vo credential: "
 							+ job.getFqan());
 			job.setCredential(getCredential());
 		}
@@ -1321,10 +1345,14 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 		myLogger.debug("Submitting job to endpoint...");
 
 		try {
+			status.addElement("Starting job submission using GT4...");
 			job.addLogMessage("Submitting job to endpoint...");
 			handle = getSubmissionManager().submit("GT4", job);
 			job.addLogMessage("Submission finished.");
 		} catch (RuntimeException e) {
+			status.addLogMessage("Job submission failed.");
+			status.setFailed(true);
+			status.setFinished(true);
 			job.addLogMessage("Submission to endpoint failed: "
 					+ e.getLocalizedMessage());
 			addLogMessageToPossibleMultiPartJobParent(job,
@@ -1337,6 +1365,9 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 		}
 
 		if (handle == null) {
+			status.addLogMessage("Submission finished but no jobhandle...");
+			status.setFailed(true);
+			status.setFinished(true);
 			job.addLogMessage("Submission finished but jobhandle is null...");
 			addLogMessageToPossibleMultiPartJobParent(job,
 					"Job submission for job: " + job.getJobname()
@@ -1359,20 +1390,27 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 		jobdao.saveOrUpdate(job);
 		myLogger.info("Jobsubmission for job " + job.getJobname()
 				+ " and user " + getDN() + " successful.");
-
+		
+		status.addElement("Job submission finished...");
+		status.setFinished(true);
 	}
 
 	public void restartJob(final String jobname, String changedJsdl)
 			throws JobSubmissionException, NoSuchJobException {
 
 		Job job = getJob(jobname);
+		
+		DtoActionStatus status = null;
+		status = new DtoActionStatus(job.getJobname(), 3);
+		actionStatus.put(job.getJobname(), status);
 
 		job.addLogMessage("Restarting job...");
 		job.addLogMessage("Killing possibly running job...");
+		status.addElement("Killing job...");
 		kill(job);
 
 		job.setStatus(JobConstants.READY_TO_SUBMIT);
-
+		status.addElement("Resetting job properties...");
 		job.getJobProperties().remove(Constants.ERROR_REASON);
 
 		String possibleMultiPartJob = job
@@ -1387,6 +1425,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 		}
 
 		if (StringUtils.isNotBlank(changedJsdl)) {
+			status.addElement("Changing job description...");
 			job.addLogMessage("Changing job properties...");
 			Document newJsdl;
 			Document oldJsdl = job.getJobDescription();
@@ -1434,11 +1473,13 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 
 			job.setJobDescription(oldJsdl);
 			jobdao.saveOrUpdate(job);
+		} else {
+			status.addElement("Keeping job description...");
 		}
 
 		myLogger.info("Submitting job: " + jobname + " for user " + getDN());
 		job.addLogMessage("Starting re-submission...");
-		submitJob(job, false);
+		submitJob(job, false, status);
 		job.addLogMessage("Re-submission finished.");
 
 	}
@@ -1448,12 +1489,17 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 
 		myLogger.info("Submitting job: " + jobname + " for user " + getDN());
 		Job job;
+		
+		DtoActionStatus status = null;
+		status = new DtoActionStatus(jobname, 0);
+		actionStatus.put(jobname, status);
+
 		try {
 			job = getJob(jobname);
 			if (job.getStatus() > JobConstants.READY_TO_SUBMIT) {
 				throw new JobSubmissionException("Job already submitted.");
 			}
-			submitJob(job, true);
+			submitJob(job, true, status);
 
 		} catch (NoSuchJobException e) {
 			// maybe it's a multipartjob
@@ -1637,7 +1683,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 			jobs = jobdao.findJobByDNPerApplication(getUser().getDn(),
 					application);
 		}
-
+		
 		if (refresh) {
 			refreshJobStatus(jobs);
 		}
@@ -1877,7 +1923,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	 * @param jobs
 	 *            a list of jobs you want to have refreshed
 	 */
-	protected void refreshJobStatus(final List<Job> jobs) {
+	protected void refreshJobStatus(final Collection<Job> jobs) {
 		for (Job job : jobs) {
 			getJobStatus(job.getJobname());
 		}
@@ -2872,6 +2918,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 		
 		getUser().getUserProperties().put(key, value);
 		
+		userdao.saveOrUpdate(getUser());
 	}
 	
 	/*
@@ -2904,7 +2951,7 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 	 * 
 	 * @see org.vpac.grisu.control.ServiceInterface#stageFiles(java.lang.String)
 	 */
-	public void stageFiles(final Job job) throws RemoteFileSystemException,
+	public void stageFiles(final Job job, final DtoActionStatus optionalStatus) throws RemoteFileSystemException,
 			NoSuchJobException {
 
 		// Job job;
@@ -2916,6 +2963,9 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 		for (Element stageIn : stageIns) {
 
 			String sourceUrl = JsdlHelpers.getStageInSource(stageIn);
+			if ( optionalStatus != null ) {
+				optionalStatus.addElement("Staging file "+sourceUrl.substring(sourceUrl.lastIndexOf("/")+1));
+			}
 			// TODO remove that after swing client is fixed.
 			if (sourceUrl.startsWith("file") || sourceUrl.startsWith("dummy")) {
 				continue;
@@ -2936,6 +2986,9 @@ public class EnunciateServiceInterfaceImpl implements EnunciateServiceInterface 
 						folder.createFolder();
 					}
 				} catch (FileSystemException e) {
+					if ( optionalStatus != null ) {
+						optionalStatus.addLogMessage("Error while staging in files.");
+					}
 					throw new RemoteFileSystemException(
 							"Could not create parent folder for file: "
 									+ targetUrl + ": " + e.getMessage());
