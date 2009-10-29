@@ -24,18 +24,10 @@ import org.vpac.grisu.control.exceptions.ServiceInterfaceException;
 import org.vpac.grisu.settings.CaCertManager;
 import org.vpac.grisu.settings.ClientPropertiesManager;
 
-import au.org.arcs.jcommons.dependencies.PackageIndicator;
-
-public class XFireServiceInterfaceCreator implements ServiceInterfaceCreator, PackageIndicator {
+public class XFireServiceInterfaceCreator implements ServiceInterfaceCreator {
 
 	static final Logger myLogger = Logger
 			.getLogger(XFireServiceInterfaceCreator.class.getName());
-	
-	
-	// for package auto-download
-	public String getCurrentVersion() {
-		return "0.3-SNAPSHOT";
-	}
 	
 	public static String DEFAULT_SERVICE_INTERFACE = "https://grisu.vpac.org/grisu-ws/services/grisu";
 

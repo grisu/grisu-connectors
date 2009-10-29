@@ -5,11 +5,9 @@
     <version>0.3-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.vpac.grisu</groupId>
   <artifactId>frontend-modules</artifactId>
   <packaging>pom</packaging>
   <name>frontend-modules</name>
-  <version>0.3-SNAPSHOT</version>
   <url>http://maven.apache.org</url>
   <modules>
   	<module>xfire-frontend</module>

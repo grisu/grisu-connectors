@@ -5,10 +5,8 @@
     <version>0.3-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.vpac.grisu</groupId>
   <artifactId>cxf-interface</artifactId>
   <name>CXF serviceinterface</name>
-  <version>0.3-SNAPSHOT</version>
   
      <properties>
 	   <cxf.version>2.2</cxf.version>

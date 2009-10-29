@@ -8,11 +8,9 @@
 		<version>0.3-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.vpac.grisu</groupId>
 	<artifactId>xfire-backend</artifactId>
 	<packaging>war</packaging>
 	<name>grisu webservice interface</name>
-	<version>0.3-SNAPSHOT</version>
 	
 	<description>xfire-backend publishes the XFireServiceInterface interface
 		via web services and it

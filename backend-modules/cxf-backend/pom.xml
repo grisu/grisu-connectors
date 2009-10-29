@@ -5,10 +5,8 @@
     <version>0.3-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.vpac.grisu</groupId>
   <artifactId>cxf-backend</artifactId>
   <name>CXF backend</name>
-  <version>0.3-SNAPSHOT</version>
   
   	<description>grisu-cxf publishes the CXFServiceInterface interface
 		via web services and it

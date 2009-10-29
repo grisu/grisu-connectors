@@ -6,10 +6,8 @@
 		<version>0.3-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.vpac.grisu</groupId>
 	<artifactId>xfire-interface</artifactId>
 	<name>XFire interface</name>
-	<version>0.3-SNAPSHOT</version>
 
 	<dependencies>
 
