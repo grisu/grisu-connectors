@@ -13,6 +13,5 @@
   	<module>xfire-frontend</module>
   	<module>cxf-frontend</module>
   	<module>enunciate-frontend</module>
-  	<module>jaxws-frontend</module>
   </modules>
 </project>
