@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.codehaus.enunciate.modules.spring_app.HTTPRequestContext;
+import org.globus.common.CoGProperties;
 import org.globus.myproxy.MyProxy;
 import org.ietf.jgss.GSSCredential;
 import org.springframework.dao.DataAccessException;
@@ -18,12 +19,16 @@ public class GrisuUserDetailsImpl implements UserDetailsService {
 
 	static final Logger myLogger = Logger.getLogger(GrisuUserDetailsImpl.class
 			.getName());
+	
+	static {
+		CoGProperties.getDefault().setProperty(CoGProperties.ENFORCE_SIGNING_POLICY, "false");
+	}
 
 	public UserDetails loadUserByUsername(String arg0)
 			throws UsernameNotFoundException, DataAccessException {
 
 		myLogger.debug("Authenticating....");
-
+		
 		HttpServletRequest req = HTTPRequestContext.get().getRequest();
 
 		GrisuUserDetails oldUser = (GrisuUserDetails) (req.getAttribute("user"));
@@ -46,7 +51,7 @@ public class GrisuUserDetailsImpl implements UserDetailsService {
 				String user = usernpass.substring(0, usernpass.indexOf(":"));
 				String password = usernpass
 						.substring(usernpass.indexOf(":") + 1);
-
+				
 				ProxyCredential proxy = createProxyCredential(user, password,
 						MyProxyServerParams.DEFAULT_MYPROXY_SERVER,
 						MyProxyServerParams.DEFAULT_MYPROXY_PORT,
