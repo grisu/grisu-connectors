@@ -258,7 +258,7 @@
 				<executions>
 					<execution>
 						<id>deploy-client-classes-jaxws</id>
-						<phase>install</phase>
+						<phase>deploy</phase>
 						<goals>
 							<goal>deploy-file</goal>
 						</goals>
@@ -281,7 +281,7 @@
 					</execution>
 					<execution>
 						<id>deploy-client-sources-jaxws</id>
-						<phase>install</phase>
+						<phase>deploy</phase>
 						<goals>
 							<goal>deploy-file</goal>
 						</goals>
@@ -306,7 +306,7 @@
 					</execution>
 					<execution>
 						<id>deploy-client-classes-xfire</id>
-						<phase>install</phase>
+						<phase>deploy</phase>
 						<goals>
 							<goal>deploy-file</goal>
 						</goals>
@@ -328,7 +328,7 @@
 					</execution>
 					<execution>
 						<id>deploy-client-sources-xfire</id>
-						<phase>install</phase>
+						<phase>deploy</phase>
 						<goals>
 							<goal>deploy-file</goal>
 						</goals>
@@ -352,7 +352,7 @@
 					</execution>
 					<execution>
 						<id>deploy-client-classes-gwt</id>
-						<phase>install</phase>
+						<phase>deploy</phase>
 						<goals>
 							<goal>deploy-file</goal>
 						</goals>
