@@ -1,9 +1,13 @@
 package org.vpac.grisu.control;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
 
 import org.apache.log4j.Logger;
-import org.codehaus.enunciate.modules.spring_app.HTTPRequestContext;
+import org.codehaus.enunciate.webapp.HTTPRequestContext;
 import org.globus.common.CoGProperties;
 import org.globus.myproxy.MyProxy;
 import org.ietf.jgss.GSSCredential;
@@ -16,7 +20,7 @@ import org.vpac.grisu.settings.MyProxyServerParams;
 import org.vpac.grisu.settings.ServerPropertiesManager;
 
 public class GrisuUserDetailsImpl implements UserDetailsService {
-
+	
 	static final Logger myLogger = Logger.getLogger(GrisuUserDetailsImpl.class
 			.getName());
 	
@@ -28,6 +32,10 @@ public class GrisuUserDetailsImpl implements UserDetailsService {
 			throws UsernameNotFoundException, DataAccessException {
 
 		myLogger.debug("Authenticating....");
+		
+
+//	        HttpSession session = httpRequest.getSession();
+//	        session.getServletContext();
 		
 		HttpServletRequest req = HTTPRequestContext.get().getRequest();
 

@@ -11,16 +11,58 @@
 	<name>Grisu-API</name>
 	<description>A module that takes care of creating SOAP, REst &amp;
 		GWT-RPC endpoints for a Grisu backend. It also automatically creates
-		Java, C# and Ruby client stubs.</description>
+		Java, C#, C and Ruby client stubs.</description>
 	<url>http://maven.apache.org</url>
+	<inceptionYear>2009</inceptionYear>
+	<organization>
+		<name>ARCS</name>
+		<url>http://www.arcs.org.au</url>
+	</organization>
 
+	<properties>
+		<enunciate.version>1.16-RC2</enunciate.version>
+	</properties>
 
 	<dependencies>
+
+		<!--  not sure whether that's still needed -->
 		<dependency>
 			<groupId>org.codehaus.enunciate</groupId>
 			<artifactId>enunciate-rt</artifactId>
 			<version>${enunciate.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.codehaus.enunciate</groupId>
+			<artifactId>enunciate-xfire-client-rt</artifactId>
+			<version>${enunciate.version}</version>
+		</dependency>
+
+		<!-- that's probably not needed -->
+		<dependency>
+			<groupId>org.codehaus.enunciate</groupId>
+			<artifactId>enunciate-xfire-rt</artifactId>
+			<version>${enunciate.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.codehaus.enunciate</groupId>
+			<artifactId>enunciate-gwt-rt</artifactId>
+			<version>${enunciate.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+			<version>1.6.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-servlet</artifactId>
+			<version>1.6.4</version>
+		</dependency>
+
 
 		<dependency>
 			<groupId>org.codehaus.enunciate</groupId>
@@ -34,33 +76,19 @@
 			</exclusions>
 		</dependency>
 
-
-		<!--		<dependency>-->
-		<!--			<groupId>org.codehaus.enunciate</groupId>-->
-		<!--			<artifactId>enunciate-xfire-rt</artifactId>-->
-		<!--			<version>${enunciate.version}</version>-->
-		<!--		</dependency>-->
-
-		<!--		<dependency>-->
-		<!--			<groupId>org.codehaus.enunciate</groupId>-->
-		<!--			<artifactId>enunciate-spring-app-rt</artifactId>-->
-		<!--			<version>${enunciate.version}</version>-->
-		<!--		</dependency>-->
+		<dependency>
+			<groupId>org.codehaus.enunciate</groupId>
+			<artifactId>enunciate-jersey-rt</artifactId>
+			<version>${enunciate.version}</version>
+		</dependency>
 
 
-		<!--		<dependency>-->
-		<!--			<groupId>org.codehaus.enunciate</groupId>-->
-		<!--			<artifactId>enunciate-jaxws-ri-rt</artifactId>-->
-		<!--			<version>1.14</version>-->
-		<!--			<type>jar</type>-->
-		<!--			<scope>compile</scope>-->
-		<!--		</dependency>-->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core-tiger</artifactId>
 			<version>2.0.1</version>
 			<exclusions>
-				<!--we'll depend on enunciate's version of these artifacts.-->
+
 				<exclusion>
 					<groupId>org.springframework</groupId>
 					<artifactId>spring-aop</artifactId>
@@ -83,6 +111,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-taglibs</artifactId>
@@ -165,57 +194,16 @@
 			<classifier>sources</classifier>
 			<scope>compile</scope>
 		</dependency>
-		<!--		<dependency>-->
-		<!--			<groupId>org.codehaus.xfire</groupId>-->
-		<!--			<artifactId>xfire-all</artifactId>-->
-		<!--			<version>1.2.6</version>-->
-		<!--			<type>jar</type>-->
-		<!--			<scope>compile</scope>-->
-		<!--		</dependency>-->
+
 	</dependencies>
 
-	<inceptionYear>2009</inceptionYear>
-	<organization>
-		<name>ARCS</name>
-		<url>http://www.arcs.org.au</url>
-	</organization>
 	<build>
 		<plugins>
-			<!--			<plugin>-->
-			<!--				<groupId>org.codehaus.enunciate</groupId>-->
-			<!--				<artifactId>maven-enunciate-spring-plugin</artifactId>-->
-			<!--				<version>${enunciate.version}</version>-->
-			<!--				<executions>-->
-			<!--					<execution>-->
-			<!--						<goals>-->
-			<!--							<goal>assemble</goal>-->
-			<!--						</goals>-->
-			<!--					</execution>-->
-			<!--				</executions>-->
-			<!--			</plugin>-->
-
-<!--			<plugin>-->
-<!--				<groupId>org.codehaus.enunciate</groupId>-->
-<!--				<artifactId>maven-enunciate-cxf-plugin</artifactId>-->
-<!--				<version>${enunciate.version}</version>-->
-<!--				<executions>-->
-<!--					<execution>-->
-<!--						<goals>-->
-<!--							<goal>assemble</goal>-->
-<!--						</goals>-->
-<!--					</execution>-->
-<!--				</executions>-->
-<!--			</plugin>-->
-
 
 			<plugin>
 				<groupId>org.codehaus.enunciate</groupId>
-				<artifactId>maven-enunciate-plugin</artifactId>
+				<artifactId>maven-enunciate-cxf-plugin</artifactId>
 				<version>${enunciate.version}</version>
-
-				<configuration>
-					<configFile>src/main/resources/enunciate.xml</configFile>
-				</configuration>
 				<executions>
 					<execution>
 						<goals>
@@ -224,19 +212,75 @@
 					</execution>
 				</executions>
 				<dependencies>
-<!--					<dependency>-->
-<!--						<groupId>org.codehaus.enunciate</groupId>-->
-<!--						<artifactId>enunciate-xfire</artifactId>-->
-<!--						<version>${enunciate.version}</version>-->
-<!--					</dependency>-->
+				
+					<dependency>
+						<groupId>org.codehaus.enunciate</groupId>
+						<artifactId>enunciate-xfire</artifactId>
+						<version>${enunciate.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.codehaus.enunciate</groupId>
+						<artifactId>enunciate-xfire-client</artifactId>
+						<version>${enunciate.version}</version>
+					</dependency>
+
 					<dependency>
 						<groupId>org.vpac.grisu</groupId>
 						<artifactId>grisu-commons</artifactId>
 						<version>0.3-SNAPSHOT</version>
 					</dependency>
+				</dependencies>
+
+			</plugin>
+
+
+			<plugin>
+				<groupId>org.codehaus.enunciate</groupId>
+				<artifactId>maven-enunciate-plugin</artifactId>
+				<version>${enunciate.version}</version>
+
+				<executions>
+					<execution>
+						<goals>
+							<goal>assemble</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+
+					<!--
+						There's a weird bug in Maven that I haven't been able to track
+						down in that if I don't add the XFire module here, then the next
+						project will fail because it won't find the XFire module.
+					-->
+					<!-- do I need those 2 dependencies here as well as in the cxf plugin? -->
 					<dependency>
 						<groupId>org.codehaus.enunciate</groupId>
-						<artifactId>enunciate-cxf</artifactId>
+						<artifactId>enunciate-xfire</artifactId>
+						<version>${enunciate.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.codehaus.enunciate</groupId>
+						<artifactId>enunciate-xfire-client</artifactId>
+						<version>${enunciate.version}</version>
+					</dependency>
+
+					<dependency>
+						<groupId>org.vpac.grisu</groupId>
+						<artifactId>grisu-commons</artifactId>
+						<version>0.3-SNAPSHOT</version>
+					</dependency>
+
+					<!-- is this the right place for those two dependencies? -->
+					<dependency>
+						<groupId>org.codehaus.enunciate</groupId>
+						<artifactId>enunciate-jersey</artifactId>
+						<version>${enunciate.version}</version>
+					</dependency>
+
+					<dependency>
+						<groupId>org.codehaus.enunciate</groupId>
+						<artifactId>enunciate-gwt</artifactId>
 						<version>${enunciate.version}</version>
 					</dependency>
 
@@ -304,52 +348,66 @@
 							<pomFile>client-jaxws.pom</pomFile>
 						</configuration>
 					</execution>
-					<execution>
-						<id>deploy-client-classes-xfire</id>
-						<phase>deploy</phase>
-						<goals>
-							<goal>deploy-file</goal>
-						</goals>
-						<configuration>
-							<file>target/enunciate/build/xfire-client/grisu-client-xfire-1.5.jar
-							</file>
-							<url>${project.distributionManagementArtifactRepository.url}
-							</url>
-							<repositoryId>${project.distributionManagementArtifactRepository.id}
-							</repositoryId>
-
-							<groupId>org.vpac.grisu</groupId>
-							<artifactId>grisu-client-xfire</artifactId>
-							<version>${project.version}</version>
-							<packaging>jar</packaging>
-							<uniqueVersion>false</uniqueVersion>
-							<pomFile>client-xfire.pom</pomFile>
-						</configuration>
-					</execution>
-					<execution>
-						<id>deploy-client-sources-xfire</id>
-						<phase>deploy</phase>
-						<goals>
-							<goal>deploy-file</goal>
-						</goals>
-						<configuration>
-							<file>target/enunciate/build/xfire-client/grisu-client-xfire-1.5-src.jar
-							</file>
-							<url>${project.distributionManagementArtifactRepository.url}
-							</url>
-							<repositoryId>${project.distributionManagementArtifactRepository.id}
-							</repositoryId>
-
-							<groupId>org.vpac.grisu</groupId>
-							<artifactId>grisu-client-xfire</artifactId>
-							<version>${project.version}</version>
-							<packaging>jar</packaging>
-							<description>The client-side classes for our api.</description>
-							<classifier>sources</classifier>
-							<uniqueVersion>false</uniqueVersion>
-							<pomFile>client-xfire.pom</pomFile>
-						</configuration>
-					</execution>
+					<!--					<execution>-->
+					<!--						<id>deploy-client-classes-xfire</id>-->
+					<!--						<phase>deploy</phase>-->
+					<!--						<goals>-->
+					<!--							<goal>deploy-file</goal>-->
+					<!--						</goals>-->
+					<!--						<configuration>-->
+					<!--
+						<file>target/enunciate/build/xfire-client/grisu-client-xfire-1.5.jar
+					-->
+					<!--							</file>-->
+					<!--
+						<url>${project.distributionManagementArtifactRepository.url}
+					-->
+					<!--							</url>-->
+					<!--
+						<repositoryId>${project.distributionManagementArtifactRepository.id}
+					-->
+					<!--							</repositoryId>-->
+<!---->
+					<!--							<groupId>org.vpac.grisu</groupId>-->
+					<!--							<artifactId>grisu-client-xfire</artifactId>-->
+					<!--							<version>${project.version}</version>-->
+					<!--							<packaging>jar</packaging>-->
+					<!--							<uniqueVersion>false</uniqueVersion>-->
+					<!--							<pomFile>client-xfire.pom</pomFile>-->
+					<!--						</configuration>-->
+					<!--					</execution>-->
+					<!--					<execution>-->
+					<!--						<id>deploy-client-sources-xfire</id>-->
+					<!--						<phase>deploy</phase>-->
+					<!--						<goals>-->
+					<!--							<goal>deploy-file</goal>-->
+					<!--						</goals>-->
+					<!--						<configuration>-->
+					<!--
+						<file>target/enunciate/build/xfire-client/grisu-client-xfire-1.5-src.jar
+					-->
+					<!--							</file>-->
+					<!--
+						<url>${project.distributionManagementArtifactRepository.url}
+					-->
+					<!--							</url>-->
+					<!--
+						<repositoryId>${project.distributionManagementArtifactRepository.id}
+					-->
+					<!--							</repositoryId>-->
+<!---->
+					<!--							<groupId>org.vpac.grisu</groupId>-->
+					<!--							<artifactId>grisu-client-xfire</artifactId>-->
+					<!--							<version>${project.version}</version>-->
+					<!--							<packaging>jar</packaging>-->
+					<!--
+						<description>The client-side classes for our api.</description>
+					-->
+					<!--							<classifier>sources</classifier>-->
+					<!--							<uniqueVersion>false</uniqueVersion>-->
+					<!--							<pomFile>client-xfire.pom</pomFile>-->
+					<!--						</configuration>-->
+					<!--					</execution>-->
 					<execution>
 						<id>deploy-client-classes-gwt</id>
 						<phase>deploy</phase>
@@ -396,15 +454,11 @@
 				</configuration>
 			</plugin>
 			<plugin>
-  				<groupId>org.mortbay.jetty</groupId>
-  				<artifactId>jetty-maven-plugin</artifactId>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
 			</plugin>
 
 		</plugins>
 	</build>
-
-	<properties>
-		<enunciate.version>1.15</enunciate.version>
-	</properties>
 
 </project>

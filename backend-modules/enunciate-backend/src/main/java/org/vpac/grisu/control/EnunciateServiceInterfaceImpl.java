@@ -6,7 +6,7 @@ import javax.ws.rs.Path;
 import javax.xml.ws.soap.MTOM;
 
 import org.apache.log4j.Logger;
-import org.codehaus.enunciate.modules.spring_app.HTTPRequestContext;
+import org.codehaus.enunciate.webapp.HTTPRequestContext;
 import org.globus.common.CoGProperties;
 import org.globus.myproxy.CredentialInfo;
 import org.globus.myproxy.MyProxy;
@@ -27,8 +27,6 @@ import org.vpac.grisu.utils.SeveralXMLHelpers;
 import org.w3c.dom.Document;
 
 import au.org.arcs.jcommons.interfaces.InformationManager;
-
-import com.sun.xml.ws.developer.StreamingAttachment;
 
 /**
  * This abstract class implements most of the methods of the
@@ -52,7 +50,7 @@ import com.sun.xml.ws.developer.StreamingAttachment;
 @Path("/grisu")
 @WebService(endpointInterface = "org.vpac.grisu.control.ServiceInterface")
 @MTOM(enabled = true)
-@StreamingAttachment(parseEagerly = true, memoryThreshold = 40000L)
+//@StreamingAttachment(parseEagerly = true, memoryThreshold = 40000L)
 public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface implements ServiceInterface {
 
 	static final Logger myLogger = Logger
