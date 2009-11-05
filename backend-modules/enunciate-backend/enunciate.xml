@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<enunciate label="Grisu" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://enunciate.codehaus.org/schemas/enunciate-1.15.xsd">
+	<deployment host="ngportal.vpac.org" context="api" />
+	<namespaces>
+		<namespace id="api" uri="http://api.grisu.arcs.org.au/" />
+		<namespace id="dto" uri="http://api.grisu.arcs.org.au/dto" />
+	</namespaces>
+
+	<modules>
+	
+		<csharp disabled="false" ></csharp>
+		<jaxws-ri disabled="true"/>
+		<xfire disabled="true"/>
+		<cxf disabled="false" enableJaxrs="true" />
+		<jersey disabled="true" />
+		
+		<jaxws-client disabled="false" jarName="grisu-client-jaxws.jar">
+		</jaxws-client>
+		<xfire-client disabled="false" disable14Client="true" disable15Client="false"
+			jarName="grisu-client-xfire.jar">
+		</xfire-client>
+		<gwt disabled="false" rpcModuleName="org.vpac.grisu.GrisuGwt" gwtHome="/opt/gwt" >
+		</gwt>
+
+		<spring-app enableSecurity="true">
+			<security>
+				<userDetailsService className="org.vpac.grisu.control.GrisuUserDetailsImpl" />
+			</security>
+		</spring-app>
+
+		<docs splashPackage="org.vpac.grisu.control" title="Grisu API"
+			copyright="arcs.org.au">
+			<download name="BasicJavaJob" file="src/main/resources/javaJob.jsdl"
+				description="Sample jsdl file to submit a simple java job to a fixed submission location." />
+			<download name="License" file="src/main/resources/LICENSE-2.0.txt"
+				description="The license file governing the use of this API." />
+		</docs>
+
+	</modules>
+</enunciate>
