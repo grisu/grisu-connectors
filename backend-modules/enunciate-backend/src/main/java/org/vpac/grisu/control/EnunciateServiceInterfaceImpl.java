@@ -1,8 +1,10 @@
 package org.vpac.grisu.control;
 
 import javax.jws.WebService;
+import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Path;
+import javax.xml.ws.BindingType;
 import javax.xml.ws.soap.MTOM;
 
 import org.apache.log4j.Logger;
