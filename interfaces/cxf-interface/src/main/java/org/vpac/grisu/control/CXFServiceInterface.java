@@ -632,11 +632,9 @@ public interface CXFServiceInterface extends ServiceInterface{
 	 * 
 	 * @param files
 	 *            the files to delete
-	 * @throws RemoteFileSystemException
-	 *             if the filesystem could not be accessed
 	 */
 	@WebMethod
-	void deleteFiles(DtoStringList files) throws RemoteFileSystemException;
+	void deleteFiles(DtoStringList files);
 
 	// ---------------------------------------------------------------------------------------------------
 	// 

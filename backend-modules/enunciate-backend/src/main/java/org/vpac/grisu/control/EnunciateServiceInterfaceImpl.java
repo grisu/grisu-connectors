@@ -1,5 +1,7 @@
 package org.vpac.grisu.control;
 
+import java.util.Enumeration;
+
 import javax.jws.WebService;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Path;
@@ -47,6 +49,7 @@ import au.org.arcs.jcommons.interfaces.InformationManager;
  * @author Markus Binsteiner
  * 
  */
+
 @Path("/grisu")
 @WebService(endpointInterface = "org.vpac.grisu.control.ServiceInterface")
 @MTOM(enabled = true)
@@ -193,7 +196,13 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface impl
 
 		HttpServletRequest req = null;
 		req = HTTPRequestContext.get().getRequest();
-
+		System.out.println("Request: "+req);
+		
+		Enumeration en = req.getHeaderNames();
+		while ( en.hasMoreElements() ) {
+			System.out.println(en.nextElement());
+		}
+		
 		ProxyCredential sessionProxy = (ProxyCredential) (req.getSession()
 				.getAttribute("credential"));
 
@@ -206,7 +215,7 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface impl
 
 			myLogger.debug("Auth: No Proxy in session. Creating new one.");
 			String auth_head = req.getHeader("authorization");
-
+			System.out.println("Auth_head: "+auth_head);
 			if (auth_head != null && auth_head.startsWith("Basic")) {
 				String usernpass = new String(
 						org.apache.commons.codec.binary.Base64

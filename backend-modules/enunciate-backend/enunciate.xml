@@ -7,13 +7,19 @@
 		<namespace id="dto" uri="http://api.grisu.arcs.org.au/dto" />
 	</namespaces>
 
+
+	<api-import pattern="org.vpac.grisu.model.MountPoint" />
+	<api-import pattern="org.vpac.grisu.model.dto.*" />
+	<api-import pattern="org.vpac.grisu.frontend.**" />
+	<api-import pattern="org.vpac.grisu.control.ServiceInterface" />
+	<api-import pattern="org.vpac.grisu.control.JobConstants" /> 
 	<modules>
 	
 		<csharp disabled="false" ></csharp>
 		<jaxws-ri disabled="true"/>
 		<xfire disabled="true"/>
-		<cxf disabled="false" enableJaxrs="true" />
-		<jersey disabled="true" />
+		<cxf disabled="false" enableJaxrs="false" />
+		<jersey disabled="false" />
 		
 		<jaxws-client disabled="false" jarName="grisu-client-jaxws.jar">
 		</jaxws-client>

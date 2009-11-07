@@ -1,5 +1,7 @@
 package org.vpac.grisu.control;
 
+import java.util.Enumeration;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -39,6 +41,13 @@ public class GrisuUserDetailsImpl implements UserDetailsService {
 		
 		HttpServletRequest req = HTTPRequestContext.get().getRequest();
 
+		System.out.println("Request: "+req);
+		
+		Enumeration en = req.getHeaderNames();
+		while ( en.hasMoreElements() ) {
+			System.out.println(en.nextElement());
+		}
+		
 		GrisuUserDetails oldUser = (GrisuUserDetails) (req.getAttribute("user"));
 
 		if (oldUser != null) {
@@ -51,6 +60,7 @@ public class GrisuUserDetailsImpl implements UserDetailsService {
 			myLogger
 					.debug("No old user found in session. Trying to create new one...");
 			String auth_head = req.getHeader("authorization");
+			System.out.println("Auth_head: "+auth_head);
 			if (auth_head != null && auth_head.startsWith("Basic")) {
 				String usernpass = new String(
 						org.apache.commons.codec.binary.Base64

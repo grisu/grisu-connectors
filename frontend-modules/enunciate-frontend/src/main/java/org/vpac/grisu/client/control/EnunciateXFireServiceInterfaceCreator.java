@@ -17,7 +17,6 @@ import org.codehaus.xfire.service.Service;
 import org.codehaus.xfire.service.binding.ObjectServiceFactory;
 import org.codehaus.xfire.transport.http.CommonsHttpMessageSender;
 import org.codehaus.xfire.transport.http.HttpTransport;
-import org.vpac.grisu.control.EnunciateServiceInterface;
 import org.vpac.grisu.control.ServiceInterface;
 import org.vpac.grisu.control.ServiceInterfaceCreator;
 import org.vpac.grisu.control.exceptions.NoValidCredentialException;
@@ -32,7 +31,7 @@ public class EnunciateXFireServiceInterfaceCreator implements ServiceInterfaceCr
 
 	public static String DEFAULT_SERVICE_INTERFACE = "https://grisu.vpac.org/grisu-ws/services/grisu";
 
-	public EnunciateServiceInterface create(String interfaceUrl, String username,
+	public ServiceInterface create(String interfaceUrl, String username,
 			char[] password, String myProxyServer, String myProxyPort,
 			Object[] otherOptions) throws ServiceInterfaceException {
 
@@ -133,14 +132,14 @@ public class EnunciateXFireServiceInterfaceCreator implements ServiceInterfaceCr
 		}
 
 		Service serviceModel = new ObjectServiceFactory().create(
-				EnunciateServiceInterface.class, null, "http://api.grisu.arcs.org.au/",
+				ServiceInterface.class, null, "http://api.grisu.arcs.org.au/",
 				null);
 
 		XFireProxyFactory serviceFactory = new XFireProxyFactory();
 
-		EnunciateServiceInterface serviceInterface = null;
+		ServiceInterface serviceInterface = null;
 		try {
-			serviceInterface = (EnunciateServiceInterface) serviceFactory.create(
+			serviceInterface = (ServiceInterface) serviceFactory.create(
 					serviceModel, interfaceUrl);
 			Client client = Client.getInstance(serviceInterface);
 
