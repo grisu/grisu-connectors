@@ -663,7 +663,7 @@ public interface XFireServiceInterface extends ServiceInterface{
 	 * @return all the multipartjobs of the user
 	 */
 	@WebMethod
-	DtoMultiPartJob getMultiPartJob(String multiJobPartId, boolean refresh) throws NoSuchJobException;
+	DtoMultiPartJob getMultiPartJob(String multiJobPartId) throws NoSuchJobException;
 	
 	/**
 	 * Adds the specified job to the mulitpartJob.
