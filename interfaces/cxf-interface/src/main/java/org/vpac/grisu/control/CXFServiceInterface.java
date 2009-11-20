@@ -9,7 +9,7 @@ import javax.jws.WebService;
 
 import org.vpac.grisu.control.exceptions.JobPropertiesException;
 import org.vpac.grisu.control.exceptions.JobSubmissionException;
-import org.vpac.grisu.control.exceptions.MultiPartJobException;
+import org.vpac.grisu.control.exceptions.BatchJobException;
 import org.vpac.grisu.control.exceptions.NoSuchJobException;
 import org.vpac.grisu.control.exceptions.NoSuchTemplateException;
 import org.vpac.grisu.control.exceptions.NoValidCredentialException;
@@ -25,7 +25,7 @@ import org.vpac.grisu.model.dto.DtoHostsInfo;
 import org.vpac.grisu.model.dto.DtoJob;
 import org.vpac.grisu.model.dto.DtoJobs;
 import org.vpac.grisu.model.dto.DtoMountPoints;
-import org.vpac.grisu.model.dto.DtoMultiPartJob;
+import org.vpac.grisu.model.dto.DtoBatchJob;
 import org.vpac.grisu.model.dto.DtoStringList;
 import org.vpac.grisu.model.dto.DtoSubmissionLocations;
 import org.vpac.grisu.model.dto.DtoUserProperties;
@@ -467,8 +467,8 @@ public interface CXFServiceInterface extends ServiceInterface{
 	 *             mounted / is not writeable
 	 */
 	@WebMethod
-	String upload(DataHandler file, String filename,
-			boolean return_absolute_url) throws RemoteFileSystemException;
+	String upload(DataHandler file, String filename
+			) throws RemoteFileSystemException;
 
 	/**
 	 * Download a file to the client.
@@ -662,7 +662,7 @@ public interface CXFServiceInterface extends ServiceInterface{
 	 * @return all the multipartjobs of the user
 	 */
 	@WebMethod
-	DtoMultiPartJob getMultiPartJob(String multiJobPartId) throws NoSuchJobException;
+	DtoBatchJob getBatchJob(String batchJobname) throws NoSuchJobException;
 	
 	/**
 	 * Adds the specified job to the mulitpartJob.
@@ -671,7 +671,7 @@ public interface CXFServiceInterface extends ServiceInterface{
 	 * @param jobname the jobname
 	 */
 	@WebMethod
-	String addJobToMultiPartJob(String multipartJobId, String jobname) throws NoSuchJobException, JobPropertiesException;
+	String addJobToBatchJob(String multipartJobId, String jobname) throws NoSuchJobException, JobPropertiesException;
 	
 	/**
 	 * Removes the specified job from the mulitpartJob.
@@ -680,7 +680,7 @@ public interface CXFServiceInterface extends ServiceInterface{
 	 * @param jobname the jobname
 	 */
 	@WebMethod
-	void removeJobFromMultiPartJob(String multipartJobId, String jobname) throws NoSuchJobException;
+	void removeJobFromBatchJob(String multipartJobId, String jobname) throws NoSuchJobException;
 	
 	/**
 	 * Creates a multipartjob on the server.
@@ -691,17 +691,8 @@ public interface CXFServiceInterface extends ServiceInterface{
 	 * @throws JobPropertiesException 
 	 */
 	@WebMethod
-	DtoMultiPartJob createMultiPartJob(String multiPartJobId, String fqan) throws MultiPartJobException;
+	DtoBatchJob createBatchJob(String multiPartJobId, String fqan) throws BatchJobException;
 	
-	/**
-	 * Removes the multipartJob from the server.
-	 * 
-	 * @param multiPartJobId the name of the multipartJob
-	 * @param deleteChildJobsAsWell whether to delete the child jobs of this multipartjob as well.
-	 */
-	@WebMethod
-	void deleteMultiPartJob(String multiPartJobId, boolean deleteChildJobsAsWell) throws NoSuchJobException;
-
 	/**
 	 * Distributes an input file to all the filesystems that are used in this multipartjob.
 	 * 
@@ -726,7 +717,7 @@ public interface CXFServiceInterface extends ServiceInterface{
 	 * @throws NoSuchJobException if the specified multipartjob doesn't exist
 	 */
 	@WebMethod
-	void copyMultiPartJobInputFile(String multiPartJobId, String inputFile,	String filename) throws RemoteFileSystemException, NoSuchJobException;
+	void copyBatchJobInputFile(String multiPartJobId, String inputFile,	String filename) throws RemoteFileSystemException, NoSuchJobException;
 
 	
 	/**
@@ -744,7 +735,7 @@ public interface CXFServiceInterface extends ServiceInterface{
 	 * @return all multipartjobids
 	 */
 	@WebMethod
-	DtoStringList getAllMultiPartJobIds(String application);
+	DtoStringList getAllBatchJobnames(String application);
 
 //	/**
 //	 * Creates a job using the jobProperties that are specified in the map and
@@ -856,11 +847,11 @@ public interface CXFServiceInterface extends ServiceInterface{
 	 * @throws RemoteFileSystemException
 	 *             if the files can't be deleted
 	 * @throws NoSuchJobException if no such job exists
-	 * @throws MultiPartJobException if the job is part of a multipartjob
+	 * @throws BatchJobException if the job is part of a multipartjob
 	 */
 	@WebMethod
 	void kill(String jobname, boolean clean)
-			throws RemoteFileSystemException, NoSuchJobException, MultiPartJobException;
+			throws RemoteFileSystemException, NoSuchJobException, BatchJobException;
 
 	/**
 	 * If you want to store certain values along with the job which can be used
