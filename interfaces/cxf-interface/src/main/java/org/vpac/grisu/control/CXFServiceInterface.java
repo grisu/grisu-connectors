@@ -7,9 +7,9 @@ import javax.activation.DataSource;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
+import org.vpac.grisu.control.exceptions.BatchJobException;
 import org.vpac.grisu.control.exceptions.JobPropertiesException;
 import org.vpac.grisu.control.exceptions.JobSubmissionException;
-import org.vpac.grisu.control.exceptions.BatchJobException;
 import org.vpac.grisu.control.exceptions.NoSuchJobException;
 import org.vpac.grisu.control.exceptions.NoSuchTemplateException;
 import org.vpac.grisu.control.exceptions.NoValidCredentialException;
@@ -18,6 +18,7 @@ import org.vpac.grisu.model.MountPoint;
 import org.vpac.grisu.model.dto.DtoActionStatus;
 import org.vpac.grisu.model.dto.DtoApplicationDetails;
 import org.vpac.grisu.model.dto.DtoApplicationInfo;
+import org.vpac.grisu.model.dto.DtoBatchJob;
 import org.vpac.grisu.model.dto.DtoDataLocations;
 import org.vpac.grisu.model.dto.DtoFolder;
 import org.vpac.grisu.model.dto.DtoGridResources;
@@ -25,10 +26,9 @@ import org.vpac.grisu.model.dto.DtoHostsInfo;
 import org.vpac.grisu.model.dto.DtoJob;
 import org.vpac.grisu.model.dto.DtoJobs;
 import org.vpac.grisu.model.dto.DtoMountPoints;
-import org.vpac.grisu.model.dto.DtoBatchJob;
+import org.vpac.grisu.model.dto.DtoProperties;
 import org.vpac.grisu.model.dto.DtoStringList;
 import org.vpac.grisu.model.dto.DtoSubmissionLocations;
-import org.vpac.grisu.model.dto.DtoUserProperties;
 
 /**
    CXF version of ServiceInterface
@@ -103,7 +103,7 @@ public interface CXFServiceInterface extends ServiceInterface{
 	void submitSupportRequest(String subject, String description);
 
 	@WebMethod
-	public DtoUserProperties getUserProperties();
+	public DtoProperties getUserProperties();
 	
 	/**
 	 * Returns an array of strings that are associated with this key. The
