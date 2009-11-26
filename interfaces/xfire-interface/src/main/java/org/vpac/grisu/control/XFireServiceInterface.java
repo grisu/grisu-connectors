@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
+import javax.annotation.security.RolesAllowed;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
@@ -934,5 +935,8 @@ public interface XFireServiceInterface extends ServiceInterface{
 	 */
 	@WebMethod
 	DtoActionStatus getActionStatus(String actionHandle);
+
+	@WebMethod
+	DtoProperties redistributeBatchJob(String batchjobname) throws NoSuchJobException;
 	
 }

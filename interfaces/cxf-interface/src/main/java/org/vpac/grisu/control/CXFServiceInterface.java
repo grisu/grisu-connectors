@@ -934,4 +934,7 @@ public interface CXFServiceInterface extends ServiceInterface{
 	@WebMethod
 	DtoActionStatus getActionStatus(String actionHandle);
 	
+	@WebMethod
+	DtoProperties redistributeBatchJob(String batchjobname) throws NoSuchJobException;
+	
 }
