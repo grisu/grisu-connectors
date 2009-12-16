@@ -5,11 +5,11 @@ import org.springframework.security.GrantedAuthorityImpl;
 import org.springframework.security.userdetails.UserDetails;
 
 public class GrisuUserDetails implements UserDetails {
-	
+
 	private String username;
 	private String password;
 	private boolean success;
-	
+
 	public GrisuUserDetails(String username, String password, boolean success) {
 		this.username = username;
 		this.password = password;
@@ -18,12 +18,12 @@ public class GrisuUserDetails implements UserDetails {
 
 	public GrantedAuthority[] getAuthorities() {
 
-		if ( success ) {
-			return new GrantedAuthorityImpl[]{new GrantedAuthorityImpl("User")};
+		if (success) {
+			return new GrantedAuthorityImpl[] { new GrantedAuthorityImpl("User") };
 		} else {
 			return null;
 		}
-		
+
 	}
 
 	public String getPassword() {

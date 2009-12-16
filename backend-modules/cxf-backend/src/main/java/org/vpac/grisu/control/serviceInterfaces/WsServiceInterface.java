@@ -18,9 +18,9 @@ import org.vpac.security.light.control.CertificateFiles;
 import org.vpac.security.light.control.VomsesFiles;
 import org.w3c.dom.Document;
 
-@WebService(endpointInterface="org.vpac.grisu.control.CXFServiceInterface", serviceName="grisu")
-public class WsServiceInterface extends AbstractServiceInterface 
-	implements CXFServiceInterface {
+@WebService(endpointInterface = "org.vpac.grisu.control.CXFServiceInterface", serviceName = "grisu")
+public class WsServiceInterface extends AbstractServiceInterface implements
+		CXFServiceInterface {
 
 	private static boolean triedToCopySetupFiles = false;
 
@@ -28,110 +28,106 @@ public class WsServiceInterface extends AbstractServiceInterface
 	private WebServiceContext ctx;
 
 	private ProxyCredential credential = null;
-	
-	protected synchronized ProxyCredential getCredential() throws NoValidCredentialException {
+
+	protected synchronized ProxyCredential getCredential()
+			throws NoValidCredentialException {
 		MessageContext context = ctx.getMessageContext();
 
-		if ( this.credential == null || ! this.credential.isValid() ) {
-			myLogger.debug("No valid credential in memory. Fetching it from session context...");
-			this.credential = (ProxyCredential)(context.get("credential")); 
-			if ( this.credential == null || ! this.credential.isValid() ) {
-				throw new NoValidCredentialException("Could not get credential from session context.");
+		if (this.credential == null || !this.credential.isValid()) {
+			myLogger
+					.debug("No valid credential in memory. Fetching it from session context...");
+			this.credential = (ProxyCredential) (context.get("credential"));
+			if (this.credential == null || !this.credential.isValid()) {
+				throw new NoValidCredentialException(
+						"Could not get credential from session context.");
 			}
 			getUser().cleanCache();
-		}
-		else {
-			// check whether min lifetime as configured in server config file is reached
+		} else {
+			// check whether min lifetime as configured in server config file is
+			// reached
 			try {
-				long oldLifetime = this.credential.getGssCredential().getRemainingLifetime();
-				if ( oldLifetime < ServerPropertiesManager.getMinProxyLifetimeBeforeGettingNewProxy() ) {
-					myLogger.debug("Credential reached minimum lifetime. Getting new one from session. Old lifetime: "+oldLifetime);
-					this.credential = (ProxyCredential)(context.get("credential")); 
-					if ( this.credential == null || ! this.credential.isValid() ) {
-						throw new NoValidCredentialException("Could not get credential from session context.");
+				long oldLifetime = this.credential.getGssCredential()
+						.getRemainingLifetime();
+				if (oldLifetime < ServerPropertiesManager
+						.getMinProxyLifetimeBeforeGettingNewProxy()) {
+					myLogger
+							.debug("Credential reached minimum lifetime. Getting new one from session. Old lifetime: "
+									+ oldLifetime);
+					this.credential = (ProxyCredential) (context
+							.get("credential"));
+					if (this.credential == null || !this.credential.isValid()) {
+						throw new NoValidCredentialException(
+								"Could not get credential from session context.");
 					}
 					getUser().cleanCache();
-					myLogger.debug("Success. New lifetime: "+this.credential.getGssCredential().getRemainingLifetime());
+					myLogger.debug("Success. New lifetime: "
+							+ this.credential.getGssCredential()
+									.getRemainingLifetime());
 				}
 			} catch (GSSException e) {
-				myLogger.error("Could not read remaining lifetime from GSSCredential. Retrieving new one from session context.");
-				if ( this.credential == null || ! this.credential.isValid() ) {
-					throw new NoValidCredentialException("Could not get credential from session context.");
+				myLogger
+						.error("Could not read remaining lifetime from GSSCredential. Retrieving new one from session context.");
+				if (this.credential == null || !this.credential.isValid()) {
+					throw new NoValidCredentialException(
+							"Could not get credential from session context.");
 				}
-				this.credential = (ProxyCredential)(context.get("credential")); 
+				this.credential = (ProxyCredential) (context.get("credential"));
 				getUser().cleanCache();
 			}
-			
+
 		}
 		return this.credential;
 	}
 
+	public long getCredentialEndTime() {
 
-		// not needed here because username and password is already in the http header
-	public void login(String username, String password)
-			throws NoValidCredentialException {
-		
-		// try to copy setupfiles
-		if ( ! triedToCopySetupFiles ) {
-			triedToCopySetupFiles = true;
-			
-			try {
-				LocalTemplatesHelper.copyTemplatesAndMaybeGlobusFolder();
-				VomsesFiles.copyVomses();
-				CertificateFiles.copyCACerts();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-		// nothing to do here anymore because all the myproxy stuff is now
-		// in the inhandler of the web service
-		
-	}
-
-	// only destroys the session. maybe I should do more here?
-	public String logout() {
-
-		myLogger.debug("Exiting...");
-		this.credential.destroy();
-		return null;
-	}
-
-
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.vpac.grisu.control.ServiceInterface#getTemplate(java.lang.String)
-	 */
-	public String getTemplate(String application) throws NoSuchTemplateException {
-		Document doc = ServiceTemplateManagement.getAvailableTemplate(application);
-		
-		if ( doc == null ) {
-			throw new NoSuchTemplateException("Could not find template for application: "+application+".");
-		}
-		
-		return SeveralXMLHelpers.toString(doc);
-		
+		MessageContext context = ctx.getMessageContext();
+		long endTime = (Long) (context.get("credentialEndTime"));
+		return endTime;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.vpac.grisu.control.ServiceInterface#getTemplate(java.lang.String,
-	 *      java.lang.String)
+	 * @see
+	 * org.vpac.grisu.control.ServiceInterface#getTemplate(java.lang.String)
 	 */
-	public String getTemplate(String application, String version) throws NoSuchTemplateException {
+	public String getTemplate(String application)
+			throws NoSuchTemplateException {
+		Document doc = ServiceTemplateManagement
+				.getAvailableTemplate(application);
 
-		Document doc = ServiceTemplateManagement.getAvailableTemplate(application);
-		
-		if ( doc == null ) {
-			throw new NoSuchTemplateException("Could not find template for application: "+application+", version "+version);
+		if (doc == null) {
+			throw new NoSuchTemplateException(
+					"Could not find template for application: " + application
+							+ ".");
 		}
-		
+
 		return SeveralXMLHelpers.toString(doc);
-		
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.vpac.grisu.control.ServiceInterface#getTemplate(java.lang.String,
+	 * java.lang.String)
+	 */
+	public String getTemplate(String application, String version)
+			throws NoSuchTemplateException {
+
+		Document doc = ServiceTemplateManagement
+				.getAvailableTemplate(application);
+
+		if (doc == null) {
+			throw new NoSuchTemplateException(
+					"Could not find template for application: " + application
+							+ ", version " + version);
+		}
+
+		return SeveralXMLHelpers.toString(doc);
+
 	}
 
 	/*
@@ -143,10 +139,35 @@ public class WsServiceInterface extends AbstractServiceInterface
 		return ServiceTemplateManagement.getAllAvailableApplications();
 	}
 
-	public long getCredentialEndTime() {
-		
-		MessageContext context = ctx.getMessageContext();
-		long endTime = (Long)(context.get("credentialEndTime")); 
-		return endTime;
+	// not needed here because username and password is already in the http
+	// header
+	public void login(String username, String password)
+			throws NoValidCredentialException {
+
+		// try to copy setupfiles
+		if (!triedToCopySetupFiles) {
+			triedToCopySetupFiles = true;
+
+			try {
+				LocalTemplatesHelper.copyTemplatesAndMaybeGlobusFolder();
+				VomsesFiles.copyVomses();
+				CertificateFiles.copyCACerts();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		// nothing to do here anymore because all the myproxy stuff is now
+		// in the inhandler of the web service
+
+	}
+
+	// only destroys the session. maybe I should do more here?
+	public String logout() {
+
+		myLogger.debug("Exiting...");
+		this.credential.destroy();
+		return null;
 	}
 }

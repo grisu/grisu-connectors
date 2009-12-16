@@ -28,8 +28,16 @@ public class XFireServiceInterfaceCreator implements ServiceInterfaceCreator {
 
 	static final Logger myLogger = Logger
 			.getLogger(XFireServiceInterfaceCreator.class.getName());
-	
+
 	public static String DEFAULT_SERVICE_INTERFACE = "https://grisu.vpac.org/grisu-ws/services/grisu";
+
+	public boolean canHandleUrl(String url) {
+		if (url != null) {
+			return url.startsWith("http");
+		} else {
+			return false;
+		}
+	}
 
 	public ServiceInterface create(String interfaceUrl, String username,
 			char[] password, String myProxyServer, String myProxyPort,
@@ -126,9 +134,10 @@ public class XFireServiceInterfaceCreator implements ServiceInterfaceCreator {
 			Protocol.registerProtocol("https", protocol);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
-//			e1.printStackTrace();
+			// e1.printStackTrace();
 			throw new ServiceInterfaceException(
-					"Unspecified error while trying to establish secure connection.", e1);
+					"Unspecified error while trying to establish secure connection.",
+					e1);
 		}
 
 		Service serviceModel = new ObjectServiceFactory().create(
@@ -173,7 +182,7 @@ public class XFireServiceInterfaceCreator implements ServiceInterfaceCreator {
 						CommonsHttpMessageSender.DISABLE_PROXY_UTILS, true);
 			}
 		} catch (Exception e) {
-//			e.printStackTrace();
+			// e.printStackTrace();
 			throw new ServiceInterfaceException(
 					"Unspecified error while connecting to web service.", e);
 		}
@@ -182,12 +191,12 @@ public class XFireServiceInterfaceCreator implements ServiceInterfaceCreator {
 			serviceInterface.login(username, new String(password));
 		} catch (NoValidCredentialException e) {
 			// TODO Auto-generated catch block
-//			e.printStackTrace();
+			// e.printStackTrace();
 			throw new ServiceInterfaceException(
 					"Could not create & upload proxy to the myproxy server. Probably because of a wrong private key passphrase or network problems.",
 					e);
 		} catch (Exception e1) {
-//			e1.printStackTrace();
+			// e1.printStackTrace();
 			if (e1.getCause() != null) {
 				if (e1.getCause().getCause() instanceof com.ctc.wstx.exc.WstxUnexpectedCharException) {
 					throw new ServiceInterfaceException(
@@ -199,18 +208,22 @@ public class XFireServiceInterfaceCreator implements ServiceInterfaceCreator {
 							"Can't connect to host: "
 									+ e1.getCause().getCause().getCause()
 											.getLocalizedMessage(), e1);
-				} else if ( e1.getCause() instanceof XFireFault ) {
-//					e1.getCause().printStackTrace();
-					throw new ServiceInterfaceException("Probably because of a wrong password or the MyProxy credentials you want to use are expired/do not exist.", e1);
+				} else if (e1.getCause() instanceof XFireFault) {
+					// e1.getCause().printStackTrace();
+					throw new ServiceInterfaceException(
+							"Probably because of a wrong password or the MyProxy credentials you want to use are expired/do not exist.",
+							e1);
 				}
 			}
-			throw new ServiceInterfaceException("Unspecified error while login to web service.", e1);
+			throw new ServiceInterfaceException(
+					"Unspecified error while login to web service.", e1);
 		}
 
 		Arrays.fill(password, 'x');
 
 		try {
-			if ( ! serviceInterface.getInterfaceVersion().equals(ServiceInterface.INTERFACE_VERSION)) {
+			if (!serviceInterface.getInterfaceVersion().equals(
+					ServiceInterface.INTERFACE_VERSION)) {
 				throw new ServiceInterfaceException(
 						"Remote Grisu service publishes interface version: "
 								+ serviceInterface.getInterfaceVersion()
@@ -228,14 +241,6 @@ public class XFireServiceInterfaceCreator implements ServiceInterfaceCreator {
 
 		return serviceInterface;
 
-	}
-
-	public boolean canHandleUrl(String url) {
-		if (url != null) {
-			return url.startsWith("http");
-		} else {
-			return false;
-		}
 	}
 
 }

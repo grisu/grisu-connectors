@@ -1,5 +1,3 @@
-
-
 package org.vpac.grisu.view.ws.login;
 
 import org.apache.log4j.Logger;
@@ -32,15 +30,39 @@ public class MyProxyAuthHandler extends AbstractHandler {
 	public final static String AUTH_NS = "http://grisu.vpac.org/grisu-ws";
 	public final static String AUTH_NAME = "AuthenticationToken";
 
+	private ProxyCredential createProxyCredential(String username,
+			String password, String myProxyServer, int port, int lifetime) {
+		MyProxy myproxy = new MyProxy(myProxyServer, port);
+		GSSCredential proxy = null;
+		try {
+			proxy = myproxy.get(username, password, lifetime);
+
+			int remaining = proxy.getRemainingLifetime();
+
+			if (remaining <= 0)
+				throw new RuntimeException("Proxy not valid anymore.");
+
+			return new ProxyCredential(proxy);
+		} catch (Exception e) {
+			e.printStackTrace();
+			myLogger.error("Could not create myproxy credential: "
+					+ e.getLocalizedMessage());
+			return null;
+		}
+
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.codehaus.xfire.handler.Handler#invoke(org.codehaus.xfire.MessageContext)
+	 * @see
+	 * org.codehaus.xfire.handler.Handler#invoke(org.codehaus.xfire.MessageContext
+	 * )
 	 */
 	public void invoke(MessageContext context) throws Exception {
 
 		SoapVersion version = context.getInMessage().getSoapVersion();
-		
+
 		Element header = context.getInMessage().getHeader();
 		if (header == null)
 			return;
@@ -73,7 +95,20 @@ public class MyProxyAuthHandler extends AbstractHandler {
 
 	}
 
+	private long proxyEndtime(GSSCredential credential, String username,
+			String password, String myProxyServer, int port) {
 
+		MyProxy myproxy = new MyProxy(myProxyServer, port);
+		CredentialInfo info = null;
+		try {
+			info = myproxy.info(credential, username, password);
+		} catch (MyProxyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return info.getEndTime();
+	}
 
 	private void setAuth(String username, String password,
 			String myProxyServer, String myProxyPort,
@@ -104,7 +139,7 @@ public class MyProxyAuthHandler extends AbstractHandler {
 
 			// put the credential into the session
 			handlerContext.getSession().put("credential", credential);
-			
+
 		} else {
 
 			long oldLifetime = -2;
@@ -120,7 +155,6 @@ public class MyProxyAuthHandler extends AbstractHandler {
 						.debug("Credential reached minimum lifetime. Creating new one. Old lifetime: "
 								+ oldLifetime);
 
-
 				credential = createProxyCredential(username, password,
 						myProxyServer, port, ServerPropertiesManager
 								.getMyProxyLifetime());
@@ -132,50 +166,14 @@ public class MyProxyAuthHandler extends AbstractHandler {
 				// put the credential into the session
 				handlerContext.getSession().put("credential", credential);
 
-				
 			}
-			
-			long endTime = proxyEndtime(credential.getGssCredential(), username, password, myProxyServer, port);
+
+			long endTime = proxyEndtime(credential.getGssCredential(),
+					username, password, myProxyServer, port);
 			handlerContext.getSession().put("credentialEndTime", endTime);
 			// put the credential endtime into the session
-			
+
 		}
 	}
-	
-	private ProxyCredential createProxyCredential(String username,
-			String password, String myProxyServer, int port, int lifetime) {
-		MyProxy myproxy = new MyProxy(myProxyServer, port);
-		GSSCredential proxy = null;
-		try {
-			proxy = myproxy.get(username, password, lifetime);
 
-			int remaining = proxy.getRemainingLifetime();
-
-			if (remaining <= 0)
-				throw new RuntimeException("Proxy not valid anymore.");
-
-			return new ProxyCredential(proxy);
-		} catch (Exception e) {
-			e.printStackTrace();
-			myLogger.error("Could not create myproxy credential: "
-					+ e.getLocalizedMessage());
-			return null;
-		}
-
-	}
-
-	private long proxyEndtime(GSSCredential credential, String username, String password, String myProxyServer, int port) {
-
-		MyProxy myproxy = new MyProxy(myProxyServer, port);
-		CredentialInfo info = null;
-		try {
-			info = myproxy.info(credential, username, password);
-		} catch (MyProxyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return info.getEndTime();
-	}
-	
 }

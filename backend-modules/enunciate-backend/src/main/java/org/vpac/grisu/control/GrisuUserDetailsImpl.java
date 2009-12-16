@@ -19,16 +19,39 @@ public class GrisuUserDetailsImpl implements UserDetailsService {
 
 	static final Logger myLogger = Logger.getLogger(GrisuUserDetailsImpl.class
 			.getName());
-	
+
 	static {
-		CoGProperties.getDefault().setProperty(CoGProperties.ENFORCE_SIGNING_POLICY, "false");
+		CoGProperties.getDefault().setProperty(
+				CoGProperties.ENFORCE_SIGNING_POLICY, "false");
+	}
+
+	private ProxyCredential createProxyCredential(String username,
+			String password, String myProxyServer, int port, int lifetime) {
+		MyProxy myproxy = new MyProxy(myProxyServer, port);
+		GSSCredential proxy = null;
+		try {
+			proxy = myproxy.get(username, password, lifetime);
+
+			int remaining = proxy.getRemainingLifetime();
+
+			if (remaining <= 0)
+				throw new RuntimeException("Proxy not valid anymore.");
+
+			return new ProxyCredential(proxy);
+		} catch (Exception e) {
+			e.printStackTrace();
+			myLogger.error("Could not create myproxy credential: "
+					+ e.getLocalizedMessage());
+			return null;
+		}
+
 	}
 
 	public UserDetails loadUserByUsername(String arg0)
 			throws UsernameNotFoundException, DataAccessException {
 
 		myLogger.debug("Authenticating....");
-		
+
 		HttpServletRequest req = HTTPRequestContext.get().getRequest();
 
 		GrisuUserDetails oldUser = (GrisuUserDetails) (req.getAttribute("user"));
@@ -51,7 +74,7 @@ public class GrisuUserDetailsImpl implements UserDetailsService {
 				String user = usernpass.substring(0, usernpass.indexOf(":"));
 				String password = usernpass
 						.substring(usernpass.indexOf(":") + 1);
-				
+
 				ProxyCredential proxy = createProxyCredential(user, password,
 						MyProxyServerParams.DEFAULT_MYPROXY_SERVER,
 						MyProxyServerParams.DEFAULT_MYPROXY_PORT,
@@ -69,34 +92,13 @@ public class GrisuUserDetailsImpl implements UserDetailsService {
 				req.getSession().setAttribute("user",
 						new GrisuUserDetails(user, password, success));
 
-				myLogger.debug("Authentication successful. Proxy & user object stored in session.");
+				myLogger
+						.debug("Authentication successful. Proxy & user object stored in session.");
 
 				return new GrisuUserDetails(user, password, success);
 			} else {
 				return null;
 			}
-		}
-
-	}
-
-	private ProxyCredential createProxyCredential(String username,
-			String password, String myProxyServer, int port, int lifetime) {
-		MyProxy myproxy = new MyProxy(myProxyServer, port);
-		GSSCredential proxy = null;
-		try {
-			proxy = myproxy.get(username, password, lifetime);
-
-			int remaining = proxy.getRemainingLifetime();
-
-			if (remaining <= 0)
-				throw new RuntimeException("Proxy not valid anymore.");
-
-			return new ProxyCredential(proxy);
-		} catch (Exception e) {
-			e.printStackTrace();
-			myLogger.error("Could not create myproxy credential: "
-					+ e.getLocalizedMessage());
-			return null;
 		}
 
 	}
