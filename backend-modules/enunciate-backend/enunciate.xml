@@ -18,12 +18,12 @@
 		<csharp disabled="false" ></csharp>
 		<jaxws-ri disabled="true"/>
 		<xfire disabled="true"/>
-		<cxf disabled="false" enableJaxrs="false" />
-		<jersey disabled="false" />
+		<cxf disabled="false" />
+		<jersey disabled="true" />
 		
 		<jaxws-client disabled="false" jarName="grisu-client-jaxws.jar">
 		</jaxws-client>
-		<xfire-client disabled="false" disable14Client="true" disable15Client="false"
+		<xfire-client disabled="true" disable14Client="true" disable15Client="false"
 			jarName="grisu-client-xfire.jar">
 		</xfire-client>
 		<gwt disabled="false" rpcModuleName="org.vpac.grisu.GrisuGwt" gwtHome="/opt/gwt" >

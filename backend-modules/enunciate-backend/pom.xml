@@ -20,7 +20,7 @@
 	</organization>
 
 	<properties>
-		<enunciate.version>1.16</enunciate.version>
+		<enunciate.version>1.17-RC1</enunciate.version>
 	</properties>
 
 	<dependencies>
@@ -55,11 +55,11 @@
 			</exclusions>
 		</dependency>
 		
-		<dependency>
-			<groupId>org.codehaus.enunciate</groupId>
-			<artifactId>enunciate-jersey-rt</artifactId>
-			<version>${enunciate.version}</version>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.codehaus.enunciate</groupId>-->
+<!--			<artifactId>enunciate-jersey-rt</artifactId>-->
+<!--			<version>${enunciate.version}</version>-->
+<!--		</dependency>-->
 
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -191,11 +191,11 @@
 				</executions>
 				<dependencies>
 				
-					<dependency>
+<!--					<dependency>
 						<groupId>org.codehaus.enunciate</groupId>
 						<artifactId>enunciate-xfire-client</artifactId>
 						<version>${enunciate.version}</version>
-					</dependency>
+					</dependency>-->
 
 				</dependencies>
 
@@ -262,7 +262,7 @@
 							<pomFile>client-jaxws.pom</pomFile>
 						</configuration>
 					</execution>
-										<execution>
+<!--										<execution>
 											<id>deploy-client-classes-xfire</id>
 											<phase>deploy</phase>
 											<goals>
@@ -321,7 +321,7 @@
 												<uniqueVersion>false</uniqueVersion>
 												<pomFile>client-xfire.pom</pomFile>
 											</configuration>
-										</execution>
+										</execution>-->
 					<execution>
 						<id>deploy-client-classes-gwt</id>
 						<phase>deploy</phase>

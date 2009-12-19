@@ -2,6 +2,7 @@ package org.vpac.grisu.control;
 
 import java.util.Enumeration;
 
+import javax.annotation.security.RolesAllowed;
 import javax.jws.WebService;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Path;
@@ -53,80 +54,49 @@ import au.org.arcs.jcommons.interfaces.InformationManager;
 @Path("/grisu")
 @WebService(endpointInterface = "org.vpac.grisu.control.ServiceInterface")
 @MTOM(enabled = true)
-//@StreamingAttachment(parseEagerly = true, memoryThreshold = 40000L)
-public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface implements ServiceInterface {
+// @StreamingAttachment(parseEagerly = true, memoryThreshold = 40000L)
+public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
+		implements ServiceInterface {
 
 	static final Logger myLogger = Logger
 			.getLogger(EnunciateServiceInterfaceImpl.class.getName());
 
-	private InformationManager informationManager = CachedMdsInformationManager
+	private final InformationManager informationManager = CachedMdsInformationManager
 			.getDefaultCachedMdsInformationManager(Environment
 					.getGrisuDirectory().toString());
 
 	private String username;
 	private char[] password;
-	
+
 	static {
-		CoGProperties.getDefault().setProperty(CoGProperties.ENFORCE_SIGNING_POLICY, "false");
-	}
-
-	/**
-	 * This method has to be implemented by the endpoint specific
-	 * ServiceInterface. Since there are a few different ways to get a proxy
-	 * credential (myproxy, just use the one in /tmp/x509..., shibb,...) this
-	 * needs to be implemented differently for every single situation.
-	 * 
-	 * @return the proxy credential that is used to contact the grid
-	 */
-	protected synchronized ProxyCredential getCredential() {
-
-		if (this.credential == null || !this.credential.isValid()) {
-			myLogger
-					.debug("No valid credential in memory. Fetching it from session context...");
-			this.credential = getCredentialJaxWs();
-			if (this.credential == null || !this.credential.isValid()) {
-				throw new NoValidCredentialException(
-						"Could not get credential from session context.");
-			}
-			getUser().cleanCache();
-		} else {
-			// check whether min lifetime as configured in server config file is
-			// reached
-			try {
-				long oldLifetime = this.credential.getGssCredential()
-						.getRemainingLifetime();
-				if (oldLifetime < ServerPropertiesManager
-						.getMinProxyLifetimeBeforeGettingNewProxy()) {
-					myLogger
-							.debug("Credential reached minimum lifetime. Getting new one from session. Old lifetime: "
-									+ oldLifetime);
-					this.credential = getCredentialJaxWs();
-					if (this.credential == null || !this.credential.isValid()) {
-						throw new NoValidCredentialException(
-								"Could not get credential from session context.");
-					}
-					getUser().cleanCache();
-					myLogger.debug("Success. New lifetime: "
-							+ this.credential.getGssCredential()
-									.getRemainingLifetime());
-				}
-			} catch (GSSException e) {
-				myLogger
-						.error("Could not read remaining lifetime from GSSCredential. Retrieving new one from session context.");
-				if (this.credential == null || !this.credential.isValid()) {
-					throw new NoValidCredentialException(
-							"Could not get credential from session context.");
-				}
-				this.credential = getCredentialJaxWs();
-				getUser().cleanCache();
-			}
-
-		}
-
-		return credential;
+		CoGProperties.getDefault().setProperty(
+				CoGProperties.ENFORCE_SIGNING_POLICY, "false");
 	}
 
 	private ProxyCredential credential = null;
+
+	private ProxyCredential createProxyCredential(String username,
+			String password, String myProxyServer, int port, int lifetime) {
+		MyProxy myproxy = new MyProxy(myProxyServer, port);
+		GSSCredential proxy = null;
+		try {
+			proxy = myproxy.get(username, password, lifetime);
+
+			int remaining = proxy.getRemainingLifetime();
+
+			if (remaining <= 0) {
+				throw new RuntimeException("Proxy not valid anymore.");
+			}
+
+			return new ProxyCredential(proxy);
+		} catch (Exception e) {
+			e.printStackTrace();
+			myLogger.error("Could not create myproxy credential: "
+					+ e.getLocalizedMessage());
+			return null;
+		}
+
+	}
 
 	// /**
 	// * Gets the credential from memory or the session context if the one from
@@ -181,8 +151,89 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface impl
 	// return this.credential;
 	// }
 
+	/**
+	 * This method has to be implemented by the endpoint specific
+	 * ServiceInterface. Since there are a few different ways to get a proxy
+	 * credential (myproxy, just use the one in /tmp/x509..., shibb,...) this
+	 * needs to be implemented differently for every single situation.
+	 * 
+	 * @return the proxy credential that is used to contact the grid
+	 */
+	@Override
+	protected synchronized ProxyCredential getCredential() {
+
+		if (this.credential == null || !this.credential.isValid()) {
+			myLogger
+					.debug("No valid credential in memory. Fetching it from session context...");
+			this.credential = getCredentialJaxWs();
+			if (this.credential == null || !this.credential.isValid()) {
+				throw new NoValidCredentialException(
+						"Could not get credential from session context.");
+			}
+			getUser().cleanCache();
+		} else {
+			// check whether min lifetime as configured in server config file is
+			// reached
+			try {
+				long oldLifetime = this.credential.getGssCredential()
+						.getRemainingLifetime();
+				if (oldLifetime < ServerPropertiesManager
+						.getMinProxyLifetimeBeforeGettingNewProxy()) {
+					myLogger
+							.debug("Credential reached minimum lifetime. Getting new one from session. Old lifetime: "
+									+ oldLifetime);
+					this.credential = getCredentialJaxWs();
+					if (this.credential == null || !this.credential.isValid()) {
+						throw new NoValidCredentialException(
+								"Could not get credential from session context.");
+					}
+					getUser().cleanCache();
+					myLogger.debug("Success. New lifetime: "
+							+ this.credential.getGssCredential()
+									.getRemainingLifetime());
+				}
+			} catch (GSSException e) {
+				myLogger
+						.error("Could not read remaining lifetime from GSSCredential. Retrieving new one from session context.");
+				if (this.credential == null || !this.credential.isValid()) {
+					throw new NoValidCredentialException(
+							"Could not get credential from session context.");
+				}
+				this.credential = getCredentialJaxWs();
+				getUser().cleanCache();
+			}
+
+		}
+
+		return credential;
+	}
+
+	@RolesAllowed("User")
+	public long getCredentialEndTime() {
+
+		MyProxy myproxy = new MyProxy(MyProxyServerParams.getMyProxyServer(),
+				MyProxyServerParams.getMyProxyPort());
+		CredentialInfo info = null;
+		try {
+			HttpServletRequest req = HTTPRequestContext.get().getRequest();
+			String auth_head = req.getHeader("authorization");
+			String usernpass = new String(
+					org.apache.commons.codec.binary.Base64
+							.decodeBase64((auth_head.substring(6).getBytes())));
+			String user = usernpass.substring(0, usernpass.indexOf(":"));
+			String password = usernpass.substring(usernpass.indexOf(":") + 1);
+			info = myproxy.info(getCredential().getGssCredential(), user,
+					password);
+		} catch (MyProxyException e) {
+			myLogger.error(e);
+			return -1;
+		}
+
+		return info.getEndTime();
+	}
+
 	protected ProxyCredential getCredentialJaxWs() {
-		
+
 		if (username != null && password != null) {
 
 			ProxyCredential proxy = createProxyCredential(username, new String(
@@ -196,26 +247,27 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface impl
 
 		HttpServletRequest req = null;
 		req = HTTPRequestContext.get().getRequest();
-		System.out.println("Request: "+req);
-		
+		System.out.println("ServiceInterface: Request: " + req);
+
 		Enumeration en = req.getHeaderNames();
-		while ( en.hasMoreElements() ) {
+		while (en.hasMoreElements()) {
 			System.out.println(en.nextElement());
 		}
-		
+
 		ProxyCredential sessionProxy = (ProxyCredential) (req.getSession()
 				.getAttribute("credential"));
 
 		if (sessionProxy != null && sessionProxy.isValid()) {
+			System.out.println("Auth: Using old proxy!!");
 
 			myLogger.debug("Auth: Using old proxy!!");
 			return sessionProxy;
 
 		} else {
-
+			System.out.println("Auth: No Proxy in session. Creating new one.");
 			myLogger.debug("Auth: No Proxy in session. Creating new one.");
 			String auth_head = req.getHeader("authorization");
-			System.out.println("Auth_head: "+auth_head);
+			System.out.println("Auth_head: " + auth_head);
 			if (auth_head != null && auth_head.startsWith("Basic")) {
 				String usernpass = new String(
 						org.apache.commons.codec.binary.Base64
@@ -224,7 +276,7 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface impl
 				String user = usernpass.substring(0, usernpass.indexOf(":"));
 				String password = usernpass
 						.substring(usernpass.indexOf(":") + 1);
-				
+
 				ProxyCredential proxy = createProxyCredential(user, password,
 						MyProxyServerParams.getMyProxyServer(),
 						MyProxyServerParams.getMyProxyPort(),
@@ -248,51 +300,6 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface impl
 			}
 		}
 
-	}
-
-	private ProxyCredential createProxyCredential(String username,
-			String password, String myProxyServer, int port, int lifetime) {
-		MyProxy myproxy = new MyProxy(myProxyServer, port);
-		GSSCredential proxy = null;
-		try {
-			proxy = myproxy.get(username, password, lifetime);
-
-			int remaining = proxy.getRemainingLifetime();
-
-			if (remaining <= 0)
-				throw new RuntimeException("Proxy not valid anymore.");
-
-			return new ProxyCredential(proxy);
-		} catch (Exception e) {
-			e.printStackTrace();
-			myLogger.error("Could not create myproxy credential: "
-					+ e.getLocalizedMessage());
-			return null;
-		}
-
-	}
-
-	public long getCredentialEndTime() {
-
-		MyProxy myproxy = new MyProxy(MyProxyServerParams.getMyProxyServer(),
-				MyProxyServerParams.getMyProxyPort());
-		CredentialInfo info = null;
-		try {
-			HttpServletRequest req = HTTPRequestContext.get().getRequest();
-			String auth_head = req.getHeader("authorization");
-			String usernpass = new String(
-					org.apache.commons.codec.binary.Base64
-							.decodeBase64((auth_head.substring(6).getBytes())));
-			String user = usernpass.substring(0, usernpass.indexOf(":"));
-			String password = usernpass.substring(usernpass.indexOf(":") + 1);
-			info = myproxy.info(getCredential().getGssCredential(), user,
-					password);
-		} catch (MyProxyException e) {
-			myLogger.error(e);
-			return -1;
-		}
-
-		return info.getEndTime();
 	}
 
 	public String getTemplate(String application)
@@ -325,7 +332,7 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface impl
 	}
 
 	public void login(String username, String password) {
-		
+
 		this.username = username;
 		this.password = password.toCharArray();
 
@@ -343,7 +350,5 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface impl
 		return "Logged out.";
 
 	}
-
-
 
 }
