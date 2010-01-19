@@ -15,13 +15,13 @@
 	<api-import pattern="org.vpac.grisu.control.JobConstants" /> 
 	<modules>
 	
-		<csharp disabled="false" ></csharp>
+		<csharp disabled="true" ></csharp>
 		<jaxws-ri disabled="true"/>
 		<xfire disabled="true"/>
 		<cxf disabled="false" />
 		<jersey disabled="true" />
 		
-		<jaxws-client disabled="false" jarName="grisu-client-jaxws.jar">
+		<jaxws-client disabled="true" jarName="grisu-client-jaxws.jar">
 		</jaxws-client>
 		<xfire-client disabled="true" disable14Client="true" disable15Client="false"
 			jarName="grisu-client-xfire.jar">
