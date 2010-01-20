@@ -20,7 +20,7 @@
 	</organization>
 
 	<properties>
-		<enunciate.version>1.17-RC1</enunciate.version>
+		<enunciate.version>1.17</enunciate.version>
 	</properties>
 
 	<dependencies>
