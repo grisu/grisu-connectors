@@ -1,9 +1,11 @@
 package org.vpac.grisu.control;
 
+import java.util.Enumeration;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.codehaus.enunciate.modules.spring_app.HTTPRequestContext;
+import org.codehaus.enunciate.webapp.HTTPRequestContext;
 import org.globus.common.CoGProperties;
 import org.globus.myproxy.MyProxy;
 import org.ietf.jgss.GSSCredential;
@@ -34,8 +36,9 @@ public class GrisuUserDetailsImpl implements UserDetailsService {
 
 			int remaining = proxy.getRemainingLifetime();
 
-			if (remaining <= 0)
+			if (remaining <= 0) {
 				throw new RuntimeException("Proxy not valid anymore.");
+			}
 
 			return new ProxyCredential(proxy);
 		} catch (Exception e) {
@@ -52,7 +55,17 @@ public class GrisuUserDetailsImpl implements UserDetailsService {
 
 		myLogger.debug("Authenticating....");
 
+		// HttpSession session = httpRequest.getSession();
+		// session.getServletContext();
+
 		HttpServletRequest req = HTTPRequestContext.get().getRequest();
+
+		System.out.println("Request: " + req);
+
+		Enumeration en = req.getHeaderNames();
+		while (en.hasMoreElements()) {
+			System.out.println(en.nextElement());
+		}
 
 		GrisuUserDetails oldUser = (GrisuUserDetails) (req.getAttribute("user"));
 
@@ -66,6 +79,7 @@ public class GrisuUserDetailsImpl implements UserDetailsService {
 			myLogger
 					.debug("No old user found in session. Trying to create new one...");
 			String auth_head = req.getHeader("authorization");
+			System.out.println("Auth_head: " + auth_head);
 			if (auth_head != null && auth_head.startsWith("Basic")) {
 				String usernpass = new String(
 						org.apache.commons.codec.binary.Base64
@@ -74,6 +88,9 @@ public class GrisuUserDetailsImpl implements UserDetailsService {
 				String user = usernpass.substring(0, usernpass.indexOf(":"));
 				String password = usernpass
 						.substring(usernpass.indexOf(":") + 1);
+
+				System.out.println("Username: " + user);
+				System.out.println("Pass: " + password);
 
 				ProxyCredential proxy = createProxyCredential(user, password,
 						MyProxyServerParams.DEFAULT_MYPROXY_SERVER,

@@ -1,10 +1,5 @@
 package org.vpac.grisu.control;
 
-import java.util.Map;
-
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.jws.WebMethod;
 import javax.jws.WebService;
 
 import org.vpac.grisu.control.exceptions.BatchJobException;

@@ -7,6 +7,7 @@
 		<namespace id="dto" uri="http://api.grisu.arcs.org.au/dto" />
 	</namespaces>
 
+
 	<api-import pattern="org.vpac.grisu.model.MountPoint" />
 	<api-import pattern="org.vpac.grisu.model.dto.*" />
 	<api-import pattern="org.vpac.grisu.frontend.**" />
@@ -14,21 +15,18 @@
 	<api-import pattern="org.vpac.grisu.control.JobConstants" /> 
 	<modules>
 	
-<!--		<csharp disabled="true" ></csharp>-->
+		<csharp disabled="true" ></csharp>
 		<jaxws-ri disabled="true"/>
-<!--		<xfire disabled="true"/>-->
-		<cxf disabled="false" enableJaxrs="false" />
-		<jersey disabled="false" />
+		<xfire disabled="true"/>
+		<cxf disabled="false" />
+		<jersey disabled="true" />
 		
-		<jaxws-client disabled="false" jarName="grisu-client-jaxws.jar">
-			<server-side-type pattern="org.vpac.grisu.model.dto.*" />
-			<server-side-type pattern="org.vpac.grisu.frontend.**" />
-			<server-side-type pattern="org.vpac.grisu.model.MountPoint" />
+		<jaxws-client disabled="true" jarName="grisu-client-jaxws.jar">
 		</jaxws-client>
-		<xfire-client disabled="false" disable14Client="true" disable15Client="false"
+		<xfire-client disabled="true" disable14Client="true" disable15Client="false"
 			jarName="grisu-client-xfire.jar">
 		</xfire-client>
-		<gwt disabled="false" rpcModuleName="org.vpac.grisu.GrisuGwt" gwtHome="/opt/gwt" >
+		<gwt disabled="true" rpcModuleName="org.vpac.grisu.GrisuGwt" gwtHome="/opt/gwt" >
 		</gwt>
 
 		<spring-app enableSecurity="true">
@@ -39,9 +37,9 @@
 
 		<docs splashPackage="org.vpac.grisu.control" title="Grisu API"
 			copyright="arcs.org.au">
-			<download name="BasicJavaJob" file="javaJob.jsdl"
+			<download name="BasicJavaJob" file="src/main/resources/javaJob.jsdl"
 				description="Sample jsdl file to submit a simple java job to a fixed submission location." />
-			<download name="License" file="LICENSE-2.0.txt"
+			<download name="License" file="src/main/resources/LICENSE-2.0.txt"
 				description="The license file governing the use of this API." />
 		</docs>
 

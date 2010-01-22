@@ -30,7 +30,6 @@ public class EnunciateXFireServiceInterfaceCreator implements
 			.getLogger(EnunciateXFireServiceInterfaceCreator.class.getName());
 
 	public static String DEFAULT_SERVICE_INTERFACE = "https://grisu.vpac.org/grisu-ws/services/grisu";
-
 	public boolean canHandleUrl(String url) {
 		if (url != null) {
 			return url.startsWith("http");

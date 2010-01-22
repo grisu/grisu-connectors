@@ -1,12 +1,15 @@
 package org.vpac.grisu.control;
 
+import java.util.Enumeration;
+
+import javax.annotation.security.RolesAllowed;
 import javax.jws.WebService;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Path;
 import javax.xml.ws.soap.MTOM;
 
 import org.apache.log4j.Logger;
-import org.codehaus.enunciate.modules.spring_app.HTTPRequestContext;
+import org.codehaus.enunciate.webapp.HTTPRequestContext;
 import org.globus.common.CoGProperties;
 import org.globus.myproxy.CredentialInfo;
 import org.globus.myproxy.MyProxy;
@@ -28,8 +31,6 @@ import org.w3c.dom.Document;
 
 import au.org.arcs.jcommons.interfaces.InformationManager;
 
-import com.sun.xml.ws.developer.StreamingAttachment;
-
 /**
  * This abstract class implements most of the methods of the
  * {@link ServiceInterface} interface. This way developers don't have to waste
@@ -49,17 +50,18 @@ import com.sun.xml.ws.developer.StreamingAttachment;
  * @author Markus Binsteiner
  * 
  */
+
 @Path("/grisu")
 @WebService(endpointInterface = "org.vpac.grisu.control.ServiceInterface")
 @MTOM(enabled = true)
-@StreamingAttachment(parseEagerly = true, memoryThreshold = 40000L)
+// @StreamingAttachment(parseEagerly = true, memoryThreshold = 40000L)
 public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 		implements ServiceInterface {
 
 	static final Logger myLogger = Logger
 			.getLogger(EnunciateServiceInterfaceImpl.class.getName());
 
-	private InformationManager informationManager = CachedMdsInformationManager
+	private final InformationManager informationManager = CachedMdsInformationManager
 			.getDefaultCachedMdsInformationManager(Environment
 					.getGrisuDirectory().toString());
 
@@ -80,10 +82,12 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 		try {
 			proxy = myproxy.get(username, password, lifetime);
 
+
 			int remaining = proxy.getRemainingLifetime();
 
-			if (remaining <= 0)
+			if (remaining <= 0) {
 				throw new RuntimeException("Proxy not valid anymore.");
+			}
 
 			return new ProxyCredential(proxy);
 		} catch (Exception e) {
@@ -156,6 +160,7 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 	 * 
 	 * @return the proxy credential that is used to contact the grid
 	 */
+	@Override
 	protected synchronized ProxyCredential getCredential() {
 
 		if (this.credential == null || !this.credential.isValid()) {
@@ -204,6 +209,7 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 		return credential;
 	}
 
+	@RolesAllowed("User")
 	public long getCredentialEndTime() {
 
 		MyProxy myproxy = new MyProxy(MyProxyServerParams.getMyProxyServer(),
@@ -242,20 +248,27 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 
 		HttpServletRequest req = null;
 		req = HTTPRequestContext.get().getRequest();
+		System.out.println("ServiceInterface: Request: " + req);
+
+		Enumeration en = req.getHeaderNames();
+		while (en.hasMoreElements()) {
+			System.out.println(en.nextElement());
+		}
 
 		ProxyCredential sessionProxy = (ProxyCredential) (req.getSession()
 				.getAttribute("credential"));
 
 		if (sessionProxy != null && sessionProxy.isValid()) {
+			System.out.println("Auth: Using old proxy!!");
 
 			myLogger.debug("Auth: Using old proxy!!");
 			return sessionProxy;
 
 		} else {
-
+			System.out.println("Auth: No Proxy in session. Creating new one.");
 			myLogger.debug("Auth: No Proxy in session. Creating new one.");
 			String auth_head = req.getHeader("authorization");
-
+			System.out.println("Auth_head: " + auth_head);
 			if (auth_head != null && auth_head.startsWith("Basic")) {
 				String usernpass = new String(
 						org.apache.commons.codec.binary.Base64

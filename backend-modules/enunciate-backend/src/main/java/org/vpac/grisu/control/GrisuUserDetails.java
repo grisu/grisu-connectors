@@ -4,6 +4,8 @@ import org.springframework.security.GrantedAuthority;
 import org.springframework.security.GrantedAuthorityImpl;
 import org.springframework.security.userdetails.UserDetails;
 
+
+
 public class GrisuUserDetails implements UserDetails {
 
 	private String username;
