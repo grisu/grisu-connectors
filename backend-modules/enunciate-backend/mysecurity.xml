@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+                           http://www.springframework.org/schema/security 
+                         http://www.springframework.org/schema/security/spring-security-2.0.1.xsd">
+<bean id="daoAuthenticationProvider" class="org.vpac.grisu.control.MyProxyAuthenticationProvider">
+  <security:custom-authentication-provider/>
+  <property name="userDetailsService" ref="inMemoryDaoImpl"/>
+</bean>
+</beans>
