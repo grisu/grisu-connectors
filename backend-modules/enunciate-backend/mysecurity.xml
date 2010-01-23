@@ -9,6 +9,7 @@
                          http://www.springframework.org/schema/security/spring-security-2.0.1.xsd">
 <bean id="daoAuthenticationProvider" class="org.vpac.grisu.control.MyProxyAuthenticationProvider">
   <security:custom-authentication-provider/>
-  <property name="userDetailsService" ref="inMemoryDaoImpl"/>
+  <property name="userDetailsService" ref="grisuUserDetailsService" />
 </bean>
+<bean id="grisuUserDetailsService" class="org.vpac.grisu.control.GrisuUserDetailsImpl"/>
 </beans>
