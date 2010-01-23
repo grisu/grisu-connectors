@@ -21,16 +21,17 @@
 		<cxf disabled="false" />
 		<jersey disabled="true" />
 		
-		<jaxws-client disabled="true" jarName="grisu-client-jaxws.jar">
+		<jaxws-client disabled="false" jarName="grisu-client-jaxws.jar">
 		</jaxws-client>
 		<xfire-client disabled="true" disable14Client="true" disable15Client="false"
 			jarName="grisu-client-xfire.jar">
 		</xfire-client>
-		<gwt disabled="true" rpcModuleName="org.vpac.grisu.GrisuGwt" gwtHome="/opt/gwt" >
+		<gwt disabled="false" rpcModuleName="org.vpac.grisu.GrisuGwt" gwtHome="/opt/gwt-2.0.0" >
 		</gwt>
 
 		<spring-app enableSecurity="true">
-			<security>
+			<springImport file="mysecurity.xml"/>
+			<security disableDefaultProvider="true">
 				<userDetailsService className="org.vpac.grisu.control.GrisuUserDetailsImpl" />
 			</security>
 		</spring-app>

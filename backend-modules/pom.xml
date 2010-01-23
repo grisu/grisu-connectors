@@ -12,6 +12,6 @@
   <modules>
   	<module>xfire-backend</module>
   	<module>cxf-backend</module>
-<!--  	<module>enunciate-backend</module>-->
+  	<module>enunciate-backend</module>
   </modules>
 </project>

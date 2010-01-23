@@ -2,7 +2,6 @@ package org.vpac.grisu.control;
 
 import java.util.Enumeration;
 
-import javax.annotation.security.RolesAllowed;
 import javax.jws.WebService;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Path;
@@ -56,14 +55,14 @@ import au.org.arcs.jcommons.interfaces.InformationManager;
 @MTOM(enabled = true)
 // @StreamingAttachment(parseEagerly = true, memoryThreshold = 40000L)
 public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
-		implements ServiceInterface {
+implements ServiceInterface {
 
 	static final Logger myLogger = Logger
-			.getLogger(EnunciateServiceInterfaceImpl.class.getName());
+	.getLogger(EnunciateServiceInterfaceImpl.class.getName());
 
 	private final InformationManager informationManager = CachedMdsInformationManager
-			.getDefaultCachedMdsInformationManager(Environment
-					.getGrisuDirectory().toString());
+	.getDefaultCachedMdsInformationManager(Environment
+			.getGrisuDirectory().toString());
 
 	private String username;
 	private char[] password;
@@ -110,7 +109,7 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 	// NoValidCredentialException {
 	//
 	// MessageContext context = AbstractInvoker.getContext();
-	//		
+	//
 	// if ( this.credential == null || ! this.credential.isValid() ) {
 	// myLogger.debug("No valid credential in memory. Fetching it from session context...");
 	// this.credential =
@@ -148,7 +147,7 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 	// (ProxyCredential)(context.getSession().get("credential"));
 	// getUser().cleanCache();
 	// }
-	//		
+	//
 	// return this.credential;
 	// }
 
@@ -163,13 +162,13 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 	@Override
 	protected synchronized ProxyCredential getCredential() {
 
-		if (this.credential == null || !this.credential.isValid()) {
+		if ((this.credential == null) || !this.credential.isValid()) {
 			myLogger
-					.debug("No valid credential in memory. Fetching it from session context...");
+			.debug("No valid credential in memory. Fetching it from session context...");
 			this.credential = getCredentialJaxWs();
-			if (this.credential == null || !this.credential.isValid()) {
+			if ((this.credential == null) || !this.credential.isValid()) {
 				throw new NoValidCredentialException(
-						"Could not get credential from session context.");
+				"Could not get credential from session context.");
 			}
 			getUser().cleanCache();
 		} else {
@@ -177,28 +176,28 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 			// reached
 			try {
 				long oldLifetime = this.credential.getGssCredential()
-						.getRemainingLifetime();
+				.getRemainingLifetime();
 				if (oldLifetime < ServerPropertiesManager
 						.getMinProxyLifetimeBeforeGettingNewProxy()) {
 					myLogger
-							.debug("Credential reached minimum lifetime. Getting new one from session. Old lifetime: "
-									+ oldLifetime);
+					.debug("Credential reached minimum lifetime. Getting new one from session. Old lifetime: "
+							+ oldLifetime);
 					this.credential = getCredentialJaxWs();
-					if (this.credential == null || !this.credential.isValid()) {
+					if ((this.credential == null) || !this.credential.isValid()) {
 						throw new NoValidCredentialException(
-								"Could not get credential from session context.");
+						"Could not get credential from session context.");
 					}
 					getUser().cleanCache();
 					myLogger.debug("Success. New lifetime: "
 							+ this.credential.getGssCredential()
-									.getRemainingLifetime());
+							.getRemainingLifetime());
 				}
 			} catch (GSSException e) {
 				myLogger
-						.error("Could not read remaining lifetime from GSSCredential. Retrieving new one from session context.");
-				if (this.credential == null || !this.credential.isValid()) {
+				.error("Could not read remaining lifetime from GSSCredential. Retrieving new one from session context.");
+				if ((this.credential == null) || !this.credential.isValid()) {
 					throw new NoValidCredentialException(
-							"Could not get credential from session context.");
+					"Could not get credential from session context.");
 				}
 				this.credential = getCredentialJaxWs();
 				getUser().cleanCache();
@@ -209,7 +208,7 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 		return credential;
 	}
 
-	@RolesAllowed("User")
+	//	@RolesAllowed("User")
 	public long getCredentialEndTime() {
 
 		MyProxy myproxy = new MyProxy(MyProxyServerParams.getMyProxyServer(),
@@ -220,7 +219,7 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 			String auth_head = req.getHeader("authorization");
 			String usernpass = new String(
 					org.apache.commons.codec.binary.Base64
-							.decodeBase64((auth_head.substring(6).getBytes())));
+					.decodeBase64((auth_head.substring(6).getBytes())));
 			String user = usernpass.substring(0, usernpass.indexOf(":"));
 			String password = usernpass.substring(usernpass.indexOf(":") + 1);
 			info = myproxy.info(getCredential().getGssCredential(), user,
@@ -235,7 +234,7 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 
 	protected ProxyCredential getCredentialJaxWs() {
 
-		if (username != null && password != null) {
+		if ((username != null) && (password != null)) {
 
 			ProxyCredential proxy = createProxyCredential(username, new String(
 					password), MyProxyServerParams.getMyProxyServer(),
@@ -258,7 +257,7 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 		ProxyCredential sessionProxy = (ProxyCredential) (req.getSession()
 				.getAttribute("credential"));
 
-		if (sessionProxy != null && sessionProxy.isValid()) {
+		if ((sessionProxy != null) && sessionProxy.isValid()) {
 			System.out.println("Auth: Using old proxy!!");
 
 			myLogger.debug("Auth: Using old proxy!!");
@@ -269,14 +268,14 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 			myLogger.debug("Auth: No Proxy in session. Creating new one.");
 			String auth_head = req.getHeader("authorization");
 			System.out.println("Auth_head: " + auth_head);
-			if (auth_head != null && auth_head.startsWith("Basic")) {
+			if ((auth_head != null) && auth_head.startsWith("Basic")) {
 				String usernpass = new String(
 						org.apache.commons.codec.binary.Base64
-								.decodeBase64((auth_head.substring(6)
-										.getBytes())));
+						.decodeBase64((auth_head.substring(6)
+								.getBytes())));
 				String user = usernpass.substring(0, usernpass.indexOf(":"));
 				String password = usernpass
-						.substring(usernpass.indexOf(":") + 1);
+				.substring(usernpass.indexOf(":") + 1);
 
 				ProxyCredential proxy = createProxyCredential(user, password,
 						MyProxyServerParams.getMyProxyServer(),
@@ -285,7 +284,7 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 
 				boolean success = true;
 
-				if (proxy == null || !proxy.isValid()) {
+				if ((proxy == null) || !proxy.isValid()) {
 					success = false;
 					myLogger.debug("Auth: authentication not successful!");
 					return null;
@@ -304,23 +303,23 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 	}
 
 	public String getTemplate(String application)
-			throws NoSuchTemplateException {
+	throws NoSuchTemplateException {
 
 		Document doc = ServiceTemplateManagement
-				.getAvailableTemplate(application);
+		.getAvailableTemplate(application);
 
 		String result;
 		if (doc == null) {
 			throw new NoSuchTemplateException(
 					"Could not find template for application: " + application
-							+ ".");
+					+ ".");
 		} else {
 			try {
 				result = SeveralXMLHelpers.toString(doc);
 			} catch (Exception e) {
 				throw new NoSuchTemplateException(
 						"Could not find valid xml template for application: "
-								+ application + ".");
+						+ application + ".");
 			}
 		}
 
