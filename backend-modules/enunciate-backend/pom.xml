@@ -152,6 +152,19 @@
 			<artifactId>grisu-core</artifactId>
 			<version>0.3-SNAPSHOT</version>
 			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>net.sf.ehcache</groupId>
+					<artifactId>ehcache</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache</artifactId>
+			<version>1.3.0</version>
+			<type>jar</type>
+			<scope>compile</scope>
 		</dependency>
 
 		<!--		<dependency>-->
