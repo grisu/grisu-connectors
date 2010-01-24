@@ -78,7 +78,7 @@ public class GrisuUserDetails implements UserDetails {
 				if (oldLifetime >= ServerPropertiesManager
 						.getMinProxyLifetimeBeforeGettingNewProxy()) {
 					
-					myLogger.debug("Proxy still valid and long enough lifetime.");
+//					myLogger.debug("Proxy still valid and long enough lifetime.");
 					return proxy;		
 				}
 			} catch (Exception e) {

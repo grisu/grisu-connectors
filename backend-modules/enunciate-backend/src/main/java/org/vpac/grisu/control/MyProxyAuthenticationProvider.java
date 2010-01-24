@@ -16,9 +16,9 @@ public class MyProxyAuthenticationProvider extends DaoAuthenticationProvider {
 			UsernamePasswordAuthenticationToken authentication)
 			throws AuthenticationException {
 
-		System.out.println("MyProxy: ");
-		System.out.println("Username: "
-				+ authentication.getPrincipal().toString());
+//		System.out.println("MyProxy: ");
+//		System.out.println("Username: "
+//				+ authentication.getPrincipal().toString());
 		
 		GrisuUserDetails gud = (GrisuUserDetails)userDetails;
 		gud.setAuthentication(authentication);
