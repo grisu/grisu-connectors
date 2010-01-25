@@ -32,7 +32,6 @@
 		<spring-app enableSecurity="true">
 			<springImport file="mysecurity.xml"/>
 			<security disableDefaultProvider="true">
-<!--				<userDetailsService className="org.vpac.grisu.control.GrisuUserDetailsImpl" />-->
 			</security>
 		</spring-app>
 
