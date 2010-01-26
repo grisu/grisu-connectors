@@ -58,19 +58,19 @@ implements ServiceInterface {
 
 	private final InformationManager informationManager = CachedMdsInformationManager
 	.getDefaultCachedMdsInformationManager(Environment
-			.getGrisuDirectory().toString());
+			.getVarGrisuDirectory().toString());
 
 	private GrisuUserDetails cachedUserDetails = null;
-	
+
 	private String username;
 	private char[] password;
 
 	static {
 		CoGProperties.getDefault().setProperty(
 				CoGProperties.ENFORCE_SIGNING_POLICY, "false");
-		
+
 		System.out.println("ONE TIME INIT.");
-		
+
 		try {
 			LocalTemplatesHelper.copyTemplatesAndMaybeGlobusFolder();
 			VomsesFiles.copyVomses();
@@ -81,15 +81,50 @@ implements ServiceInterface {
 			// throw new
 			// RuntimeException("Could not initiate local backend: "+e.getLocalizedMessage());
 		}
-		
+
 	}
+
+	@Override
+	protected synchronized ProxyCredential getCredential() {
+
+		if ( cachedUserDetails == null ) {
+
+			GrisuUserDetails gud = getSpringUserDetails();
+			if ( gud != null ) {
+				myLogger.debug("Found user: "+gud.getUsername());
+				cachedUserDetails = gud;
+			} else {
+				myLogger.error("Couldn't find user...");
+				return null;
+			}
+
+		}
+		return cachedUserDetails.getProxyCredential();
+
+	}
+
+
 
 	public long getCredentialEndTime() {
 
 		return getSpringUserDetails().getCredentialEndTime();
 	}
 
+	private GrisuUserDetails getSpringUserDetails() {
 
+		SecurityContext securityContext = SecurityContextHolder.getContext();
+		Authentication authentication = securityContext.getAuthentication();
+		if (authentication != null) {
+			Object principal = authentication.getPrincipal();
+			if ( principal instanceof GrisuUserDetails ) {
+				return (GrisuUserDetails)principal;
+			} else {
+				return null;
+			}
+		} else {
+			return null;
+		}
+	}
 
 	public String getTemplate(String application)
 	throws NoSuchTemplateException {
@@ -120,6 +155,7 @@ implements ServiceInterface {
 		return ServiceTemplateManagement.getAllAvailableApplications();
 	}
 
+
 	public void login(String username, String password) {
 
 		this.username = username;
@@ -137,42 +173,6 @@ implements ServiceInterface {
 		req.getSession().setAttribute("credential", null);
 
 		return "Logged out.";
-
-	}
-
-
-	private GrisuUserDetails getSpringUserDetails() {
-		
-		SecurityContext securityContext = SecurityContextHolder.getContext();
-	    Authentication authentication = securityContext.getAuthentication();
-	    if (authentication != null) {
-	        Object principal = authentication.getPrincipal();
-	        if ( principal instanceof GrisuUserDetails ) {
-	        	return (GrisuUserDetails)principal;
-	        } else {
-	        	return null;
-	        }
-	    } else {
-	    	return null;
-	    }
-	}
-
-	@Override
-	protected synchronized ProxyCredential getCredential() {
-		
-		if ( cachedUserDetails == null ) {
-		
-		GrisuUserDetails gud = getSpringUserDetails();
-		if ( gud != null ) {
-        	myLogger.debug("Found user: "+gud.getUsername());
-        	cachedUserDetails = gud;
-		} else {
-	        myLogger.error("Couldn't find user...");
-	        return null;
-	    }
-		
-		} 
-		return cachedUserDetails.getProxyCredential();
 
 	}
 

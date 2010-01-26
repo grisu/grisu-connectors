@@ -31,26 +31,26 @@ import com.sun.org.apache.xerces.internal.dom.DocumentImpl;
 
 public class CXFServiceInterfaceCreator implements ServiceInterfaceCreator {
 
-	public static String TRUST_FILE_NAME = Environment.getGrisuDirectory()
-			.getPath()
-			+ File.separator + "truststore.jks";
+	public static String TRUST_FILE_NAME = Environment.getGrisuClientDirectory()
+	.getPath()
+	+ File.separator + "truststore.jks";
 
 	/**
 	 * configures secure connection parameters.
 	 **/
 	public CXFServiceInterfaceCreator() throws ServiceInterfaceException {
 		try {
-			if (!(new File(Environment.getGrisuDirectory(), "truststore.jks")
-					.exists())) {
+			if (!(new File(Environment.getGrisuClientDirectory(), "truststore.jks")
+			.exists())) {
 				InputStream ts = CXFServiceInterfaceCreator.class
-						.getResourceAsStream("/truststore.jks");
+				.getResourceAsStream("/truststore.jks");
 				IOUtils.copy(ts, new FileOutputStream(TRUST_FILE_NAME));
 			}
 		} catch (IOException ex) {
 			throw new ServiceInterfaceException(
 					"cannot copy SSL certificate store into grisu home directory. Does "
-							+ Environment.getGrisuDirectory().getPath()
-							+ " exist?", ex);
+					+ Environment.getGrisuClientDirectory().getPath()
+					+ " exist?", ex);
 		}
 		System.setProperty("javax.net.ssl.trustStore", TRUST_FILE_NAME);
 	}
