@@ -31,8 +31,12 @@ public class GrisuUserDetails implements UserDetails {
 	}
 
 
-	private ProxyCredential createProxyCredential(String username,
+	private synchronized ProxyCredential createProxyCredential(String username,
 			String password, String myProxyServer, int port, int lifetime) {
+
+		//		System.out.println("Username: "+username);
+		//		System.out.println("Password: "+password);
+
 		MyProxy myproxy = new MyProxy(myProxyServer, port);
 		GSSCredential proxy = null;
 		try {
@@ -64,7 +68,7 @@ public class GrisuUserDetails implements UserDetails {
 
 	}
 
-	public long getCredentialEndTime() {
+	public synchronized long getCredentialEndTime() {
 
 		if ( authentication == null ) {
 			return -1;
@@ -92,7 +96,7 @@ public class GrisuUserDetails implements UserDetails {
 		return "dummy";
 	}
 
-	public ProxyCredential getProxyCredential() throws AuthenticationException {
+	public synchronized ProxyCredential getProxyCredential() throws AuthenticationException {
 
 		if ( authentication == null ) {
 			throw new AuthenticationException("No authentication token set.") {

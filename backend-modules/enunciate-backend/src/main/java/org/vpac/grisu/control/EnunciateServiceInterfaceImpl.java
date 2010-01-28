@@ -7,12 +7,10 @@ import javax.xml.ws.soap.MTOM;
 
 import org.apache.log4j.Logger;
 import org.codehaus.enunciate.webapp.HTTPRequestContext;
-import org.globus.common.CoGProperties;
 import org.springframework.security.Authentication;
 import org.springframework.security.context.SecurityContext;
 import org.springframework.security.context.SecurityContextHolder;
 import org.vpac.grisu.backend.model.ProxyCredential;
-import org.vpac.grisu.backend.utils.LocalTemplatesHelper;
 import org.vpac.grisu.control.exceptions.NoSuchTemplateException;
 import org.vpac.grisu.control.info.CachedMdsInformationManager;
 import org.vpac.grisu.control.serviceInterfaces.AbstractServiceInterface;
@@ -20,8 +18,6 @@ import org.vpac.grisu.control.serviceInterfaces.LocalServiceInterface;
 import org.vpac.grisu.settings.Environment;
 import org.vpac.grisu.settings.ServiceTemplateManagement;
 import org.vpac.grisu.utils.SeveralXMLHelpers;
-import org.vpac.security.light.control.CertificateFiles;
-import org.vpac.security.light.control.VomsesFiles;
 import org.w3c.dom.Document;
 
 import au.org.arcs.jcommons.interfaces.InformationManager;
@@ -65,24 +61,7 @@ implements ServiceInterface {
 	private String username;
 	private char[] password;
 
-	static {
-		CoGProperties.getDefault().setProperty(
-				CoGProperties.ENFORCE_SIGNING_POLICY, "false");
 
-		System.out.println("ONE TIME INIT.");
-
-		try {
-			LocalTemplatesHelper.copyTemplatesAndMaybeGlobusFolder();
-			VomsesFiles.copyVomses();
-			CertificateFiles.copyCACerts();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			myLogger.error(e.getLocalizedMessage());
-			// throw new
-			// RuntimeException("Could not initiate local backend: "+e.getLocalizedMessage());
-		}
-
-	}
 
 	@Override
 	protected synchronized ProxyCredential getCredential() {
