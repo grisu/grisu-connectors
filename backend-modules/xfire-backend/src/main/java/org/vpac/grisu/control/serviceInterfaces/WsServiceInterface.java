@@ -7,6 +7,7 @@ import org.codehaus.xfire.annotations.EnableMTOM;
 import org.codehaus.xfire.service.invoker.AbstractInvoker;
 import org.ietf.jgss.GSSException;
 import org.vpac.grisu.backend.model.ProxyCredential;
+import org.vpac.grisu.backend.model.User;
 import org.vpac.grisu.control.ServiceInterface;
 import org.vpac.grisu.control.XFireServiceInterface;
 import org.vpac.grisu.control.exceptions.NoSuchTemplateException;
@@ -144,6 +145,11 @@ XFireServiceInterface {
 
 		return SeveralXMLHelpers.toString(doc);
 
+	}
+
+	@Override
+	protected User getUser() {
+		throw new RuntimeException("Needs to be implemented.");
 	}
 
 	/*

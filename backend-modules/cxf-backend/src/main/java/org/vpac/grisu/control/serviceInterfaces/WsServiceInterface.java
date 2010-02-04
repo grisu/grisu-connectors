@@ -7,6 +7,7 @@ import javax.xml.ws.handler.MessageContext;
 
 import org.ietf.jgss.GSSException;
 import org.vpac.grisu.backend.model.ProxyCredential;
+import org.vpac.grisu.backend.model.User;
 import org.vpac.grisu.control.CXFServiceInterface;
 import org.vpac.grisu.control.exceptions.NoSuchTemplateException;
 import org.vpac.grisu.control.exceptions.NoValidCredentialException;
@@ -126,6 +127,12 @@ CXFServiceInterface {
 
 		return SeveralXMLHelpers.toString(doc);
 
+	}
+
+	@Override
+	protected User getUser() {
+
+		throw new RuntimeException("Needs to be implemented.");
 	}
 
 	/*
