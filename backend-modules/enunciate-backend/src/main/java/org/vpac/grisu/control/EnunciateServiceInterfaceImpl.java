@@ -56,29 +56,24 @@ implements ServiceInterface {
 	.getDefaultCachedMdsInformationManager(Environment
 			.getVarGrisuDirectory().toString());
 
-	private GrisuUserDetails cachedUserDetails = null;
-
 	private String username;
 	private char[] password;
+
 
 
 
 	@Override
 	protected synchronized ProxyCredential getCredential() {
 
-		if ( cachedUserDetails == null ) {
 
-			GrisuUserDetails gud = getSpringUserDetails();
-			if ( gud != null ) {
-				myLogger.debug("Found user: "+gud.getUsername());
-				cachedUserDetails = gud;
-			} else {
-				myLogger.error("Couldn't find user...");
-				return null;
-			}
-
+		GrisuUserDetails gud = getSpringUserDetails();
+		if ( gud != null ) {
+			myLogger.debug("Found user: "+gud.getUsername());
+			return gud.getProxyCredential();
+		} else {
+			myLogger.error("Couldn't find user...");
+			return null;
 		}
-		return cachedUserDetails.getProxyCredential();
 
 	}
 
