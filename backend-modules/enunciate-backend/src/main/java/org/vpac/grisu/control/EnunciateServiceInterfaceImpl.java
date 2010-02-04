@@ -11,6 +11,7 @@ import org.springframework.security.Authentication;
 import org.springframework.security.context.SecurityContext;
 import org.springframework.security.context.SecurityContextHolder;
 import org.vpac.grisu.backend.model.ProxyCredential;
+import org.vpac.grisu.backend.model.User;
 import org.vpac.grisu.control.exceptions.NoSuchTemplateException;
 import org.vpac.grisu.control.info.CachedMdsInformationManager;
 import org.vpac.grisu.control.serviceInterfaces.AbstractServiceInterface;
@@ -125,10 +126,29 @@ implements ServiceInterface {
 
 	}
 
+	@Override
+	protected User getUser() {
+
+		HttpServletRequest req = HTTPRequestContext.get().getRequest();
+		User user = (User)(req.getAttribute("user"));
+
+		if ( user == null ) {
+
+			user = User.createUser(getCredential(), this);
+			req.setAttribute("user", user);
+
+			if ( user == null ) {
+				throw new RuntimeException("Can't get user for session.");
+			}
+		}
+
+		return user;
+	}
+
+
 	public String[] listHostedApplicationTemplates() {
 		return ServiceTemplateManagement.getAllAvailableApplications();
 	}
-
 
 	public void login(String username, String password) {
 
@@ -138,6 +158,8 @@ implements ServiceInterface {
 		getCredential();
 
 	}
+
+
 
 	public String logout() {
 
