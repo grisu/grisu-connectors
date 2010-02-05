@@ -10,6 +10,8 @@ import org.springframework.security.GrantedAuthorityImpl;
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
 import org.springframework.security.userdetails.UserDetails;
 import org.vpac.grisu.backend.model.ProxyCredential;
+import org.vpac.grisu.backend.model.User;
+import org.vpac.grisu.control.serviceInterfaces.AbstractServiceInterface;
 import org.vpac.grisu.settings.MyProxyServerParams;
 import org.vpac.grisu.settings.ServerPropertiesManager;
 
@@ -26,10 +28,11 @@ public class GrisuUserDetails implements UserDetails {
 	private final boolean success = true;
 	private ProxyCredential proxy = null;
 
+	private User user = null;
+
 	public GrisuUserDetails(String username) {
 		this.username = username;
 	}
-
 
 	private synchronized ProxyCredential createProxyCredential(String username,
 			String password, String myProxyServer, int port, int lifetime) {
@@ -146,6 +149,17 @@ public class GrisuUserDetails implements UserDetails {
 		}
 
 
+
+	}
+
+	public synchronized User getUser(AbstractServiceInterface si) {
+
+		if ( user == null ) {
+			user = User.createUser(getProxyCredential(), si);
+		}
+
+		user.setCred(getProxyCredential());
+		return user;
 
 	}
 
