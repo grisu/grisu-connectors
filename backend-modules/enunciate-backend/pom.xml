@@ -20,7 +20,7 @@
 	</organization>
 
 	<properties>
-		<enunciate.version>1.18-RC1</enunciate.version>
+		<enunciate.version>1.18</enunciate.version>
 		<gwt.version>2.0.0</gwt.version>
 	</properties>
 
@@ -189,7 +189,7 @@
 
 			<plugin>
 				<groupId>org.codehaus.enunciate</groupId>
-				<artifactId>maven-enunciate-cxf-plugin</artifactId>
+				<artifactId>maven-enunciate-plugin</artifactId>
 				<version>${enunciate.version}</version>
 				<executions>
 					<execution>
@@ -197,12 +197,80 @@
 							<goal>assemble</goal>
 						</goals>
 					</execution>
+
+					<execution>
+						<id>install-and-deploy-jaxws</id>
+						<goals>
+							<!--
+								the "install-artifact" goal does a local install of the artifact
+							-->
+							<goal>install-artifact</goal>
+							<!-- the "deploy-artifact" goal deploys the artifact -->
+							<goal>deploy-artifact</goal>
+						</goals>
+						<phase>install</phase>
+
+						<configuration>
+							<!--
+								the "enunciateArtifactId" element is the only thing required.
+								other options reflect those of the maven deploy plugin, and
+								include options to set the groupId, artifactId, version,
+								classifier, pomFile etc. However, suitable defaults will be
+								supplied as necessary
+							-->
+							<enunciateArtifactId>jaxws.client.library</enunciateArtifactId>
+							<groupId>org.vpac.grisu</groupId>
+							<artifactId>grisu-client-jaxws</artifactId>
+							<version>${project.version}</version>
+							<packaging>jar</packaging>
+							<uniqueVersion>false</uniqueVersion>
+							<pomFile>client-jaxws.pom</pomFile>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>install-and-deploy-gwt</id>
+						<goals>
+							<!--
+								the "install-artifact" goal does a local install of the artifact
+							-->
+							<goal>install-artifact</goal>
+							<!-- the "deploy-artifact" goal deploys the artifact -->
+							<goal>deploy-artifact</goal>
+						</goals>
+						<phase>install</phase>
+
+						<configuration>
+							<!--
+								the "enunciateArtifactId" element is the only thing required.
+								other options reflect those of the maven deploy plugin, and
+								include options to set the groupId, artifactId, version,
+								classifier, pomFile etc. However, suitable defaults will be
+								supplied as necessary
+							-->
+							<enunciateArtifactId>gwt.client.library</enunciateArtifactId>
+							<groupId>org.vpac.grisu</groupId>
+							<artifactId>grisu-client-enunciate-gwt</artifactId>
+
+							<version>${project.version}</version>
+							<packaging>jar</packaging>
+
+							<uniqueVersion>false</uniqueVersion>
+							<pomFile>client-gwt.pom</pomFile>
+
+						</configuration>
+					</execution>
 				</executions>
 
+
+				<dependencies>
+					<dependency>
+						<groupId>org.codehaus.enunciate</groupId>
+						<artifactId>enunciate-gwt</artifactId>
+						<version>1.18</version>
+					</dependency>
+				</dependencies>
 			</plugin>
-
-
-
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -212,135 +280,6 @@
 					<target>1.5</target>
 				</configuration>
 			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>deploy-client-classes-jaxws</id>
-						<phase>deploy</phase>
-						<goals>
-							<goal>deploy-file</goal>
-						</goals>
-						<configuration>
-
-							<file>target/enunciate/build/jaxws-client/grisu-client-jaxws.jar
-							</file>
-							<url>${project.distributionManagementArtifactRepository.url}
-							</url>
-							<repositoryId>${project.distributionManagementArtifactRepository.id}
-							</repositoryId>
-
-							<groupId>org.vpac.grisu</groupId>
-							<artifactId>grisu-client-jaxws</artifactId>
-							<version>${project.version}</version>
-							<packaging>jar</packaging>
-							<uniqueVersion>false</uniqueVersion>
-							<pomFile>client-jaxws.pom</pomFile>
-						</configuration>
-					</execution>
-					<execution>
-						<id>deploy-client-sources-jaxws</id>
-						<phase>deploy</phase>
-						<goals>
-							<goal>deploy-file</goal>
-						</goals>
-						<configuration>
-
-							<file>target/enunciate/build/jaxws-client/grisu-client-jaxws-src.jar
-							</file>
-							<url>${project.distributionManagementArtifactRepository.url}
-							</url>
-							<repositoryId>${project.distributionManagementArtifactRepository.id}
-							</repositoryId>
-
-							<groupId>org.vpac.grisu</groupId>
-							<artifactId>grisu-client-jaxws</artifactId>
-							use this project's version
-							<version>${project.version}</version>
-							<packaging>jar</packaging>
-							<classifier>sources</classifier>
-							<uniqueVersion>false</uniqueVersion>
-							<pomFile>client-jaxws.pom</pomFile>
-						</configuration>
-					</execution>
-					<!--
-						<execution> <id>deploy-client-classes-xfire</id>
-						<phase>deploy</phase> <goals> <goal>deploy-file</goal> </goals>
-						<configuration>
-
-						<file>target/enunciate/build/xfire-client/grisu-client-xfire-1.5.jar
-
-						</file>
-
-						<url>${project.distributionManagementArtifactRepository.url}
-
-						</url>
-
-						<repositoryId>${project.distributionManagementArtifactRepository.id}
-
-						</repositoryId> <groupId>org.vpac.grisu</groupId>
-						<artifactId>grisu-client-xfire</artifactId>
-						<version>${project.version}</version> <packaging>jar</packaging>
-						<uniqueVersion>false</uniqueVersion>
-						<pomFile>client-xfire.pom</pomFile> </configuration> </execution>
-						<execution> <id>deploy-client-sources-xfire</id>
-						<phase>deploy</phase> <goals> <goal>deploy-file</goal> </goals>
-						<configuration>
-
-						<file>target/enunciate/build/xfire-client/grisu-client-xfire-1.5-src.jar
-
-						</file>
-
-						<url>${project.distributionManagementArtifactRepository.url}
-
-						</url>
-
-						<repositoryId>${project.distributionManagementArtifactRepository.id}
-
-						</repositoryId> <groupId>org.vpac.grisu</groupId>
-						<artifactId>grisu-client-xfire</artifactId>
-						<version>${project.version}</version> <packaging>jar</packaging>
-
-						<description>The client-side classes for our api.</description>
-
-						<classifier>sources</classifier>
-						<uniqueVersion>false</uniqueVersion>
-						<pomFile>client-xfire.pom</pomFile> </configuration> </execution>
-					-->
-					<execution>
-						<id>deploy-client-classes-gwt</id>
-						<phase>deploy</phase>
-						<goals>
-							<goal>deploy-file</goal>
-						</goals>
-						<configuration>
-
-							<file>target/enunciate/build/gwt/Grisu-gwt-client.jar
-							</file>
-							<url>${project.distributionManagementArtifactRepository.url}
-							</url>
-
-							<repositoryId>${project.distributionManagementArtifactRepository.id}
-							</repositoryId>
-
-							<groupId>org.vpac.grisu</groupId>
-							<artifactId>grisu-client-enunciate-gwt</artifactId>
-
-							<version>${project.version}</version>
-							<packaging>jar</packaging>
-
-							<uniqueVersion>false</uniqueVersion>
-							<pomFile>client-gwt.pom</pomFile>
-						</configuration>
-					</execution>
-				</executions>
-				<configuration>
-
-				</configuration>
-			</plugin>
-
 
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
