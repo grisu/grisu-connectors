@@ -198,35 +198,35 @@
 						</goals>
 					</execution>
 
-									<execution>
-						<id>install-and-deploy-jaxws</id>
-						<goals>
-							<!--
-								the "install-artifact" goal does a local install of the artifact
-							-->
-							<goal>install-artifact</goal>
-							<!-- the "deploy-artifact" goal deploys the artifact -->
-							<goal>deploy-artifact</goal>
-						</goals>
-						<phase>install</phase>
-
-						<configuration>
-							<!--
-								the "enunciateArtifactId" element is the only thing required.
-								other options reflect those of the maven deploy plugin, and
-								include options to set the groupId, artifactId, version,
-								classifier, pomFile etc. However, suitable defaults will be
-								supplied as necessary
-							-->
-							<enunciateArtifactId>jaxws.client.library</enunciateArtifactId>
-							<groupId>org.vpac.grisu</groupId>
-							<artifactId>grisu-client-jaxws</artifactId>
-							<version>${project.version}</version>
-							<packaging>jar</packaging>
-							<uniqueVersion>false</uniqueVersion>
-							<pomFile>client-jaxws.pom</pomFile>
-						</configuration>
-					</execution>
+<!--									<execution>-->
+<!--						<id>install-and-deploy-jaxws</id>-->
+<!--						<goals>-->
+<!--							-->
+<!--								the "install-artifact" goal does a local install of the artifact-->
+<!--							-->
+<!--							<goal>install-artifact</goal>-->
+<!--							 the "deploy-artifact" goal deploys the artifact -->
+<!--							<goal>deploy-artifact</goal>-->
+<!--						</goals>-->
+<!--						<phase>install</phase>-->
+<!---->
+<!--						<configuration>-->
+<!--							-->
+<!--								the "enunciateArtifactId" element is the only thing required.-->
+<!--								other options reflect those of the maven deploy plugin, and-->
+<!--								include options to set the groupId, artifactId, version,-->
+<!--								classifier, pomFile etc. However, suitable defaults will be-->
+<!--								supplied as necessary-->
+<!--							-->
+<!--							<enunciateArtifactId>jaxws.client.library</enunciateArtifactId>-->
+<!--							<groupId>org.vpac.grisu</groupId>-->
+<!--							<artifactId>grisu-client-jaxws</artifactId>-->
+<!--							<version>${project.version}</version>-->
+<!--							<packaging>jar</packaging>-->
+<!--							<uniqueVersion>false</uniqueVersion>-->
+<!--							<pomFile>client-jaxws.pom</pomFile>-->
+<!--						</configuration>-->
+<!--					</execution>-->
 
 <!--					<execution>-->
 <!--						<id>install-and-deploy-gwt</id>-->
