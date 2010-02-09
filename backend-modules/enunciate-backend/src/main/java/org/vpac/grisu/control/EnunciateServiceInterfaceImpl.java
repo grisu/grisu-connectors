@@ -129,22 +129,9 @@ implements ServiceInterface {
 	@Override
 	protected User getUser() {
 
-		//		HttpServletRequest req = HTTPRequestContext.get().getRequest();
-		//		User user = (User)(req.getAttribute("user"));
-		//
-		//		if ( user == null ) {
-		//
-		//			user = User.createUser(getCredential(), this);
-		//			req.setAttribute("user", user);
-		//
-		//			if ( user == null ) {
-		//				throw new RuntimeException("Can't get user for session.");
-		//			}
-		//		}
-
 		GrisuUserDetails gud = getSpringUserDetails();
 		if ( gud != null ) {
-			myLogger.debug("Found user: "+gud.getUsername());
+			//			myLogger.debug("Found user: "+gud.getUsername());
 			return gud.getUser(this);
 		} else {
 			myLogger.error("Couldn't find user...");
