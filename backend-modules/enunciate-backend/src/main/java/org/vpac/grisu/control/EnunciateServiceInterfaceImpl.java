@@ -50,6 +50,11 @@ import au.org.arcs.jcommons.interfaces.InformationManager;
 public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 implements ServiceInterface {
 
+	static {
+		System.out.println("INHERITABLETHREAD");
+		SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
+	}
+
 	static final Logger myLogger = Logger
 	.getLogger(EnunciateServiceInterfaceImpl.class.getName());
 
