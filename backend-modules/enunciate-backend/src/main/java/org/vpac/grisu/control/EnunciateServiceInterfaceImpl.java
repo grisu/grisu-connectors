@@ -1,10 +1,14 @@
 package org.vpac.grisu.control;
 
+import java.io.File;
+import java.io.IOException;
+
 import javax.jws.WebService;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Path;
 import javax.xml.ws.soap.MTOM;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.codehaus.enunciate.webapp.HTTPRequestContext;
 import org.springframework.security.Authentication;
@@ -18,8 +22,6 @@ import org.vpac.grisu.control.serviceInterfaces.AbstractServiceInterface;
 import org.vpac.grisu.control.serviceInterfaces.LocalServiceInterface;
 import org.vpac.grisu.settings.Environment;
 import org.vpac.grisu.settings.ServiceTemplateManagement;
-import org.vpac.grisu.utils.SeveralXMLHelpers;
-import org.w3c.dom.Document;
 
 import au.org.arcs.jcommons.interfaces.InformationManager;
 
@@ -48,33 +50,30 @@ import au.org.arcs.jcommons.interfaces.InformationManager;
 @MTOM(enabled = true)
 // @StreamingAttachment(parseEagerly = true, memoryThreshold = 40000L)
 public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
-implements ServiceInterface {
+		implements ServiceInterface {
 
 	static {
 		System.out.println("INHERITABLETHREAD");
-		SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
+		SecurityContextHolder
+				.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
 	}
 
 	static final Logger myLogger = Logger
-	.getLogger(EnunciateServiceInterfaceImpl.class.getName());
+			.getLogger(EnunciateServiceInterfaceImpl.class.getName());
 
 	private final InformationManager informationManager = CachedMdsInformationManager
-	.getDefaultCachedMdsInformationManager(Environment
-			.getVarGrisuDirectory().toString());
+			.getDefaultCachedMdsInformationManager(Environment
+					.getVarGrisuDirectory().toString());
 
 	private String username;
 	private char[] password;
 
-
-
-
 	@Override
 	protected synchronized ProxyCredential getCredential() {
 
-
 		GrisuUserDetails gud = getSpringUserDetails();
-		if ( gud != null ) {
-			myLogger.debug("Found user: "+gud.getUsername());
+		if (gud != null) {
+			myLogger.debug("Found user: " + gud.getUsername());
 			return gud.getProxyCredential();
 		} else {
 			myLogger.error("Couldn't find user...");
@@ -82,8 +81,6 @@ implements ServiceInterface {
 		}
 
 	}
-
-
 
 	public long getCredentialEndTime() {
 
@@ -96,8 +93,8 @@ implements ServiceInterface {
 		Authentication authentication = securityContext.getAuthentication();
 		if (authentication != null) {
 			Object principal = authentication.getPrincipal();
-			if ( principal instanceof GrisuUserDetails ) {
-				return (GrisuUserDetails)principal;
+			if (principal instanceof GrisuUserDetails) {
+				return (GrisuUserDetails) principal;
 			} else {
 				return null;
 			}
@@ -106,28 +103,19 @@ implements ServiceInterface {
 		}
 	}
 
-	public String getTemplate(String application)
-	throws NoSuchTemplateException {
+	public String getTemplate(String name) throws NoSuchTemplateException {
 
-		Document doc = ServiceTemplateManagement
-		.getAvailableTemplate(application);
+		File file = new File(Environment.getAvailableTemplatesDirectory(), name
+				+ ".template");
 
-		String result;
-		if (doc == null) {
-			throw new NoSuchTemplateException(
-					"Could not find template for application: " + application
-					+ ".");
-		} else {
-			try {
-				result = SeveralXMLHelpers.toString(doc);
-			} catch (Exception e) {
-				throw new NoSuchTemplateException(
-						"Could not find valid xml template for application: "
-						+ application + ".");
-			}
+		String temp;
+		try {
+			temp = FileUtils.readFileToString(file);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
 
-		return result;
+		return temp;
 
 	}
 
@@ -135,8 +123,8 @@ implements ServiceInterface {
 	protected User getUser() {
 
 		GrisuUserDetails gud = getSpringUserDetails();
-		if ( gud != null ) {
-			//			myLogger.debug("Found user: "+gud.getUsername());
+		if (gud != null) {
+			// myLogger.debug("Found user: "+gud.getUsername());
 			return gud.getUser(this);
 		} else {
 			myLogger.error("Couldn't find user...");
@@ -144,7 +132,6 @@ implements ServiceInterface {
 		}
 
 	}
-
 
 	public String[] listHostedApplicationTemplates() {
 		return ServiceTemplateManagement.getAllAvailableApplications();
@@ -158,8 +145,6 @@ implements ServiceInterface {
 		getCredential();
 
 	}
-
-
 
 	public String logout() {
 
