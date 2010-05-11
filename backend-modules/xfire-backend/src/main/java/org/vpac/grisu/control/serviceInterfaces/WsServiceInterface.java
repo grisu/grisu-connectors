@@ -1,8 +1,12 @@
 package org.vpac.grisu.control.serviceInterfaces;
 
+import java.io.File;
+import java.io.IOException;
+
 import javax.jws.WebService;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.io.FileUtils;
 import org.codehaus.xfire.MessageContext;
 import org.codehaus.xfire.annotations.EnableMTOM;
 import org.codehaus.xfire.service.invoker.AbstractInvoker;
@@ -13,6 +17,7 @@ import org.vpac.grisu.control.ServiceInterface;
 import org.vpac.grisu.control.XFireServiceInterface;
 import org.vpac.grisu.control.exceptions.NoSuchTemplateException;
 import org.vpac.grisu.control.exceptions.NoValidCredentialException;
+import org.vpac.grisu.settings.Environment;
 import org.vpac.grisu.settings.ServerPropertiesManager;
 import org.vpac.grisu.settings.ServiceTemplateManagement;
 
