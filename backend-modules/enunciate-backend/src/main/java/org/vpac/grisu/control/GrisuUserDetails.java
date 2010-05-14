@@ -15,13 +15,10 @@ import org.vpac.grisu.control.serviceInterfaces.AbstractServiceInterface;
 import org.vpac.grisu.settings.MyProxyServerParams;
 import org.vpac.grisu.settings.ServerPropertiesManager;
 
-
-
 public class GrisuUserDetails implements UserDetails {
 
 	static final Logger myLogger = Logger.getLogger(GrisuUserDetails.class
 			.getName());
-
 
 	private final String username;
 	private UsernamePasswordAuthenticationToken authentication;
@@ -37,8 +34,8 @@ public class GrisuUserDetails implements UserDetails {
 	private synchronized ProxyCredential createProxyCredential(String username,
 			String password, String myProxyServer, int port, int lifetime) {
 
-		//		System.out.println("Username: "+username);
-		//		System.out.println("Password: "+password);
+		// System.out.println("Username: "+username);
+		// System.out.println("Password: "+password);
 
 		MyProxy myproxy = new MyProxy(myProxyServer, port);
 		GSSCredential proxy = null;
@@ -73,7 +70,7 @@ public class GrisuUserDetails implements UserDetails {
 
 	public synchronized long getCredentialEndTime() {
 
-		if ( authentication == null ) {
+		if (authentication == null) {
 			return -1;
 		}
 
@@ -99,48 +96,56 @@ public class GrisuUserDetails implements UserDetails {
 		return "dummy";
 	}
 
-	public synchronized ProxyCredential getProxyCredential() throws AuthenticationException {
+	public synchronized ProxyCredential getProxyCredential()
+			throws AuthenticationException {
 
-		if ( authentication == null ) {
+		myLogger.debug("Getting proxy credential...");
+
+		if (authentication == null) {
 			throw new AuthenticationException("No authentication token set.") {
 			};
 		}
 
-		if ( (proxy != null) && proxy.isValid() ) {
+		if ((proxy != null) && proxy.isValid()) {
 
+			myLogger.debug("Old valid proxy found.");
 			long oldLifetime = -1;
 			try {
 				oldLifetime = proxy.getGssCredential().getRemainingLifetime();
 				if (oldLifetime >= ServerPropertiesManager
 						.getMinProxyLifetimeBeforeGettingNewProxy()) {
 
-					//					myLogger.debug("Proxy still valid and long enough lifetime.");
+					// myLogger.debug("Proxy still valid and long enough lifetime.");
+					myLogger
+							.debug("Old valid proxy still good enough. Using it.");
 					return proxy;
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
+			myLogger.debug("Old proxy not good enough. Creating new one...");
 		}
 
-		ProxyCredential proxyTemp = createProxyCredential(authentication.getPrincipal().toString(), authentication.getCredentials().toString(),
-				MyProxyServerParams.DEFAULT_MYPROXY_SERVER,
+		ProxyCredential proxyTemp = createProxyCredential(authentication
+				.getPrincipal().toString(), authentication.getCredentials()
+				.toString(), MyProxyServerParams.DEFAULT_MYPROXY_SERVER,
 				MyProxyServerParams.DEFAULT_MYPROXY_PORT,
 				ServerPropertiesManager.getMyProxyLifetime());
 
 		if ((proxyTemp == null) || !proxyTemp.isValid()) {
 
-			//			if ( proxyTemp == null ) {
-			//				System.out.println("PROXYTEMP IS NULL");
-			//			} else {
-			//				if ( proxyTemp.getGssCredential() == null ) {
-			//					System.out.println("GSSCREDENTIAL IS NULL");
-			//				} else {
-			//					System.out.println("GSSCREDENTIAL NO LIFETIME");
-			//				}
-			//			}
+			// if ( proxyTemp == null ) {
+			// System.out.println("PROXYTEMP IS NULL");
+			// } else {
+			// if ( proxyTemp.getGssCredential() == null ) {
+			// System.out.println("GSSCREDENTIAL IS NULL");
+			// } else {
+			// System.out.println("GSSCREDENTIAL NO LIFETIME");
+			// }
+			// }
 
-			throw new AuthenticationException("Could not get valid myproxy credential."){
+			throw new AuthenticationException(
+					"Could not get valid myproxy credential.") {
 			};
 		} else {
 			myLogger.info("Authentication successful.");
@@ -148,13 +153,11 @@ public class GrisuUserDetails implements UserDetails {
 			return this.proxy;
 		}
 
-
-
 	}
 
 	public synchronized User getUser(AbstractServiceInterface si) {
 
-		if ( user == null ) {
+		if (user == null) {
 			user = User.createUser(getProxyCredential(), si);
 		}
 
@@ -183,10 +186,10 @@ public class GrisuUserDetails implements UserDetails {
 		return success;
 	}
 
-	public void setAuthentication(UsernamePasswordAuthenticationToken authentication) {
+	public void setAuthentication(
+			UsernamePasswordAuthenticationToken authentication) {
 		this.authentication = authentication;
 		getProxyCredential();
 	}
-
 
 }

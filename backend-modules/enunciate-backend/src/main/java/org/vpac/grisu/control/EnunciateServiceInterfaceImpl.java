@@ -4,13 +4,11 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.jws.WebService;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Path;
 import javax.xml.ws.soap.MTOM;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.codehaus.enunciate.webapp.HTTPRequestContext;
 import org.springframework.security.Authentication;
 import org.springframework.security.context.SecurityContext;
 import org.springframework.security.context.SecurityContextHolder;
@@ -150,8 +148,8 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 
 		myLogger.debug("Logging out user: " + getDN());
 
-		HttpServletRequest req = HTTPRequestContext.get().getRequest();
-		req.getSession().setAttribute("credential", null);
+		// HttpServletRequest req = HTTPRequestContext.get().getRequest();
+		// req.getSession().setAttribute("credential", null);
 
 		return "Logged out.";
 
