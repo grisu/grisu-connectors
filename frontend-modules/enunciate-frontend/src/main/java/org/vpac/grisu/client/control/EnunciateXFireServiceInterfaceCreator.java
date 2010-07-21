@@ -30,6 +30,7 @@ public class EnunciateXFireServiceInterfaceCreator implements
 			.getLogger(EnunciateXFireServiceInterfaceCreator.class.getName());
 
 	public static String DEFAULT_SERVICE_INTERFACE = "https://grisu.vpac.org/grisu-ws/services/grisu";
+
 	public boolean canHandleUrl(String url) {
 		if (url != null) {
 			return url.startsWith("http");
@@ -85,8 +86,7 @@ public class EnunciateXFireServiceInterfaceCreator implements
 				}
 			} catch (Exception e) {
 				// doesn't matter
-				myLogger
-						.debug("Couldn't find specified cacert. Using default one.");
+				myLogger.debug("Couldn't find specified cacert. Using default one.");
 			}
 
 			if (cacertURL == null) {
@@ -94,14 +94,12 @@ public class EnunciateXFireServiceInterfaceCreator implements
 				cacertFilename = new CaCertManager()
 						.getCaCertNameForServiceInterfaceUrl(interfaceUrl);
 				if (cacertFilename != null && cacertFilename.length() > 0) {
-					myLogger
-							.debug("Found url in map. Trying to use this cacert file: "
-									+ cacertFilename);
+					myLogger.debug("Found url in map. Trying to use this cacert file: "
+							+ cacertFilename);
 					cacertURL = EnunciateXFireServiceInterfaceCreator.class
 							.getResource("/" + cacertFilename);
 					if (cacertURL == null) {
-						myLogger
-								.debug("Didn't find cacert. Using the default one.");
+						myLogger.debug("Didn't find cacert. Using the default one.");
 						// use the default one
 						cacertURL = EnunciateXFireServiceInterfaceCreator.class
 								.getResource("/cacert.pem");
@@ -109,8 +107,7 @@ public class EnunciateXFireServiceInterfaceCreator implements
 						myLogger.debug("Found cacert. Using it. Good.");
 					}
 				} else {
-					myLogger
-							.debug("Didn't find any configuration for a special cacert. Using the default one.");
+					myLogger.debug("Didn't find any configuration for a special cacert. Using the default one.");
 					// use the default one
 					cacertURL = EnunciateXFireServiceInterfaceCreator.class
 							.getResource("/cacert.pem");
@@ -153,8 +150,8 @@ public class EnunciateXFireServiceInterfaceCreator implements
 
 			// timeout
 			Long timeout = ClientPropertiesManager.getConnectionTimeoutInMS();
-			client.setProperty(CommonsHttpMessageSender.HTTP_TIMEOUT, timeout
-					.toString());
+			client.setProperty(CommonsHttpMessageSender.HTTP_TIMEOUT,
+					timeout.toString());
 			// enable file transfer for bigger files
 			client.setProperty(HttpTransport.CHUNKING_ENABLED, "true");
 			client.setProperty("mtom-enabled", "true");
@@ -221,11 +218,11 @@ public class EnunciateXFireServiceInterfaceCreator implements
 		Arrays.fill(password, 'x');
 
 		try {
-			if (!serviceInterface.getInterfaceVersion().equals(
+			if (!serviceInterface.getInterfaceInfo("VERSION").equals(
 					ServiceInterface.INTERFACE_VERSION)) {
 				throw new ServiceInterfaceException(
 						"Remote Grisu service publishes interface version: "
-								+ serviceInterface.getInterfaceVersion()
+								+ serviceInterface.getInterfaceInfo("VERSION")
 								+ ". This client only supports version "
 								+ ServiceInterface.INTERFACE_VERSION
 								+ ". Please download a new version of the Grisu client from http://grisu.arcs.org.au",

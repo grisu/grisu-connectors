@@ -2,6 +2,8 @@ package org.vpac.grisu.control;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import javax.jws.WebService;
 import javax.ws.rs.Path;
@@ -66,6 +68,8 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 	private String username;
 	private char[] password;
 
+	private static String hostname = null;
+
 	@Override
 	protected synchronized ProxyCredential getCredential() {
 
@@ -89,6 +93,7 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 
 		SecurityContext securityContext = SecurityContextHolder.getContext();
 		Authentication authentication = securityContext.getAuthentication();
+
 		if (authentication != null) {
 			Object principal = authentication.getPrincipal();
 			if (principal instanceof GrisuUserDetails) {
@@ -148,11 +153,33 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 
 		myLogger.debug("Logging out user: " + getDN());
 
+		// getUser().closeFileSystems();
 		// HttpServletRequest req = HTTPRequestContext.get().getRequest();
 		// req.getSession().setAttribute("credential", null);
 
 		return "Logged out.";
 
+	}
+
+	@Override
+	public String getInterfaceInfo(String key) {
+
+		if ("HOSTNAME".equalsIgnoreCase(key)) {
+			if (hostname == null) {
+				try {
+					InetAddress addr = InetAddress.getLocalHost();
+					byte[] ipAddr = addr.getAddress();
+					hostname = addr.getHostName();
+				} catch (UnknownHostException e) {
+					hostname = "Unavailable";
+				}
+			}
+		} else if ("VERSION".equalsIgnoreCase(key)) {
+			return ServiceInterface.INTERFACE_VERSION;
+		} else if ("NAME".equalsIgnoreCase(key)) {
+			return "Webservice (REST/SOAP) interface running on: " + hostname;
+		}
+		return null;
 	}
 
 }
