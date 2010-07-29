@@ -17,13 +17,10 @@ import org.springframework.security.context.SecurityContextHolder;
 import org.vpac.grisu.backend.model.ProxyCredential;
 import org.vpac.grisu.backend.model.User;
 import org.vpac.grisu.control.exceptions.NoSuchTemplateException;
-import org.vpac.grisu.control.info.CachedMdsInformationManager;
 import org.vpac.grisu.control.serviceInterfaces.AbstractServiceInterface;
 import org.vpac.grisu.control.serviceInterfaces.LocalServiceInterface;
 import org.vpac.grisu.settings.Environment;
 import org.vpac.grisu.settings.ServiceTemplateManagement;
-
-import au.org.arcs.jcommons.interfaces.InformationManager;
 
 /**
  * This abstract class implements most of the methods of the
@@ -60,10 +57,6 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 
 	static final Logger myLogger = Logger
 			.getLogger(EnunciateServiceInterfaceImpl.class.getName());
-
-	private final InformationManager informationManager = CachedMdsInformationManager
-			.getDefaultCachedMdsInformationManager(Environment
-					.getVarGrisuDirectory().toString());
 
 	private String username;
 	private char[] password;
@@ -177,7 +170,7 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 		} else if ("VERSION".equalsIgnoreCase(key)) {
 			return ServiceInterface.INTERFACE_VERSION;
 		} else if ("NAME".equalsIgnoreCase(key)) {
-			return "Webservice (REST/SOAP) interface running on: " + hostname;
+			return "Webservice (REST/SOAP) interface";
 		}
 		return null;
 	}
