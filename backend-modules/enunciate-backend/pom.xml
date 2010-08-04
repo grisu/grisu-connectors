@@ -20,7 +20,7 @@
 	</organization>
 
 	<properties>
-		<enunciate.version>1.19</enunciate.version>
+		<enunciate.version>1.20</enunciate.version>
 		<gwt.version>2.0.0</gwt.version>
 	</properties>
 
@@ -270,7 +270,7 @@
 					<dependency>
 						<groupId>org.codehaus.enunciate</groupId>
 						<artifactId>enunciate-gwt</artifactId>
-						<version>1.18</version>
+						<version>${enunciate.version}</version>
 					</dependency>
 				</dependencies>
 			</plugin>
