@@ -1,0 +1,265 @@
+8
+
+dir
+824
+https://projects.gridaus.org.au/svn/grisu/trunk/grisu-core/dotfiles/.grisu/globus/etc
+https://projects.gridaus.org.au/svn/grisu
+
+
+
+2008-04-29T05:54:29.161644Z
+582
+markus
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+8882a08a-ce34-0410-b810-d8c7c368afb5
+
+globus-devel-env.bat
+file
+
+
+
+
+2008-05-27T14:31:40.000000Z
+3de8c5f1673227d14c50debfdb395fd0
+2008-04-29T05:54:29.161644Z
+582
+markus
+
+globus-devel-env.csh
+file
+
+
+
+
+2008-05-27T14:31:40.000000Z
+b17bb434a45e4e4e9ee9f4649483a0c8
+2008-04-29T05:54:29.161644Z
+582
+markus
+
+globus-devel-env.sh
+file
+
+
+
+
+2008-05-27T14:31:40.000000Z
+0173dceec6a251b06ded02f49046f2ee
+2008-04-29T05:54:29.161644Z
+582
+markus
+
+globus-devel-setcp.bat
+file
+
+
+
+
+2008-05-27T14:31:40.000000Z
+64e745c7e35be16986ea812b4d3734e3
+2008-04-29T05:54:29.161644Z
+582
+markus
+
+globus-fork.conf
+file
+
+
+
+
+2008-05-27T14:31:40.000000Z
+adcaf09adf404e43a9633cfdb9b98b6e
+2008-04-29T05:54:29.161644Z
+582
+markus
+
+globus-gatekeeper.conf
+file
+
+
+
+
+2008-05-27T14:31:40.000000Z
+0a1339d32058eb3b6fc32241aae943df
+2008-04-29T05:54:29.161644Z
+582
+markus
+
+globus-job-manager.conf
+file
+
+
+
+
+2008-05-27T14:31:40.000000Z
+d62dd46a615de785aeb57e688e84e16f
+2008-04-29T05:54:29.161644Z
+582
+markus
+
+globus-pbs.conf
+file
+
+
+
+
+2008-05-27T14:31:40.000000Z
+919d7a40a26a7d287fe3d9b984d2fb4e
+2008-04-29T05:54:29.161644Z
+582
+markus
+
+globus-user-env.csh
+file
+
+
+
+
+2008-05-27T14:31:40.000000Z
+804fd0a185cf752fb8b0c8a27797da01
+2008-04-29T05:54:29.161644Z
+582
+markus
+
+globus-user-env.sh
+file
+
+
+
+
+2008-05-27T14:31:40.000000Z
+27f6abcff0a3f4e2364d600c2b5fa481
+2008-04-29T05:54:29.161644Z
+582
+markus
+
+globus_cas_service
+dir
+
+globus_cas_unit_test
+dir
+
+globus_cas_utils
+dir
+
+globus_core
+dir
+
+globus_delegation_service
+dir
+
+globus_delegation_test
+dir
+
+globus_gram_local_proxy_tool.conf
+file
+
+
+
+
+2008-05-27T14:31:40.000000Z
+f5ae0500bf3649aa540e3423d63ce812
+2008-04-29T05:54:29.161644Z
+582
+markus
+
+globus_wsrf_common
+dir
+
+globus_wsrf_core
+dir
+
+globus_wsrf_core_registry
+dir
+
+globus_wsrf_core_samples_authzService
+dir
+
+globus_wsrf_core_samples_counter
+dir
+
+globus_wsrf_core_samples_mgmt
+dir
+
+globus_wsrf_mds_aggregator
+dir
+
+globus_wsrf_mds_index
+dir
+
+globus_wsrf_mds_index_test
+dir
+
+globus_wsrf_mds_trigger
+dir
+
+globus_wsrf_mds_usefulrp
+dir
+
+globus_wsrf_rendezvous_service
+dir
+
+globus_wsrf_rft
+dir
+
+globus_wsrf_servicegroup
+dir
+
+globus_wsrf_test_interop
+dir
+
+globus_wsrf_test_unit
+dir
+
+gram-service
+dir
+
+gram-service-Fork
+dir
+
+gram-service-Multi
+dir
+
+gram-service-PBS
+dir
+
+grid-info-gram-rsl-reporter.schema
+file
+
+
+
+
+2008-05-27T14:31:40.000000Z
+1cf8f4606224d89b53a1a83263d97cab
+2008-04-29T05:54:29.161644Z
+582
+markus
+
+grid-services
+dir
+
+myproxy-server.config
+file
+
+
+
+
+2008-05-27T14:31:40.000000Z
+17abe34bfe31dc522ed4b79070c13bcd
+2008-04-29T05:54:29.161644Z
+582
+markus
+

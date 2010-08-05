@@ -1,0 +1,78 @@
+# General settings
+
+[General]
+# the directory which Grisu uses to put all jobdirectories into, default: grisu-dir
+#jobDirName = grisu-dir
+# the minimum proxy lifetime in seconds before Grisu refreshes the credential (if that's to short, some actions may fail. if it's too long the credentials needs refreshing too often), default: 600
+# minProxyLifetime = 600
+# the lifetime of a proxy that gets delegated from MyProxy (in seconds), default: 3600
+# proxyLifetime = 3600
+# the wait time in seconds before a job status gets checked again on a remote endpoint (before that, the last status is returned). this helps making grisu faster, although you sometimes get out of date job statuses, default: 60
+# statusCheckWaitTime = 60
+
+
+# The database configuration.
+
+[Database]
+# default is a pure java based database using derby which is stored in the .grisu directory
+# if you put a grisu-hibernate.cfg.xml file in the .grisu directory, this will be used and the configuration
+# in here will be ignored
+# Also possible: easy (default value) configuration like below, mysql would like like:
+#databaseType=mysql
+#databaseConnectionUrl=jdbc:mysql://mysql-bg.ceres.auckland.ac.nz:3306/grisu_backend?autoReconnect=true
+#databaseUsername=grisu
+#databasePassword=grisu_password
+
+
+# The information manager you want to use. If in the package
+# org.vpac.grisu.control.info then the classname is sufficient, otherwise you need to specify
+# the whole path
+
+[InformationManager]
+# default is mds based cached information manager
+# also possible:
+#type = SqlMDSInformationManager
+#databaseUrl = jdbc:mysql://mysql-bg.ceres.auckland.ac.nz/mds_test?autoReconnect=true
+#user = grisu_read
+#password = password
+
+# The information manager you want to use. If in the package
+# org.vpac.grisu.control.info then the classname is sufficient, otherwise you need to specify
+# the whole path
+
+[MatchMaker]
+# default is mds based cached information manager
+# also possible:
+#type = SqlMDSMatchMaker
+#databaseUrl = jdbc:mysql://mysql-bg.ceres.auckland.ac.nz/mds_test?autoReconnect=true
+#user = grisu_read
+#password = password
+
+# This section allows to tweak settings to control how many threads certain user
+# actions use
+
+[ConcurrentThreadSettings]
+# for 3rd party gridftp filetransfers (used when job is archived or subjob of a batchjob is moved to another site), default: 5
+# fileTransfersPerUser = 5
+# when querying the status of subjobs of a batchjob: how many subjobs are queried at the same time, default: 2
+# jobStatusThreads = 2
+# when submitting a batchjob, how many jobs should be submitted at the same time, default: 2
+# batchJobSubmitThreads = 2
+
+# Since the grid is not always very stable, it turned out that retrying an action that failed
+# straight away often works. Here are some settings for that.
+
+[RetrySettings]
+# when a file transfer fails, how many times should Grisu retry, default: 3
+# fileTransfers = 3
+# the time in seconds to wait until Grisu tries to re-transfer a file, default: 1
+# fileTransferWaitTime = 1
+# when a job submission fails, how many times should Grisu retry, default: 5
+# jobSubmissions = 5
+
+# Debug settings
+
+[Debug]
+# when enabling this, all job descriptions for jobs that are submitted are saved in a debug directory (.grisu/debug), default: false
+enabled = false
+

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
+
+    <global>
+         <resource 
+            name="mdsTestExecsourceIndexEntryHome"
+            type="org.globus.mds.index.impl.IndexEntryHome">
+            <resourceParams>
+                <parameter>
+                    <name>
+                        factory
+                    </name>
+                    <value>
+                        org.globus.wsrf.jndi.BeanFactory
+                    </value>
+                </parameter>
+            </resourceParams>
+        </resource>
+
+       <resource 
+            name="mdsTestExecsourceIndexHome"
+            type="org.globus.mds.aggregator.impl.SingletonAggregatorHome">
+            <resourceParams>
+                <parameter>
+                    <name>
+                        factory
+                    </name>
+                    <value>
+                        org.globus.wsrf.jndi.BeanFactory
+                    </value>
+                </parameter>
+                <parameter>
+                    <name>resourceClass</name>
+                    <value>org.globus.mds.index.impl.IndexResource</value>
+                </parameter>
+            </resourceParams>
+        </resource>
+        <resource name="mdsTestExecsourceIndexConfiguration"
+                 type="org.globus.mds.aggregator.impl.AggregatorConfiguration">
+          <resourceParams>
+	     <parameter>
+                    <name>
+                        factory
+                    </name>
+                    <value>
+                        org.globus.wsrf.jndi.BeanFactory
+                    </value>
+                </parameter>
+             <parameter>
+	        <name>aggregatorSources</name>
+	        <value>org.globus.mds.aggregator.impl.ExecutionAggregatorSource</value>
+	     </parameter>
+             <parameter>
+	        <name>executableMappings</name>
+	        <value>aggr-test=aggregator-exec-test.sh</value>
+	     </parameter>                 
+	  </resourceParams>
+       </resource>
+
+    </global>
+    <service name="mds/test/execsource/IndexService">
+       <resourceLink name="home" target="java:comp/env/mdsTestExecsourceIndexHome"/>
+       <resourceLink name="groupHome" target="java:comp/env/mdsTestExecsourceIndexHome"/>
+       <resourceLink name="entryHome" target="java:comp/env/mdsTestExecsourceIndexEntryHome"/>
+       <resourceLink name="configuration" target="java:comp/env/mdsTestExecsourceIndexConfiguration"/>
+   </service>
+
+    <service name="mds/test/execsource/IndexServiceEntry">
+       <resourceLink name="home" target="java:comp/env/mdsTestExecsourceIndexEntryHome"/>
+       <resourceLink name="groupHome" target="java:comp/env/mdsTestExecsourceIndexHome"/>
+       <resourceLink name="entryHome" target="java:comp/env/mdsTestExecsourceIndexEntryHome"/>
+       <resourceLink name="configuration" target="java:comp/env/mdsTestExecsourceIndexConfiguration"/>
+    </service>
+
+
+
+    <service name="mds/test/subsource/IndexService">
+
+       <resource name="home"
+            type="org.globus.mds.aggregator.impl.SingletonAggregatorHome">
+            <resourceParams>
+                <parameter>
+                    <name>
+                        factory
+                    </name>
+                    <value>
+                        org.globus.wsrf.jndi.BeanFactory
+                    </value>
+                </parameter>
+                <parameter>
+                    <name>resourceClass</name>
+                    <value>org.globus.mds.index.impl.IndexResource</value>
+                </parameter>
+            </resourceParams>
+        </resource>
+
+       <resourceLink name="groupHome" target="java:comp/env/services/mds/test/subsource/IndexService/home"/>
+       <resourceLink name="entryHome" target="java:comp/env/services/mds/test/subsource/IndexServiceEntry/home"/>
+
+       <resource name="configuration"
+                 type="org.globus.mds.aggregator.impl.AggregatorConfiguration">
+          <resourceParams>
+	     <parameter>
+                    <name>
+                        factory
+                    </name>
+                    <value>
+                        org.globus.wsrf.jndi.BeanFactory
+                    </value>
+                </parameter>
+             <parameter>
+	        <name>aggregatorSources</name>
+	        <value>org.globus.mds.aggregator.impl.SubscriptionAggregatorSource</value>
+	     </parameter>
+	  </resourceParams>
+       </resource>
+
+
+
+   </service>
+
+    <service name="mds/test/subsource/IndexServiceEntry">
+
+          <resource name="home"
+            type="org.globus.mds.index.impl.IndexEntryHome">
+            <resourceParams>
+                <parameter>
+                    <name>
+                        factory
+                    </name>
+                    <value>
+                        org.globus.wsrf.jndi.BeanFactory
+                    </value>
+                </parameter>
+            </resourceParams>
+        </resource>
+ 
+       <resourceLink name="groupHome" target="java:comp/env/services/mds/test/subsource/IndexService/home"/>
+       <resourceLink name="entryHome" target="java:comp/env/services/mds/test/subsource/IndexServiceEntry/home"/>
+       <resourceLink name="configuration" target="java:comp/env/services/mds/test/subsource/IndexService/configuration"/>
+    </service>
+
+
+</jndiConfig>
+

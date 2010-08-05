@@ -1,0 +1,1 @@
+stderr_log,local_cred - /usr/local/globus-4.0.1/libexec/globus-job-manager globus-job-manager -conf /usr/local/globus-4.0.1/etc/globus-job-manager.conf -type pbs -rdn jobmanager-pbs -machine-type unknown -publish-jobs 

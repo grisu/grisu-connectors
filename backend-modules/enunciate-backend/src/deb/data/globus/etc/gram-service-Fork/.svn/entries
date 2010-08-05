@@ -1,0 +1,40 @@
+8
+
+dir
+824
+https://projects.gridaus.org.au/svn/grisu/trunk/grisu-core/dotfiles/.grisu/globus/etc/gram-service-Fork
+https://projects.gridaus.org.au/svn/grisu
+
+
+
+2008-04-29T05:54:29.161644Z
+582
+markus
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+8882a08a-ce34-0410-b810-d8c7c368afb5
+
+jndi-config.xml
+file
+
+
+
+
+2008-05-27T14:31:38.000000Z
+d63d4ba22fc30c284ae285b46f0fe69a
+2008-04-29T05:54:29.161644Z
+582
+markus
+

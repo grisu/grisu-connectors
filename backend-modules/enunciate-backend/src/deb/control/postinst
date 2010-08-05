@@ -1,0 +1,67 @@
+#!/bin/sh
+# postinst script for hudson
+#
+# see: dh_installdeb(1)
+
+set -e
+
+# summary of how this script can be called:
+#        * <postinst> `configure' <most-recently-configured-version>
+#        * <old-postinst> `abort-upgrade' <new version>
+#        * <conflictor's-postinst> `abort-remove' `in-favour' <package>
+#          <new-version>
+#        * <postinst> `abort-remove'
+#        * <deconfigured's-postinst> `abort-deconfigure' `in-favour'
+#          <failed-install-package> <version> `removing'
+#          <conflicting-package> <version>
+# for details, see http://www.debian.org/doc/debian-policy/ or
+# the debian-policy package
+
+
+case "$1" in
+    configure)
+
+		# if templates_available directory already exist, don't extract the default templates (inclusive git repo info)
+		if [ -d /etc/grisu/templates_available ]; then
+			rm /etc/grisu/templates_available.tar.bz2
+		else
+			tar xjvf /etc/grisu/templates_available.tar.bz2 -C /etc/grisu/ >> /dev/null
+			rm /etc/grisu/templates_available.tar.bz2
+		fi
+
+		# copy grisu-backend
+		if [ -f /etc/grisu/grisu-backend.config ]; then
+			rm /etc/grisu/grisu-backend.config.dpkg-new
+		else
+			mv /etc/grisu/grisu-backend.config.dpkg-new /etc/grisu/grisu-backend.config
+		fi
+		
+		# create log dir
+		if [ ! -d /var/log/grisu ]; then
+			mkdir /var/log/grisu
+			chown -R tomcat6:tomcat6 /var/log/grisu
+		fi
+		
+		
+		
+		update-alternatives --set java /usr/lib/jvm/java-6-sun/jre/bin/java
+		update-alternatives --set javac /usr/lib/jvm/java-6-sun/bin/javac
+		
+		echo 'JAVA_HOME=/usr/lib/jvm/java-6-sun/' >> /etc/default/tomcat6
+		
+		/etc/init.d/tomcat6 restart
+	;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+		
+esac
+
+
+
+

@@ -1,0 +1,6 @@
+<Context
+    docBase="/var/lib/grisu/grisu-ws.war"
+    unpackWAR="false"
+    reloadable="true"
+    debug="0">
+  </Context>

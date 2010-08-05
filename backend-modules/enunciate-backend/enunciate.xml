@@ -13,6 +13,7 @@
 	<api-import pattern="org.vpac.grisu.frontend.**" />
 	<api-import pattern="org.vpac.grisu.control.ServiceInterface" />
 	<api-import pattern="org.vpac.grisu.control.JobConstants" /> 
+	
 	<modules>
 	
 		<csharp disabled="false" ></csharp>

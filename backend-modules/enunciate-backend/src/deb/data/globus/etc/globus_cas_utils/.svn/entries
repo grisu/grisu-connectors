@@ -1,0 +1,52 @@
+8
+
+dir
+824
+https://projects.gridaus.org.au/svn/grisu/trunk/grisu-core/dotfiles/.grisu/globus/etc/globus_cas_utils
+https://projects.gridaus.org.au/svn/grisu
+
+
+
+2008-04-29T05:54:29.161644Z
+582
+markus
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+8882a08a-ce34-0410-b810-d8c7c368afb5
+
+database_delete.sql
+file
+
+
+
+
+2008-05-27T14:31:40.000000Z
+7d2de74765c45dfdb4fe3187f8f458a6
+2008-04-29T05:54:29.161644Z
+582
+markus
+
+database_view.sql
+file
+
+
+
+
+2008-05-27T14:31:40.000000Z
+39af2ec6ffb4e47066ae46cfaaf189d9
+2008-04-29T05:54:29.161644Z
+582
+markus
+

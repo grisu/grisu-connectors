@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
+
+    <!-- Configuration delta (addition) fpr a Local Resource Manager -->
+       
+    <!-- Configuration for Managed Job *Factory* Service -->
+
+    <service name="ManagedJobFactoryService">
+        <!-- LRM configuration:  Fork -->
+        <resource
+            name="ForkResourceConfiguration"
+            type="org.globus.exec.service.factory.FactoryResourceConfiguration">            
+            <resourceParams>
+                <parameter>
+                    <name>
+                        factory
+                    </name>
+                    <value>
+                        org.globus.wsrf.jndi.BeanFactory
+                    </value>
+                </parameter>
+                <parameter>
+                    <name>
+                        localResourceManagerName
+                    </name>
+                    <value>
+                        Fork
+                    </value>
+                </parameter>              
+                <!-- Site-specific scratchDir
+Default: ${GLOBUS_USER_HOME}/.globus/scratch
+                <parameter>
+                    <name>
+                       scratchDirectory
+                    </name>
+                    <value>
+                       ${GLOBUS_USER_HOME}/.globus/scratch
+                   </value>
+                </parameter>
+                -->
+            </resourceParams>
+        </resource> 
+        
+    </service>
+
+
+</jndiConfig>

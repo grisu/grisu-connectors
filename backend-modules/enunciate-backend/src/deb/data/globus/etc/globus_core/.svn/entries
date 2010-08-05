@@ -1,0 +1,52 @@
+8
+
+dir
+824
+https://projects.gridaus.org.au/svn/grisu/trunk/grisu-core/dotfiles/.grisu/globus/etc/globus_core
+https://projects.gridaus.org.au/svn/grisu
+
+
+
+2008-04-29T05:54:29.161644Z
+582
+markus
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+8882a08a-ce34-0410-b810-d8c7c368afb5
+
+flavor_gcc32dbg.gpt
+file
+
+
+
+
+2008-05-27T14:31:39.000000Z
+fcc0e6f84723b68ad5697f4d6a4f8cdb
+2008-04-29T05:54:29.161644Z
+582
+markus
+
+flavor_gcc32dbgpthr.gpt
+file
+
+
+
+
+2008-05-27T14:31:39.000000Z
+df8ffdc29128824b819d6e5a391ce8b4
+2008-04-29T05:54:29.161644Z
+582
+markus
+

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ServiceGroupRegistrations
+  xmlns="http://mds.globus.org/servicegroup/client" 
+  xmlns:sgc="http://mds.globus.org/servicegroup/client" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing"
+  xmlns:agg="http://mds.globus.org/aggregator/types">
+
+<defaultServiceGroupEPR>
+   <wsa:Address>https://127.0.0.1:8443/wsrf/services/DefaultTriggerService</wsa:Address>
+</defaultServiceGroupEPR>
+
+<ServiceGroupRegistrationParameters
+   xmlns="http://mds.globus.org/servicegroup/client"
+   xmlns:agg="http://mds.globus.org/aggregator/types"
+   xmlns:trigger="http://mds.globus.org/2004/08/trigger/types">
+
+    <RegistrantEPR
+      xmlns:agg="http://mds.globus.org/aggregator/types"
+      xmlns:gram="http://www.globus.org/namespaces/2004/10/gram/job"
+      xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing">
+      <wsa:Address>
+         https://127.0.0.1:8443/wsrf/services/ManagedJobFactoryService
+      </wsa:Address>
+      <wsa:ReferenceProperties>
+         <gram:ResourceID>Fork</gram:ResourceID>
+      </wsa:ReferenceProperties>
+   </RegistrantEPR>
+
+   <RefreshIntervalSecs>600</RefreshIntervalSecs>
+   <Content xsi:type="agg:AggregatorContent"
+      xmlns:agg="http://mds.globus.org/aggregator/types">
+
+      <agg:AggregatorConfig xsi:type="agg:AggregatorConfig">
+         <agg:GetResourcePropertyPollType
+            xmlns:glue="http://mds.globus.org/glue/ce/1.1" >
+            <agg:PollIntervalMillis>600000</agg:PollIntervalMillis>
+            <agg:ResourcePropertyName>glue:GLUECE</agg:ResourcePropertyName>
+         </agg:GetResourcePropertyPollType>
+
+         <trigger:TriggerRuleType>
+            <trigger:matchingRule>//*[local-name()='GLUECE']</trigger:matchingRule>
+            <trigger:actionScript>glue-trigger</trigger:actionScript>
+            <trigger:minimumFiringInterval>600</trigger:minimumFiringInterval>
+         </trigger:TriggerRuleType>
+
+      </agg:AggregatorConfig>
+      <agg:AggregatorData/>
+   </Content>
+
+</ServiceGroupRegistrationParameters>
+</ServiceGroupRegistrations>

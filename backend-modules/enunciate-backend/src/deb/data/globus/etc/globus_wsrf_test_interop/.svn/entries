@@ -1,0 +1,52 @@
+8
+
+dir
+824
+https://projects.gridaus.org.au/svn/grisu/trunk/grisu-core/dotfiles/.grisu/globus/etc/globus_wsrf_test_interop
+https://projects.gridaus.org.au/svn/grisu
+
+
+
+2008-04-29T05:54:29.161644Z
+582
+markus
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+8882a08a-ce34-0410-b810-d8c7c368afb5
+
+jndi-config.xml
+file
+
+
+
+
+2008-05-27T14:31:39.000000Z
+785d9cd6f1ff86d695dc8ec3e22500a1
+2008-04-29T05:54:29.161644Z
+582
+markus
+
+server-config.wsdd
+file
+
+
+
+
+2008-05-27T14:31:39.000000Z
+e9f9dd040d0c8e84a6e38b8ed8fea21a
+2008-04-29T05:54:29.161644Z
+582
+markus
+

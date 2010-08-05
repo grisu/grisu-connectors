@@ -1,0 +1,10 @@
+  -x509_cert_dir /etc/grid-security/certificates
+  -x509_user_cert /etc/grid-security/hostcert.pem
+  -x509_user_key /etc/grid-security/hostkey.pem
+  -gridmap /etc/grid-security/grid-mapfile
+  -home /usr/local/globus-4.0.1
+  -e libexec
+  -logfile var/globus-gatekeeper.log
+  -port 2119
+  -grid_services etc/grid-services
+  -inetd

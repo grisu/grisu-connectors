@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment name="defaultServerConfig" 
+    xmlns="http://xml.apache.org/axis/wsdd/" 
+    xmlns:trigger="http://mds.globus.org/2004/08/trigger/types" 
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <service name="TriggerServiceEntry" provider="Handler" 
+        use="literal" style="document">
+        <parameter name="providers" 
+                   value="GetRPProvider
+                          GetMRPProvider
+                          QueryRPProvider
+                          SetTerminationTimeProvider"/>
+        <parameter name="handlerClass" value="org.globus.axis.providers.RPCProvider"/>
+        <parameter name="scope" value="Application"/> 
+        <parameter name="allowedMethods" value="*"/>
+        <parameter name="className" 
+            value="org.globus.mds.trigger.impl.TriggerEntryService"/>
+        <wsdlFile>share/schema/mds/index/index_entry_service.wsdl</wsdlFile>
+    </service>
+
+
+    <service name="TriggerService" provider="Handler" 
+        use="literal" style="document">
+        <parameter name="providers" 
+                   value="org.globus.wsrf.impl.servicegroup.ServiceGroupRegistrationProvider 
+                          GetRPProvider
+                          GetMRPProvider 
+                          QueryRPProvider
+                          DestroyProvider 
+                          SetTerminationTimeProvider 
+                          SubscribeProvider 
+                          GetCurrentMessageProvider"/>
+        <parameter name="handlerClass" value="org.globus.axis.providers.RPCProvider"/>
+        <parameter name="scope" value="Application"/> 
+        <parameter name="allowedMethods" value="*"/>
+        <parameter name="className" 
+            value="org.globus.mds.trigger.impl.TriggerService"/>
+        <wsdlFile>share/schema/mds/index/index_service.wsdl</wsdlFile>
+    </service>
+
+    <service name="TriggerFactoryService" provider="Handler" 
+        use="literal" style="document">
+        <parameter name="handlerClass" value="org.globus.axis.providers.RPCProvider"/>
+        <parameter name="scope" value="Application"/> 
+        <parameter name="allowedMethods" value="*"/>
+        <parameter name="className" 
+            value="org.globus.mds.trigger.impl.TriggerFactoryService"/>
+        <wsdlFile>share/schema/mds/servicegroup/ServiceGroupFactory_service.wsdl</wsdlFile>
+    </service>
+
+    <service name="DefaultTriggerServiceEntry" provider="Handler"
+        use="literal" style="document">
+        <parameter name="providers" 
+                   value="GetRPProvider
+                          GetMRPProvider
+                          QueryRPProvider
+                          SetTerminationTimeProvider"/>
+        <parameter name="handlerClass" value="org.globus.axis.providers.RPCProvider"/>
+        <parameter name="scope" value="Application"/>
+        <parameter name="allowedMethods" value="*"/>
+        <parameter name="className"
+            value="org.globus.mds.trigger.impl.TriggerEntryService"/>
+        <wsdlFile>share/schema/mds/index/index_entry_service.wsdl</wsdlFile>
+    </service>
+
+
+    <service name="DefaultTriggerService" provider="Handler"
+        use="literal" style="document">
+        <parameter name="providers" 
+                   value="org.globus.wsrf.impl.servicegroup.ServiceGroupRegistrationProvider 
+                          GetRPProvider
+                          GetMRPProvider 
+                          QueryRPProvider
+                          DestroyProvider 
+                          SetTerminationTimeProvider 
+                          SubscribeProvider 
+                          GetCurrentMessageProvider"/>
+        <parameter name="handlerClass" value="org.globus.axis.providers.RPCProvider"/>
+        <parameter name="scope" value="Application"/>
+        <parameter name="allowedMethods" value="*"/>
+        <parameter name="className"
+            value="org.globus.mds.trigger.impl.TriggerService"/>
+        <wsdlFile>share/schema/mds/index/index_service.wsdl</wsdlFile>
+    </service>
+
+    <typeMapping 
+        name="TriggerRuleType" 
+        qname="trigger:TriggerRuleType" 
+        type="java:org.globus.mds.trigger.types.TriggerRuleType"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="" />
+
+    <typeMapping 
+        name="TriggerStatusType" 
+        qname="trigger:TriggerStatusType" 
+        type="java:org.globus.mds.trigger.types.TriggerStatusType"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="" />
+
+    <typeMapping 
+        name="ActionResult" 
+        qname="trigger:ActionResult" 
+        type="java:org.globus.mds.trigger.types.ActionResult"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="" />
+
+</deployment>

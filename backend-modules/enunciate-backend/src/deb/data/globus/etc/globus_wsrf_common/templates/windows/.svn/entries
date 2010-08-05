@@ -1,0 +1,52 @@
+8
+
+dir
+824
+https://projects.gridaus.org.au/svn/grisu/trunk/grisu-core/dotfiles/.grisu/globus/etc/globus_wsrf_common/templates/windows
+https://projects.gridaus.org.au/svn/grisu
+
+
+
+2008-04-29T05:54:29.161644Z
+582
+markus
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+8882a08a-ce34-0410-b810-d8c7c368afb5
+
+ant-launcher-template
+file
+
+
+
+
+2008-05-27T14:31:39.000000Z
+eb6056666234e65ae47b34d308b761c5
+2008-04-29T05:54:29.161644Z
+582
+markus
+
+launcher-template
+file
+
+
+
+
+2008-05-27T14:31:39.000000Z
+7a621a0ad37aaa3bbe9b36b83fd3d471
+2008-04-29T05:54:29.161644Z
+582
+markus
+

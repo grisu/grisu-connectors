@@ -1,0 +1,20 @@
+#dbDriver=com.mysql.jdbc.Driver
+dbDriver=org.postgresql.Driver
+#dbConnectionURL=jdbc:mysql://127.0.0.1/casDatabase
+dbConnectionURL=jdbc:postgresql://127.0.0.1/casDatabase
+dbUsername=tester
+#dbPassword=tester
+dbPassword=foo
+#activeConnections
+#onExhaustAction
+#maxWait
+#idleConnections
+#####
+# Used for service test
+host=127.0.0.1
+port=8443
+user1SubjectDN=/DC=org/DC=doegrids/OU=People/CN=Samuel Meder 196344
+user2SubjectDN=/DC=org/DC=doegrids/OU=People/CN=Samuel Meder 196344/11
+serverDN=/DC=org/DC=doegrids/OU=People/CN=Samuel Meder 196344
+maxAssertionLifetime=86400
+#securityType=message

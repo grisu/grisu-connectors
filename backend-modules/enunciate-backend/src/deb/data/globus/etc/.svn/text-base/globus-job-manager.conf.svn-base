@@ -1,0 +1,11 @@
+	-home "/usr/local/globus-4.0.1"
+	-globus-gatekeeper-host ng2.vpac.org
+	-globus-gatekeeper-port 2119
+	-globus-gatekeeper-subject "/C=AU/O=APAC-GRID/OU=VPAC/CN=ng2.vpac.org"
+	-globus-host-cputype i686
+	-globus-host-manufacturer pc
+	-globus-host-osname Linux
+	-globus-host-osversion 2.6.11.10-xenU
+	-save-logfile on_error
+	-state-file-dir /usr/local/globus-4.0.1/tmp/gram_job_state
+	-machine-type unknown

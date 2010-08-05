@@ -1,0 +1,42 @@
+<ServiceGroupRegistrationParameters
+   xmlns:sgc="http://mds.globus.org/servicegroup/client" 
+   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+   xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing"
+   xmlns:agg="http://mds.globus.org/aggregator/types"
+   xmlns="http://mds.globus.org/servicegroup/client" >
+
+
+   <!-- Specifies that the registration will be renewed every 10 minutes -->
+   <RefreshIntervalSecs>600</RefreshIntervalSecs>
+
+
+   <!-- <Content> specifies registration specific information -->
+   <Content xsi:type="agg:AggregatorContent"
+      xmlns:agg="http://mds.globus.org/aggregator/types">
+
+     <agg:AggregatorConfig xsi:type="agg:AggregatorConfig">
+
+         <agg:GetMultipleResourcePropertiesPollType
+            xmlns:rft="http://www.globus.org/namespaces/2004/10/rft">
+            <!-- Specifies that the index should refresh information
+                 every 60000 milliseconds (once per minute) -->
+            <agg:PollIntervalMillis>60000</agg:PollIntervalMillis>
+
+            <!-- specifies that all Resource Properties should be
+                 collected from the RFT factory -->
+            
+            <agg:ResourcePropertyNames>rft:TotalNumberOfBytesTransferred</agg:ResourcePropertyNames>
+            <agg:ResourcePropertyNames>rft:TotalNumberOfActiveTransfers</agg:ResourcePropertyNames>
+            <agg:ResourcePropertyNames>rft:RFTFactoryStartTime</agg:ResourcePropertyNames>
+            <agg:ResourcePropertyNames>rft:ActiveResourceInstances</agg:ResourcePropertyNames>
+            
+            <agg:ResourcePropertyNames>rft:TotalNumberOfTransfers</agg:ResourcePropertyNames>
+
+        </agg:GetMultipleResourcePropertiesPollType>
+      </agg:AggregatorConfig> 
+      <agg:AggregatorData/>
+   </Content>
+
+</ServiceGroupRegistrationParameters>
+

@@ -167,23 +167,24 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<!--		<dependency>-->
-		<!--			<groupId>org.vpac.grisu</groupId>-->
-		<!--			<artifactId>grisu-client</artifactId>-->
-		<!--			<version>0.3-SNAPSHOT</version>-->
-		<!--			<scope>compile</scope>-->
-		<!--		</dependency>-->
-		<!--		<dependency>-->
-		<!--			<groupId>org.vpac.grisu</groupId>-->
-		<!--			<artifactId>grisu-client</artifactId>-->
-		<!--			<version>0.3-SNAPSHOT</version>-->
-		<!--			<classifier>sources</classifier>-->
-		<!--			<scope>compile</scope>-->
-		<!--		</dependency>-->
+		<!-- <dependency> -->
+		<!-- <groupId>org.vpac.grisu</groupId> -->
+		<!-- <artifactId>grisu-client</artifactId> -->
+		<!-- <version>0.3-SNAPSHOT</version> -->
+		<!-- <scope>compile</scope> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.vpac.grisu</groupId> -->
+		<!-- <artifactId>grisu-client</artifactId> -->
+		<!-- <version>0.3-SNAPSHOT</version> -->
+		<!-- <classifier>sources</classifier> -->
+		<!-- <scope>compile</scope> -->
+		<!-- </dependency> -->
 
 	</dependencies>
 
 	<build>
+		<finalName>grisu-ws</finalName>
 		<plugins>
 
 
@@ -198,68 +199,68 @@
 						</goals>
 					</execution>
 
-<!--									<execution>-->
-<!--						<id>install-and-deploy-jaxws</id>-->
-<!--						<goals>-->
-<!--							-->
-<!--								the "install-artifact" goal does a local install of the artifact-->
-<!--							-->
-<!--							<goal>install-artifact</goal>-->
-<!--							 the "deploy-artifact" goal deploys the artifact -->
-<!--							<goal>deploy-artifact</goal>-->
-<!--						</goals>-->
-<!--						<phase>install</phase>-->
+					<!-- <execution> -->
+					<!-- <id>install-and-deploy-jaxws</id> -->
+					<!-- <goals> -->
+					<!-- -->
+					<!-- the "install-artifact" goal does a local install of the artifact -->
+					<!-- -->
+					<!-- <goal>install-artifact</goal> -->
+					<!-- the "deploy-artifact" goal deploys the artifact -->
+					<!-- <goal>deploy-artifact</goal> -->
+					<!-- </goals> -->
+					<!-- <phase>install</phase> -->
 <!---->
-<!--						<configuration>-->
-<!--							-->
-<!--								the "enunciateArtifactId" element is the only thing required.-->
-<!--								other options reflect those of the maven deploy plugin, and-->
-<!--								include options to set the groupId, artifactId, version,-->
-<!--								classifier, pomFile etc. However, suitable defaults will be-->
-<!--								supplied as necessary-->
-<!--							-->
-<!--							<enunciateArtifactId>jaxws.client.library</enunciateArtifactId>-->
-<!--							<groupId>org.vpac.grisu</groupId>-->
-<!--							<artifactId>grisu-client-jaxws</artifactId>-->
-<!--							<version>${project.version}</version>-->
-<!--							<packaging>jar</packaging>-->
-<!--							<uniqueVersion>false</uniqueVersion>-->
-<!--							<pomFile>client-jaxws.pom</pomFile>-->
-<!--						</configuration>-->
-<!--					</execution>-->
+					<!-- <configuration> -->
+					<!-- -->
+					<!-- the "enunciateArtifactId" element is the only thing required. -->
+					<!-- other options reflect those of the maven deploy plugin, and -->
+					<!-- include options to set the groupId, artifactId, version, -->
+					<!-- classifier, pomFile etc. However, suitable defaults will be -->
+					<!-- supplied as necessary -->
+					<!-- -->
+					<!-- <enunciateArtifactId>jaxws.client.library</enunciateArtifactId> -->
+					<!-- <groupId>org.vpac.grisu</groupId> -->
+					<!-- <artifactId>grisu-client-jaxws</artifactId> -->
+					<!-- <version>${project.version}</version> -->
+					<!-- <packaging>jar</packaging> -->
+					<!-- <uniqueVersion>false</uniqueVersion> -->
+					<!-- <pomFile>client-jaxws.pom</pomFile> -->
+					<!-- </configuration> -->
+					<!-- </execution> -->
 
-<!--					<execution>-->
-<!--						<id>install-and-deploy-gwt</id>-->
-<!--						<goals>-->
-<!--							-->
-<!--								the "install-artifact" goal does a local install of the artifact-->
-<!--							-->
-<!--							<goal>install-artifact</goal>-->
-<!--							 the "deploy-artifact" goal deploys the artifact -->
-<!--							<goal>deploy-artifact</goal>-->
-<!--						</goals>-->
-<!--						<phase>install</phase>-->
+					<!-- <execution> -->
+					<!-- <id>install-and-deploy-gwt</id> -->
+					<!-- <goals> -->
+					<!-- -->
+					<!-- the "install-artifact" goal does a local install of the artifact -->
+					<!-- -->
+					<!-- <goal>install-artifact</goal> -->
+					<!-- the "deploy-artifact" goal deploys the artifact -->
+					<!-- <goal>deploy-artifact</goal> -->
+					<!-- </goals> -->
+					<!-- <phase>install</phase> -->
 <!---->
-<!--						<configuration>-->
-<!--							-->
-<!--								the "enunciateArtifactId" element is the only thing required.-->
-<!--								other options reflect those of the maven deploy plugin, and-->
-<!--								include options to set the groupId, artifactId, version,-->
-<!--								classifier, pomFile etc. However, suitable defaults will be-->
-<!--								supplied as necessary-->
-<!--							-->
-<!--							<enunciateArtifactId>gwt.client.library</enunciateArtifactId>-->
-<!--							<groupId>org.vpac.grisu</groupId>-->
-<!--							<artifactId>grisu-client-enunciate-gwt</artifactId>-->
+					<!-- <configuration> -->
+					<!-- -->
+					<!-- the "enunciateArtifactId" element is the only thing required. -->
+					<!-- other options reflect those of the maven deploy plugin, and -->
+					<!-- include options to set the groupId, artifactId, version, -->
+					<!-- classifier, pomFile etc. However, suitable defaults will be -->
+					<!-- supplied as necessary -->
+					<!-- -->
+					<!-- <enunciateArtifactId>gwt.client.library</enunciateArtifactId> -->
+					<!-- <groupId>org.vpac.grisu</groupId> -->
+					<!-- <artifactId>grisu-client-enunciate-gwt</artifactId> -->
 <!---->
-<!--							<version>${project.version}</version>-->
-<!--							<packaging>jar</packaging>-->
+					<!-- <version>${project.version}</version> -->
+					<!-- <packaging>jar</packaging> -->
 <!---->
-<!--							<uniqueVersion>false</uniqueVersion>-->
-<!--							<pomFile>client-gwt.pom</pomFile>-->
+					<!-- <uniqueVersion>false</uniqueVersion> -->
+					<!-- <pomFile>client-gwt.pom</pomFile> -->
 <!---->
-<!--						</configuration>-->
-<!--					</execution>-->
+					<!-- </configuration> -->
+					<!-- </execution> -->
 
 
 
@@ -287,6 +288,90 @@
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<artifactId>jdeb</artifactId>
+				<groupId>org.vafer</groupId>
+				<version>0.8-SNAPSHOT</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>jdeb</goal>
+						</goals>
+						<configuration>
+							<changesIn>changes.txt</changesIn>
+							<namePattern>grisu-backend-ws.[[extension]]</namePattern>
+<!--							<installDir>/opt/grisu</installDir>-->
+							<dataSet>
+							<data>
+                                <src>${project.build.directory}/${project.build.finalName}.war</src>
+                                <type>file</type>
+                                 <mapper>
+                                    <type>perm</type>
+                                    <prefix>/var/lib/grisu/</prefix>
+                                    <user>tomcat6</user>
+                                    <group>tomcat6</group>
+                                  </mapper>
+                            </data>
+							
+                            <data>
+								  <src>${project.basedir}/src/deb/data/grisu-ws.xml</src>
+                                  <type>file</type>
+                                  <mapper>
+                                    <type>perm</type>
+                                    <prefix>/etc/tomcat6/Catalina/localhost/</prefix>
+                                    <user>tomcat6</user>
+                                    <group>tomcat6</group>
+                                  </mapper>
+								</data>
+								
+	                            <data>
+                                <src>${project.basedir}/src/deb/data/etc/grisu</src>
+                                <type>directory</type>
+                                <mapper>
+                                    <type>perm</type>
+                                    <prefix>/etc/grisu</prefix>
+                                    <user>tomcat6</user>
+                                    <group>tomcat6</group>
+                                </mapper>
+                            </data>
+                            <data>
+                                <src>${project.basedir}/src/deb/data/globus</src>
+                                <type>directory</type>
+                                <mapper>
+                                    <type>perm</type>
+                                    <prefix>/var/lib/grisu/globus</prefix>
+                                    <user>tomcat6</user>
+                                    <group>tomcat6</group>
+                                </mapper>
+                            </data>
+                            <data>
+                                <src>${project.basedir}/src/deb/data/etc/vomses</src>
+                                <type>directory</type>
+                                <mapper>
+                                    <type>perm</type>
+                                    <prefix>/etc/vomses</prefix>
+                                    <user>root</user>
+                                    <group>root</group>
+                                </mapper>
+                            </data>
+                            <data>
+								<src>${project.basedir}/src/deb/data/templates_available.tar.bz2</src>
+                                  <type>file</type>
+                                  <mapper>
+                                    <type>perm</type>
+                                    <prefix>/etc/grisu</prefix>
+                                    <user>tomcat6</user>
+                                    <group>tomcat6</group>
+                                  </mapper>
+								</data>
+							</dataSet>
+	
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 
 		</plugins>

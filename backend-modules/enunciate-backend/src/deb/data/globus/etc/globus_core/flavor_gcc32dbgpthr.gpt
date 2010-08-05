@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE gpt_package_metadata SYSTEM "package.dtd">
+<flavors Format_Version="0.1" >
+<flavor_definition label="gcc32dbgpthr" >
+<config nolabel="CPP" switch="CPP='/usr/bin/gcc -E'" />
+<config nolabel="CPPFLAGS" switch="CPPFLAGS=' -I/usr/local/globus-4.0.1/include -I/usr/local/globus-4.0.1/include/gcc32dbgpthr'" />
+<config nolabel="CFLAGS" switch="CFLAGS='-g    -D_REENTRANT -Wall'" />
+<config nolabel="LDFLAGS" switch="LDFLAGS=' -L/usr/local/globus-4.0.1/lib '" />
+<config nolabel="LIBS" switch="LIBS='  -lpthread'" />
+<config nolabel="CXX" switch="CXX='/usr/bin/g++'" />
+<config nolabel="CXXCPP" switch="CXXCPP='/usr/bin/g++ -E'" />
+<config nolabel="CXXFLAGS" switch="CXXFLAGS='-g   '" />
+<config nolabel="AR" switch="AR='/usr/bin/ar'" />
+<config nolabel="ARFLAGS" switch="ARFLAGS='ruv'" />
+<config nolabel="RANLIB" switch="RANLIB='/usr/bin/ranlib'" />
+<config nolabel="NM" switch="NM='/usr/bin/nm -B'" />
+<config label="gcc" switch="CC='/usr/bin/gcc'" />
+<config label="dbg" switch="--enable-debug" />
+<config label="pthr" switch="--with-threads=pthreads" />
+</flavor_definition>
+</flavors>
