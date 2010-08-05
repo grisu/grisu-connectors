@@ -1,0 +1,2 @@
+release date=19:13 05.08.2010,version=0.3,urgency=low,by=Markus Binsteiner <m.binsteiner@auckland.ac.nz>,distribution=unknown
+ * debian support

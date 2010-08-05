@@ -302,73 +302,73 @@
 						</goals>
 						<configuration>
 							<changesIn>changes.txt</changesIn>
-							<namePattern>grisu-backend-ws.[[extension]]</namePattern>
-<!--							<installDir>/opt/grisu</installDir>-->
+							<deb>[[buildDir]]/grisu-backend-ws.deb</deb>
+							<!-- <installDir>/opt/grisu</installDir> -->
 							<dataSet>
-							<data>
-                                <src>${project.build.directory}/${project.build.finalName}.war</src>
-                                <type>file</type>
-                                 <mapper>
-                                    <type>perm</type>
-                                    <prefix>/var/lib/grisu/</prefix>
-                                    <user>tomcat6</user>
-                                    <group>tomcat6</group>
-                                  </mapper>
-                            </data>
-							
-                            <data>
-								  <src>${project.basedir}/src/deb/data/grisu-ws.xml</src>
-                                  <type>file</type>
-                                  <mapper>
-                                    <type>perm</type>
-                                    <prefix>/etc/tomcat6/Catalina/localhost/</prefix>
-                                    <user>tomcat6</user>
-                                    <group>tomcat6</group>
-                                  </mapper>
+								<data>
+									<src>${project.build.directory}/${project.build.finalName}.war</src>
+									<type>file</type>
+									<mapper>
+										<type>perm</type>
+										<prefix>/var/lib/grisu/</prefix>
+										<user>tomcat6</user>
+										<group>tomcat6</group>
+									</mapper>
 								</data>
-								
-	                            <data>
-                                <src>${project.basedir}/src/deb/data/etc/grisu</src>
-                                <type>directory</type>
-                                <mapper>
-                                    <type>perm</type>
-                                    <prefix>/etc/grisu</prefix>
-                                    <user>tomcat6</user>
-                                    <group>tomcat6</group>
-                                </mapper>
-                            </data>
-                            <data>
-                                <src>${project.basedir}/src/deb/data/globus</src>
-                                <type>directory</type>
-                                <mapper>
-                                    <type>perm</type>
-                                    <prefix>/var/lib/grisu/globus</prefix>
-                                    <user>tomcat6</user>
-                                    <group>tomcat6</group>
-                                </mapper>
-                            </data>
-                            <data>
-                                <src>${project.basedir}/src/deb/data/etc/vomses</src>
-                                <type>directory</type>
-                                <mapper>
-                                    <type>perm</type>
-                                    <prefix>/etc/vomses</prefix>
-                                    <user>root</user>
-                                    <group>root</group>
-                                </mapper>
-                            </data>
-                            <data>
-								<src>${project.basedir}/src/deb/data/templates_available.tar.bz2</src>
-                                  <type>file</type>
-                                  <mapper>
-                                    <type>perm</type>
-                                    <prefix>/etc/grisu</prefix>
-                                    <user>tomcat6</user>
-                                    <group>tomcat6</group>
-                                  </mapper>
+
+								<data>
+									<src>${project.basedir}/src/deb/data/grisu-ws.xml</src>
+									<type>file</type>
+									<mapper>
+										<type>perm</type>
+										<prefix>/etc/tomcat6/Catalina/localhost/</prefix>
+										<user>tomcat6</user>
+										<group>tomcat6</group>
+									</mapper>
+								</data>
+
+								<data>
+									<src>${project.basedir}/src/deb/data/etc/grisu</src>
+									<type>directory</type>
+									<mapper>
+										<type>perm</type>
+										<prefix>/etc/grisu</prefix>
+										<user>tomcat6</user>
+										<group>tomcat6</group>
+									</mapper>
+								</data>
+								<data>
+									<src>${project.basedir}/src/deb/data/globus</src>
+									<type>directory</type>
+									<mapper>
+										<type>perm</type>
+										<prefix>/var/lib/grisu/globus</prefix>
+										<user>tomcat6</user>
+										<group>tomcat6</group>
+									</mapper>
+								</data>
+								<data>
+									<src>${project.basedir}/src/deb/data/etc/vomses</src>
+									<type>directory</type>
+									<mapper>
+										<type>perm</type>
+										<prefix>/etc/vomses</prefix>
+										<user>root</user>
+										<group>root</group>
+									</mapper>
+								</data>
+								<data>
+									<src>${project.basedir}/src/deb/data/templates_available.tar.bz2</src>
+									<type>file</type>
+									<mapper>
+										<type>perm</type>
+										<prefix>/etc/grisu</prefix>
+										<user>tomcat6</user>
+										<group>tomcat6</group>
+									</mapper>
 								</data>
 							</dataSet>
-	
+
 						</configuration>
 					</execution>
 				</executions>
