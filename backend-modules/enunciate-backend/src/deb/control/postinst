@@ -29,6 +29,15 @@ case "$1" in
 			rm /etc/grisu/templates_available.tar.bz2
 		fi
 
+	 	# copy a few ca root certs in the proper directory to get started. Ideally those will be updated automatically using a package		
+		if [ -d /etc/grid-security/certificates ]; then
+			rm /etc/grisu/rootcerts.tar
+		else 
+			mkdir -p /etc/grid-security/certificates
+			tar xf /etc/grisu/rootcerts.tar -C /etc/grid-security/certificates >> /dev/null
+			rm /etc/grisu/rootcerts.tar
+		fi
+
 		# copy grisu-backend
 		if [ -f /etc/grisu/grisu-backend.config ]; then
 			rm /etc/grisu/grisu-backend.config.dpkg-new
@@ -36,18 +45,27 @@ case "$1" in
 			mv /etc/grisu/grisu-backend.config.dpkg-new /etc/grisu/grisu-backend.config
 		fi
 		
+		# put default proxy_ajp into place
+		if [ -f /etc/grisu/grisu-ajp.conf ]; then
+			rm /etc/grisu/grisu-ajp.conf.dpkg-new
+		else
+			#a2ensite default-ssl
+			#a2enmod proxy_ajp
+			mv /etc/grisu/grisu-ajp.conf.dpkg-new /etc/grisu/grisu-ajp.conf
+		fi
+		
+		
 		# create log dir
 		if [ ! -d /var/log/grisu ]; then
 			mkdir /var/log/grisu
 			chown -R tomcat6:tomcat6 /var/log/grisu
 		fi
 		
-		
-		
 		update-alternatives --set java /usr/lib/jvm/java-6-sun/jre/bin/java
 		update-alternatives --set javac /usr/lib/jvm/java-6-sun/bin/javac
 		
 		echo 'JAVA_HOME=/usr/lib/jvm/java-6-sun/' >> /etc/default/tomcat6
+		
 		
 		/etc/init.d/tomcat6 restart
 	;;
