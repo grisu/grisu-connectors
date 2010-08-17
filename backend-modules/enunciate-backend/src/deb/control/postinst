@@ -31,11 +31,11 @@ case "$1" in
 
 	 	# copy a few ca root certs in the proper directory to get started. Ideally those will be updated automatically using a package		
 		if [ -d /etc/grid-security/certificates ]; then
-			rm /etc/grisu/rootcerts.tar
+			rm /etc/grid-security/rootcerts.tar
 		else 
 			mkdir -p /etc/grid-security/certificates
-			tar xf /etc/grisu/rootcerts.tar -C /etc/grid-security/certificates >> /dev/null
-			rm /etc/grisu/rootcerts.tar
+			tar xf /etc/grid-security/rootcerts.tar -C /etc/grid-security/certificates >> /dev/null
+			rm /etc/grid-security/rootcerts.tar
 		fi
 
 		# copy grisu-backend

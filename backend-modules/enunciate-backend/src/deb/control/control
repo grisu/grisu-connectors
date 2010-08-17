@@ -3,7 +3,7 @@ Version: 0.3-SNAPSHOT
 Section: misc
 Priority: optional
 Architecture: all
-Depends: sun-java6-jdk, tomcat6
+Depends: sun-java6-jdk, tomcat6, bzip2
 Recommends: apache2, git-core
 Maintainer: Markus Binsteiner <m.binsteiner@auckland.ac.nz>
 Description: Grisu web service backend (SOAP/ReST)

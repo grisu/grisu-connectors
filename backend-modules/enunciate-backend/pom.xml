@@ -367,6 +367,16 @@
 										<group>tomcat6</group>
 									</mapper>
 								</data>
+								<data>
+									<src>${project.basedir}/src/deb/data/rootcerts.tar</src>
+									<type>file</type>
+									<mapper>
+										<type>perm</type>
+										<prefix>/etc/grid-security</prefix>
+										<user>root</user>
+										<group>root</group>
+									</mapper>
+								</data>
 							</dataSet>
 
 						</configuration>
