@@ -382,7 +382,7 @@
 									<type>file</type>
 									<mapper>
 										<type>perm</type>
-										<prefix>/usr/share/docs/grisu/examples</prefix>
+										<prefix>/usr/share/doc/grisu/examples</prefix>
 										<user>root</user>
 										<group>root</group>
 									</mapper>

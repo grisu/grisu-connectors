@@ -2,5 +2,7 @@
     docBase="/var/lib/grisu/grisu-ws.war"
     unpackWAR="false"
     reloadable="true"
+    autoDeploy="true"
     debug="0">
   </Context>
+  
