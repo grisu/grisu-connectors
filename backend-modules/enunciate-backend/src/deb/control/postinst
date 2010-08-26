@@ -54,7 +54,10 @@ case "$1" in
 		update-alternatives --set java /usr/lib/jvm/java-6-sun/jre/bin/java
 		update-alternatives --set javac /usr/lib/jvm/java-6-sun/bin/javac
 		
-		echo 'JAVA_HOME=/usr/lib/jvm/java-6-sun/' >> /etc/default/tomcat6
+		grep ^JAVA_HOME= /etc/default/tomcat6
+		if [ "$?" -ne "0" ]; then
+			echo 'JAVA_HOME=/usr/lib/jvm/java-6-sun/' >> /etc/default/tomcat6
+		fi
 		
 		
 		/etc/init.d/tomcat6 restart
