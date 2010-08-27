@@ -20,6 +20,8 @@ set -e
 
 case "$1" in
     configure)
+    
+    	/etc/init.d/tomcat6 stop	
 
 		# if templates_available directory already exist, don't extract the default templates (inclusive git repo info)
 		if [ -d /etc/grisu/templates_available ]; then
@@ -27,6 +29,11 @@ case "$1" in
 		else
 			tar xjvf /etc/grisu/templates_available.tar.bz2 -C /etc/grisu/ >> /dev/null
 			rm /etc/grisu/templates_available.tar.bz2
+		fi
+
+		# remove deployed webapp from tomcat, just to be sure
+		if [ -d /var/lib/tomcat6/webapps/grisu-ws ]; then
+			rm -rf /var/lib/tomcat6/webapps/grisu-ws
 		fi
 
 	 	# copy a few ca root certs in the proper directory to get started. Ideally those will be updated automatically using a package		
@@ -60,7 +67,7 @@ case "$1" in
 		fi
 		
 		
-		/etc/init.d/tomcat6 restart
+		/etc/init.d/tomcat6 start
 	;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

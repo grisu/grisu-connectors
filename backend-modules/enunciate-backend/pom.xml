@@ -290,9 +290,11 @@
 			</plugin>
 
 			<plugin>
-				<groupId>org.mortbay.jetty</groupId>
-				<artifactId>jetty-maven-plugin</artifactId>
+			  	<groupId>org.mortbay.jetty</groupId>
+  				<artifactId>jetty-maven-plugin</artifactId>
+  				<version>7.0.1.v20091125</version>
 			</plugin>
+			
 
 			<plugin>
 				<artifactId>jdeb</artifactId>
@@ -326,6 +328,17 @@
 									<mapper>
 										<type>perm</type>
 										<prefix>/etc/tomcat6/Catalina/localhost/</prefix>
+										<user>tomcat6</user>
+										<group>tomcat6</group>
+									</mapper>
+								</data>
+								
+								<data>
+									<src>${project.basedir}/src/deb/data/bcprov.jar</src>
+									<type>file</type>
+									<mapper>
+										<type>perm</type>
+										<prefix>/var/lib/tomcat6/shared/</prefix>
 										<user>tomcat6</user>
 										<group>tomcat6</group>
 									</mapper>
