@@ -157,10 +157,6 @@
 					<groupId>net.sf.ehcache</groupId>
 					<artifactId>ehcache</artifactId>
 				</exclusion>
-				<exclusion>
-					<artifactId>bcprov-jdk15</artifactId>
-					<groupId>bouncycastle</groupId>
-				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
