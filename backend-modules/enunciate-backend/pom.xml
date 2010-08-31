@@ -328,17 +328,6 @@
 										<group>tomcat6</group>
 									</mapper>
 								</data>
-								
-								<data>
-									<src>${project.basedir}/src/deb/data/bcprov.jar</src>
-									<type>file</type>
-									<mapper>
-										<type>perm</type>
-										<prefix>/var/lib/tomcat6/shared/</prefix>
-										<user>tomcat6</user>
-										<group>tomcat6</group>
-									</mapper>
-								</data>
 
 								<data>
 									<src>${project.basedir}/src/deb/data/etc/grisu</src>
