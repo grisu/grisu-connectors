@@ -404,6 +404,7 @@
         <configuration>
           <server>globus_tomcat</server>
           <url>http://globus.ceres.auckland.ac.nz:8080/manager</url>
+	  <path>grisu-ws</path>
         </configuration>
  	</plugin>
 
