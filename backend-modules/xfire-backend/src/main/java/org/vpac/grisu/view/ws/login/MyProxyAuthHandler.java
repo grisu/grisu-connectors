@@ -32,18 +32,19 @@ public class MyProxyAuthHandler extends AbstractHandler {
 
 	private ProxyCredential createProxyCredential(String username,
 			String password, String myProxyServer, int port, int lifetime) {
-		MyProxy myproxy = new MyProxy(myProxyServer, port);
+		final MyProxy myproxy = new MyProxy(myProxyServer, port);
 		GSSCredential proxy = null;
 		try {
 			proxy = myproxy.get(username, password, lifetime);
 
-			int remaining = proxy.getRemainingLifetime();
+			final int remaining = proxy.getRemainingLifetime();
 
-			if (remaining <= 0)
+			if (remaining <= 0) {
 				throw new RuntimeException("Proxy not valid anymore.");
+			}
 
 			return new ProxyCredential(proxy);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 			myLogger.error("Could not create myproxy credential: "
 					+ e.getLocalizedMessage());
@@ -61,28 +62,29 @@ public class MyProxyAuthHandler extends AbstractHandler {
 	 */
 	public void invoke(MessageContext context) throws Exception {
 
-		SoapVersion version = context.getInMessage().getSoapVersion();
+		final SoapVersion version = context.getInMessage().getSoapVersion();
 
-		Element header = context.getInMessage().getHeader();
-		if (header == null)
+		final Element header = context.getInMessage().getHeader();
+		if (header == null) {
 			return;
+		}
 
-		Element authEl = header.getChild(AUTH_NAME, Namespace
-				.getNamespace(AUTH_NS));
+		final Element authEl = header.getChild(AUTH_NAME,
+				Namespace.getNamespace(AUTH_NS));
 
 		if (authEl == null) {
 			throw new XFireFault("No authentication information in header.",
 					XFireFault.SENDER);
 		}
 
-		String username = authEl.getChildText("Username", Namespace
-				.getNamespace(AUTH_NS));
-		String password = authEl.getChildText("Password", Namespace
-				.getNamespace(AUTH_NS));
-		String myProxyServer = authEl.getChildText("MyProxyServer", Namespace
-				.getNamespace(AUTH_NS));
-		String myProxyPort = authEl.getChildText("MyProxyPort", Namespace
-				.getNamespace(AUTH_NS));
+		final String username = authEl.getChildText("Username",
+				Namespace.getNamespace(AUTH_NS));
+		final String password = authEl.getChildText("Password",
+				Namespace.getNamespace(AUTH_NS));
+		final String myProxyServer = authEl.getChildText("MyProxyServer",
+				Namespace.getNamespace(AUTH_NS));
+		final String myProxyPort = authEl.getChildText("MyProxyPort",
+				Namespace.getNamespace(AUTH_NS));
 
 		if (username == null || "".equals(username) || password == null
 				| "".equals(password)) {
@@ -98,11 +100,11 @@ public class MyProxyAuthHandler extends AbstractHandler {
 	private long proxyEndtime(GSSCredential credential, String username,
 			String password, String myProxyServer, int port) {
 
-		MyProxy myproxy = new MyProxy(myProxyServer, port);
+		final MyProxy myproxy = new MyProxy(myProxyServer, port);
 		CredentialInfo info = null;
 		try {
 			info = myproxy.info(credential, username, password);
-		} catch (MyProxyException e) {
+		} catch (final MyProxyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -124,18 +126,19 @@ public class MyProxyAuthHandler extends AbstractHandler {
 				.getSession().get("credential");
 		// ProxyCredential credential =
 		// (ProxyCredential)context.getProperty("credential");
-		int port = Integer.parseInt(myProxyPort);
+		final int port = Integer.parseInt(myProxyPort);
 
 		if (credential == null || !credential.isValid()) {
 
 			credential = createProxyCredential(username, password,
-					myProxyServer, port, ServerPropertiesManager
-							.getMyProxyLifetime());
+					myProxyServer, port,
+					ServerPropertiesManager.getMyProxyLifetime());
 
-			if (credential == null || !credential.isValid())
+			if (credential == null || !credential.isValid()) {
 				throw new XFireFault(
 						"No valid authentication information in header: Could not create valid credential.",
 						XFireFault.SENDER);
+			}
 
 			// put the credential into the session
 			handlerContext.getSession().put("credential", credential);
@@ -146,29 +149,29 @@ public class MyProxyAuthHandler extends AbstractHandler {
 			try {
 				oldLifetime = credential.getGssCredential()
 						.getRemainingLifetime();
-			} catch (GSSException e) {
+			} catch (final GSSException e) {
 				oldLifetime = -2;
 			}
 			if (oldLifetime < ServerPropertiesManager
 					.getMinProxyLifetimeBeforeGettingNewProxy()) {
-				myLogger
-						.debug("Credential reached minimum lifetime. Creating new one. Old lifetime: "
-								+ oldLifetime);
+				myLogger.debug("Credential reached minimum lifetime. Creating new one. Old lifetime: "
+						+ oldLifetime);
 
 				credential = createProxyCredential(username, password,
-						myProxyServer, port, ServerPropertiesManager
-								.getMyProxyLifetime());
-				if (credential == null || !credential.isValid())
+						myProxyServer, port,
+						ServerPropertiesManager.getMyProxyLifetime());
+				if (credential == null || !credential.isValid()) {
 					throw new XFireFault(
 							"No valid authentication information in header: Could not create valid credential.",
 							XFireFault.SENDER);
+				}
 
 				// put the credential into the session
 				handlerContext.getSession().put("credential", credential);
 
 			}
 
-			long endTime = proxyEndtime(credential.getGssCredential(),
+			final long endTime = proxyEndtime(credential.getGssCredential(),
 					username, password, myProxyServer, port);
 			handlerContext.getSession().put("credentialEndTime", endTime);
 			// put the credential endtime into the session

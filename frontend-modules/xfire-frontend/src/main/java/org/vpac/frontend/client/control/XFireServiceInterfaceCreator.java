@@ -54,7 +54,7 @@ public class XFireServiceInterfaceCreator implements ServiceInterfaceCreator {
 				httpProxyPort = (Integer) otherOptions[1];
 				httpProxyUsername = (String) otherOptions[2];
 				httpProxyPassword = (char[]) otherOptions[3];
-			} catch (ClassCastException cce) {
+			} catch (final ClassCastException cce) {
 				throw new ServiceInterfaceException(
 						"Could not create serviceInterface: "
 								+ cce.getLocalizedMessage(), cce);
@@ -84,7 +84,7 @@ public class XFireServiceInterfaceCreator implements ServiceInterfaceCreator {
 								+ " as configured in the -D option.");
 					}
 				}
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				// doesn't matter
 				myLogger.debug("Couldn't find specified cacert. Using default one.");
 			}
@@ -125,10 +125,10 @@ public class XFireServiceInterfaceCreator implements ServiceInterfaceCreator {
 			// Maybe we want to turn off CN validation (not recommended!):
 			protocolSocketFactory.setCheckHostname(false);
 
-			Protocol protocol = new Protocol("https",
+			final Protocol protocol = new Protocol("https",
 					(ProtocolSocketFactory) protocolSocketFactory, 443);
 			Protocol.registerProtocol("https", protocol);
-		} catch (Exception e1) {
+		} catch (final Exception e1) {
 			// TODO Auto-generated catch block
 			// e1.printStackTrace();
 			throw new ServiceInterfaceException(
@@ -136,20 +136,21 @@ public class XFireServiceInterfaceCreator implements ServiceInterfaceCreator {
 					e1);
 		}
 
-		Service serviceModel = new ObjectServiceFactory().create(
+		final Service serviceModel = new ObjectServiceFactory().create(
 				ServiceInterface.class, null, "http://grisu.vpac.org/grisu-ws",
 				null);
 
-		XFireProxyFactory serviceFactory = new XFireProxyFactory();
+		final XFireProxyFactory serviceFactory = new XFireProxyFactory();
 
 		ServiceInterface serviceInterface = null;
 		try {
 			serviceInterface = (ServiceInterface) serviceFactory.create(
 					serviceModel, interfaceUrl);
-			Client client = Client.getInstance(serviceInterface);
+			final Client client = Client.getInstance(serviceInterface);
 
 			// timeout
-			Long timeout = ClientPropertiesManager.getConnectionTimeoutInMS();
+			final Long timeout = ClientPropertiesManager
+					.getConnectionTimeoutInMS();
 			client.setProperty(CommonsHttpMessageSender.HTTP_TIMEOUT,
 					timeout.toString());
 			// enable file transfer for bigger files
@@ -177,7 +178,7 @@ public class XFireServiceInterfaceCreator implements ServiceInterfaceCreator {
 				client.setProperty(
 						CommonsHttpMessageSender.DISABLE_PROXY_UTILS, true);
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			// e.printStackTrace();
 			throw new ServiceInterfaceException(
 					"Unspecified error while connecting to web service.", e);
@@ -185,13 +186,13 @@ public class XFireServiceInterfaceCreator implements ServiceInterfaceCreator {
 
 		try {
 			serviceInterface.login(username, new String(password));
-		} catch (NoValidCredentialException e) {
+		} catch (final NoValidCredentialException e) {
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
 			throw new ServiceInterfaceException(
 					"Could not create & upload proxy to the myproxy server. Probably because of a wrong private key passphrase or network problems.",
 					e);
-		} catch (Exception e1) {
+		} catch (final Exception e1) {
 			// e1.printStackTrace();
 			if (e1.getCause() != null) {
 				if (e1.getCause().getCause() instanceof com.ctc.wstx.exc.WstxUnexpectedCharException) {
@@ -228,7 +229,7 @@ public class XFireServiceInterfaceCreator implements ServiceInterfaceCreator {
 								+ ". Please download a new version of the Grisu client from http://grisu.arcs.org.au",
 						null);
 			}
-		} catch (XFireRuntimeException xfre) {
+		} catch (final XFireRuntimeException xfre) {
 			throw new ServiceInterfaceException(
 					"Remote Grisu service doesn't publish interface version which means it's outdated."
 							+ "Please tell your administrator to update it.",

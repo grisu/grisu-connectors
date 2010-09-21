@@ -35,7 +35,7 @@ public class WsServiceInterface extends AbstractServiceInterface implements
 	@Override
 	protected synchronized ProxyCredential getCredential()
 			throws NoValidCredentialException {
-		MessageContext context = ctx.getMessageContext();
+		final MessageContext context = ctx.getMessageContext();
 
 		if ((this.credential == null) || !this.credential.isValid()) {
 			myLogger.debug("No valid credential in memory. Fetching it from session context...");
@@ -49,7 +49,7 @@ public class WsServiceInterface extends AbstractServiceInterface implements
 			// check whether min lifetime as configured in server config file is
 			// reached
 			try {
-				long oldLifetime = this.credential.getGssCredential()
+				final long oldLifetime = this.credential.getGssCredential()
 						.getRemainingLifetime();
 				if (oldLifetime < ServerPropertiesManager
 						.getMinProxyLifetimeBeforeGettingNewProxy()) {
@@ -66,7 +66,7 @@ public class WsServiceInterface extends AbstractServiceInterface implements
 							+ this.credential.getGssCredential()
 									.getRemainingLifetime());
 				}
-			} catch (GSSException e) {
+			} catch (final GSSException e) {
 				myLogger.error("Could not read remaining lifetime from GSSCredential. Retrieving new one from session context.");
 				if ((this.credential == null) || !this.credential.isValid()) {
 					throw new NoValidCredentialException(
@@ -82,27 +82,30 @@ public class WsServiceInterface extends AbstractServiceInterface implements
 
 	public long getCredentialEndTime() {
 
-		MessageContext context = ctx.getMessageContext();
-		long endTime = (Long) (context.get("credentialEndTime"));
+		final MessageContext context = ctx.getMessageContext();
+		final long endTime = (Long) (context.get("credentialEndTime"));
 		return endTime;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.vpac.grisu.control.ServiceInterface#getTemplate(java.lang.String)
-	 */
-	public final String getTemplate(final String application)
-			throws NoSuchTemplateException {
-		String temp = ServiceTemplateManagement.getTemplate(application);
+	@Override
+	public String getInterfaceInfo(String key) {
 
-		if (StringUtils.isBlank(temp)) {
-			throw new NoSuchTemplateException(
-					"Could not find template for application: " + application
-							+ ".");
+		if ("HOSTNAME".equalsIgnoreCase(key)) {
+			if (hostname == null) {
+				try {
+					final InetAddress addr = InetAddress.getLocalHost();
+					final byte[] ipAddr = addr.getAddress();
+					hostname = addr.getHostName();
+				} catch (final UnknownHostException e) {
+					hostname = "Unavailable";
+				}
+			}
+		} else if ("VERSION".equalsIgnoreCase(key)) {
+			return ServiceInterface.INTERFACE_VERSION;
+		} else if ("NAME".equalsIgnoreCase(key)) {
+			return "Webservice (SOAP/cxf) interface running on: " + hostname;
 		}
-		return temp;
+		return null;
 	}
 
 	// /*
@@ -127,6 +130,24 @@ public class WsServiceInterface extends AbstractServiceInterface implements
 	// return SeveralXMLHelpers.toString(doc);
 	//
 	// }
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.vpac.grisu.control.ServiceInterface#getTemplate(java.lang.String)
+	 */
+	public final String getTemplate(final String application)
+			throws NoSuchTemplateException {
+		final String temp = ServiceTemplateManagement.getTemplate(application);
+
+		if (StringUtils.isBlank(temp)) {
+			throw new NoSuchTemplateException(
+					"Could not find template for application: " + application
+							+ ".");
+		}
+		return temp;
+	}
 
 	@Override
 	protected User getUser() {
@@ -158,27 +179,6 @@ public class WsServiceInterface extends AbstractServiceInterface implements
 
 		myLogger.debug("Exiting...");
 		this.credential.destroy();
-		return null;
-	}
-
-	@Override
-	public String getInterfaceInfo(String key) {
-
-		if ("HOSTNAME".equalsIgnoreCase(key)) {
-			if (hostname == null) {
-				try {
-					InetAddress addr = InetAddress.getLocalHost();
-					byte[] ipAddr = addr.getAddress();
-					hostname = addr.getHostName();
-				} catch (UnknownHostException e) {
-					hostname = "Unavailable";
-				}
-			}
-		} else if ("VERSION".equalsIgnoreCase(key)) {
-			return ServiceInterface.INTERFACE_VERSION;
-		} else if ("NAME".equalsIgnoreCase(key)) {
-			return "Webservice (SOAP/cxf) interface running on: " + hostname;
-		}
 		return null;
 	}
 }

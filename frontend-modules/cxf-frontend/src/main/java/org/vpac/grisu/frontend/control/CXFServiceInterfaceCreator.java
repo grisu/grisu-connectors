@@ -31,26 +31,27 @@ import com.sun.org.apache.xerces.internal.dom.DocumentImpl;
 
 public class CXFServiceInterfaceCreator implements ServiceInterfaceCreator {
 
-	public static String TRUST_FILE_NAME = Environment.getGrisuClientDirectory()
-	.getPath()
-	+ File.separator + "truststore.jks";
+	public static String TRUST_FILE_NAME = Environment
+			.getGrisuClientDirectory().getPath()
+			+ File.separator
+			+ "truststore.jks";
 
 	/**
 	 * configures secure connection parameters.
 	 **/
 	public CXFServiceInterfaceCreator() throws ServiceInterfaceException {
 		try {
-			if (!(new File(Environment.getGrisuClientDirectory(), "truststore.jks")
-			.exists())) {
-				InputStream ts = CXFServiceInterfaceCreator.class
-				.getResourceAsStream("/truststore.jks");
+			if (!(new File(Environment.getGrisuClientDirectory(),
+					"truststore.jks").exists())) {
+				final InputStream ts = CXFServiceInterfaceCreator.class
+						.getResourceAsStream("/truststore.jks");
 				IOUtils.copy(ts, new FileOutputStream(TRUST_FILE_NAME));
 			}
-		} catch (IOException ex) {
+		} catch (final IOException ex) {
 			throw new ServiceInterfaceException(
 					"cannot copy SSL certificate store into grisu home directory. Does "
-					+ Environment.getGrisuClientDirectory().getPath()
-					+ " exist?", ex);
+							+ Environment.getGrisuClientDirectory().getPath()
+							+ " exist?", ex);
 		}
 		System.setProperty("javax.net.ssl.trustStore", TRUST_FILE_NAME);
 	}
@@ -73,13 +74,13 @@ public class CXFServiceInterfaceCreator implements ServiceInterfaceCreator {
 
 	public ServiceInterface create(String serviceInterfaceUrl, String username,
 			String password, String myproxyServer, int myproxyPort) {
-		JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
-		AegisDatabinding aDB = new AegisDatabinding();
-		AegisContext acontext = new AegisContext();
-		HashSet<java.lang.Class<?>> classes = new HashSet<java.lang.Class<?>>();
+		final JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
+		final AegisDatabinding aDB = new AegisDatabinding();
+		final AegisContext acontext = new AegisContext();
+		final HashSet<java.lang.Class<?>> classes = new HashSet<java.lang.Class<?>>();
 		classes.add(DocumentImpl.class);
 		acontext.setRootClasses(classes);
-		HashMap<Class<?>, String> classMap = new HashMap<Class<?>, String>();
+		final HashMap<Class<?>, String> classMap = new HashMap<Class<?>, String>();
 		classMap.put(DocumentImpl.class, "org.w3c.dom.Document");
 		/*
 		 * acontext.setBeanImplementationMap(classMap);
@@ -108,8 +109,8 @@ public class CXFServiceInterfaceCreator implements ServiceInterfaceCreator {
 		factory.getOutInterceptors().add(
 				new ClientAuthInterceptor(username, password, myproxyServer,
 						myproxyPort));
-		ServiceInterface service = (ServiceInterface) factory.create();
-		Client client = ClientProxy.getClient(service);
+		final ServiceInterface service = (ServiceInterface) factory.create();
+		final Client client = ClientProxy.getClient(service);
 		client.getEndpoint().put("mtom-enabled", "true");
 
 		/**

@@ -26,18 +26,19 @@ public class MyProxyAuthInterceptor extends AbstractSoapInterceptor {
 
 	private ProxyCredential createProxyCredential(String username,
 			String password, String myProxyServer, int port, int lifetime) {
-		MyProxy myproxy = new MyProxy(myProxyServer, port);
+		final MyProxy myproxy = new MyProxy(myProxyServer, port);
 		GSSCredential proxy = null;
 		try {
 			proxy = myproxy.get(username, password, lifetime);
 
-			int remaining = proxy.getRemainingLifetime();
+			final int remaining = proxy.getRemainingLifetime();
 
-			if (remaining <= 0)
+			if (remaining <= 0) {
 				throw new RuntimeException("Proxy not valid anymore.");
+			}
 
 			return new ProxyCredential(proxy);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			myLogger.error("Could not create myproxy credential: "
 					+ e.getLocalizedMessage());
 			return null;
@@ -45,7 +46,8 @@ public class MyProxyAuthInterceptor extends AbstractSoapInterceptor {
 	}
 
 	public void handleMessage(SoapMessage message) throws Fault {
-		Header header = message.getHeader(new QName("", "myProxyCredentials"));
+		final Header header = message.getHeader(new QName("",
+				"myProxyCredentials"));
 
 		try {
 			MyProxyCredentials cred = null;
@@ -57,10 +59,10 @@ public class MyProxyAuthInterceptor extends AbstractSoapInterceptor {
 				myLogger.debug("creating new credential...");
 				cred = retrieveProxyFromHeader(header);
 				proxyCredential = createProxyCredential(cred.username,
-						cred.password, cred.myproxyServer, Integer
-								.parseInt(cred.myproxyPort), 99999);
-				message.getExchange().getSession().put("credential",
-						proxyCredential);
+						cred.password, cred.myproxyServer,
+						Integer.parseInt(cred.myproxyPort), 99999);
+				message.getExchange().getSession()
+						.put("credential", proxyCredential);
 			}
 			if (proxyCredential == null || !proxyCredential.isValid()) {
 				throw new Fault(
@@ -68,7 +70,7 @@ public class MyProxyAuthInterceptor extends AbstractSoapInterceptor {
 			}
 			message.put("credential", proxyCredential);
 
-		} catch (JAXBException ex) {
+		} catch (final JAXBException ex) {
 			// should not happen...
 			throw new Fault(ex);
 		}
@@ -77,10 +79,10 @@ public class MyProxyAuthInterceptor extends AbstractSoapInterceptor {
 
 	private MyProxyCredentials retrieveProxyFromHeader(Header h)
 			throws JAXBException {
-		Unmarshaller u = JAXBContext.newInstance(MyProxyCredentials.class)
-				.createUnmarshaller();
-		Object o = u.unmarshal((org.w3c.dom.Node) (h.getObject()));
-		MyProxyCredentials cred = (MyProxyCredentials) o;
+		final Unmarshaller u = JAXBContext
+				.newInstance(MyProxyCredentials.class).createUnmarshaller();
+		final Object o = u.unmarshal((org.w3c.dom.Node) (h.getObject()));
+		final MyProxyCredentials cred = (MyProxyCredentials) o;
 		return cred;
 	}
 }

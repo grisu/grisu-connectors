@@ -37,19 +37,19 @@ public class GrisuUserDetails implements UserDetails {
 		// System.out.println("Username: "+username);
 		// System.out.println("Password: "+password);
 
-		MyProxy myproxy = new MyProxy(myProxyServer, port);
+		final MyProxy myproxy = new MyProxy(myProxyServer, port);
 		GSSCredential proxy = null;
 		try {
 			proxy = myproxy.get(username, password, lifetime);
 
-			int remaining = proxy.getRemainingLifetime();
+			final int remaining = proxy.getRemainingLifetime();
 
 			if (remaining <= 0) {
 				throw new RuntimeException("Proxy not valid anymore.");
 			}
 
 			return new ProxyCredential(proxy);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 			myLogger.error("Could not create myproxy credential: "
 					+ e.getLocalizedMessage());
@@ -74,15 +74,16 @@ public class GrisuUserDetails implements UserDetails {
 			return -1;
 		}
 
-		MyProxy myproxy = new MyProxy(MyProxyServerParams.getMyProxyServer(),
+		final MyProxy myproxy = new MyProxy(
+				MyProxyServerParams.getMyProxyServer(),
 				MyProxyServerParams.getMyProxyPort());
 		CredentialInfo info = null;
 		try {
-			String user = authentication.getPrincipal().toString();
-			String password = authentication.getCredentials().toString();
+			final String user = authentication.getPrincipal().toString();
+			final String password = authentication.getCredentials().toString();
 			info = myproxy.info(getProxyCredential().getGssCredential(), user,
 					password);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			myLogger.error(e);
 			return -1;
 		}
@@ -116,17 +117,16 @@ public class GrisuUserDetails implements UserDetails {
 						.getMinProxyLifetimeBeforeGettingNewProxy()) {
 
 					// myLogger.debug("Proxy still valid and long enough lifetime.");
-					myLogger
-							.debug("Old valid proxy still good enough. Using it.");
+					myLogger.debug("Old valid proxy still good enough. Using it.");
 					return proxy;
 				}
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				e.printStackTrace();
 			}
 			myLogger.debug("Old proxy not good enough. Creating new one...");
 		}
 
-		ProxyCredential proxyTemp = createProxyCredential(authentication
+		final ProxyCredential proxyTemp = createProxyCredential(authentication
 				.getPrincipal().toString(), authentication.getCredentials()
 				.toString(), MyProxyServerParams.DEFAULT_MYPROXY_SERVER,
 				MyProxyServerParams.DEFAULT_MYPROXY_PORT,

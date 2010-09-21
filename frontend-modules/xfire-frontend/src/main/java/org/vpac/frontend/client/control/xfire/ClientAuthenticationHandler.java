@@ -35,17 +35,17 @@ public class ClientAuthenticationHandler extends AbstractHandler {
 
 		final Namespace ns = Namespace
 				.getNamespace("http://grisu.vpac.org/grisu-ws");
-		Element el = new Element("header", ns);
+		final Element el = new Element("header", ns);
 		context.getOutMessage().setHeader(el);
 
-		Element auth = new Element("AuthenticationToken", ns);
-		Element username_el = new Element("Username", ns);
+		final Element auth = new Element("AuthenticationToken", ns);
+		final Element username_el = new Element("Username", ns);
 		username_el.addContent(username);
-		Element password_el = new Element("Password", ns);
+		final Element password_el = new Element("Password", ns);
 		password_el.addContent(password);
-		Element myProxyServer_el = new Element("MyProxyServer", ns);
+		final Element myProxyServer_el = new Element("MyProxyServer", ns);
 		myProxyServer_el.addContent(myProxyServer);
-		Element myProxyPort_el = new Element("MyProxyPort", ns);
+		final Element myProxyPort_el = new Element("MyProxyPort", ns);
 		myProxyPort_el.addContent(myProxyPort);
 		auth.addContent(username_el);
 		auth.addContent(password_el);

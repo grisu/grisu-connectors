@@ -66,7 +66,7 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 	@Override
 	protected synchronized ProxyCredential getCredential() {
 
-		GrisuUserDetails gud = getSpringUserDetails();
+		final GrisuUserDetails gud = getSpringUserDetails();
 		if (gud != null) {
 			myLogger.debug("Found user: " + gud.getUsername());
 			return gud.getProxyCredential();
@@ -82,13 +82,36 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 		return getSpringUserDetails().getCredentialEndTime();
 	}
 
+	@Override
+	public String getInterfaceInfo(String key) {
+
+		if ("HOSTNAME".equalsIgnoreCase(key)) {
+			if (hostname == null) {
+				try {
+					final InetAddress addr = InetAddress.getLocalHost();
+					final byte[] ipAddr = addr.getAddress();
+					hostname = addr.getHostName();
+				} catch (final UnknownHostException e) {
+					hostname = "Unavailable";
+				}
+			}
+		} else if ("VERSION".equalsIgnoreCase(key)) {
+			return ServiceInterface.INTERFACE_VERSION;
+		} else if ("NAME".equalsIgnoreCase(key)) {
+			return "Webservice (REST/SOAP) interface";
+		}
+		return null;
+	}
+
 	private GrisuUserDetails getSpringUserDetails() {
 
-		SecurityContext securityContext = SecurityContextHolder.getContext();
-		Authentication authentication = securityContext.getAuthentication();
+		final SecurityContext securityContext = SecurityContextHolder
+				.getContext();
+		final Authentication authentication = securityContext
+				.getAuthentication();
 
 		if (authentication != null) {
-			Object principal = authentication.getPrincipal();
+			final Object principal = authentication.getPrincipal();
 			if (principal instanceof GrisuUserDetails) {
 				return (GrisuUserDetails) principal;
 			} else {
@@ -101,13 +124,14 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 
 	public String getTemplate(String name) throws NoSuchTemplateException {
 
-		File file = new File(Environment.getAvailableTemplatesDirectory(), name
-				+ ".template");
+		final File file = new File(
+				Environment.getAvailableTemplatesDirectory(), name
+						+ ".template");
 
 		String temp;
 		try {
 			temp = FileUtils.readFileToString(file);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new RuntimeException(e);
 		}
 
@@ -118,7 +142,7 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 	@Override
 	protected User getUser() {
 
-		GrisuUserDetails gud = getSpringUserDetails();
+		final GrisuUserDetails gud = getSpringUserDetails();
 		if (gud != null) {
 			// myLogger.debug("Found user: "+gud.getUsername());
 			return gud.getUser(this);
@@ -152,27 +176,6 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 
 		return "Logged out.";
 
-	}
-
-	@Override
-	public String getInterfaceInfo(String key) {
-
-		if ("HOSTNAME".equalsIgnoreCase(key)) {
-			if (hostname == null) {
-				try {
-					InetAddress addr = InetAddress.getLocalHost();
-					byte[] ipAddr = addr.getAddress();
-					hostname = addr.getHostName();
-				} catch (UnknownHostException e) {
-					hostname = "Unavailable";
-				}
-			}
-		} else if ("VERSION".equalsIgnoreCase(key)) {
-			return ServiceInterface.INTERFACE_VERSION;
-		} else if ("NAME".equalsIgnoreCase(key)) {
-			return "Webservice (REST/SOAP) interface";
-		}
-		return null;
 	}
 
 }
