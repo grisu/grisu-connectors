@@ -121,14 +121,14 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>au.org.arcs.commons</groupId>
-			<artifactId>arcs-jcommons</artifactId>
+			<groupId>org.bestgrid</groupId>
+			<artifactId>grid-jcommons</artifactId>
 			<version>1.2</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>au.org.arcs.commons</groupId>
-			<artifactId>arcs-jcommons</artifactId>
+			<groupId>org.bestgrid</groupId>
+			<artifactId>grid-jcommons</artifactId>
 			<version>1.2</version>
 			<classifier>sources</classifier>
 			<scope>compile</scope>
