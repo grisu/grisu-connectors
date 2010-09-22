@@ -123,13 +123,13 @@
 		<dependency>
 			<groupId>au.org.arcs.commons</groupId>
 			<artifactId>arcs-jcommons</artifactId>
-			<version>1.1-SNAPSHOT</version>
+			<version>1.2</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>au.org.arcs.commons</groupId>
 			<artifactId>arcs-jcommons</artifactId>
-			<version>1.1-SNAPSHOT</version>
+			<version>1.2</version>
 			<classifier>sources</classifier>
 			<scope>compile</scope>
 		</dependency>
