@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<url>http://projects.arcs.org.au/trac/grisu/wiki/GrisuWs
 	</url>
 	<parent>
 		<artifactId>backend-modules</artifactId>
 		<groupId>org.vpac.grisu</groupId>
-		<version>0.3-SNAPSHOT</version>
+		<version>0.3-beta1</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>xfire-backend</artifactId>
@@ -59,7 +59,7 @@
 		<dependency>
 			<groupId>org.vpac.grisu</groupId>
 			<artifactId>xfire-interface</artifactId>
-			<version>0.3-SNAPSHOT</version>
+			<version>0.3-beta1</version>
 		</dependency>
 
 		<dependency>
