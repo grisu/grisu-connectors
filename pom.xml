@@ -9,6 +9,10 @@
 	<name>grisu-connectors Multi Project</name>
 	<url>http://maven.apache.org</url>
 
+	<scm>
+		<connection>scm:git:git://code.arcs.org.au/grisu/grisu-connectors.git</connection>
+		<developerConnection>scm:git:git://code.arcs.org.au/grisu/grisu-connectors.git</developerConnection>
+	</scm>
 	<repositories>
 		<repository>
 			<id>ARCS</id>
