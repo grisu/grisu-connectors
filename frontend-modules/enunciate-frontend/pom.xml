@@ -29,7 +29,7 @@
 		<dependency>
 			<groupId>org.vpac.grisu</groupId>
 			<artifactId>grisu-commons</artifactId>
-			<version>0.3-SNAPSHOT</version>
+			<version>${grisu.dependency.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>

@@ -8,6 +8,10 @@
 	<version>0.3-SNAPSHOT</version>
 	<name>grisu-connectors Multi Project</name>
 	<url>http://maven.apache.org</url>
+	
+	<properties>
+		<grisu.dependency.version>0.3-beta1</grisu.dependency.version>
+	</properties>
 
 	<scm>
 		<connection>scm:git:git://code.arcs.org.au/grisu/grisu-connectors.git</connection>

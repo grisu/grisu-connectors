@@ -88,7 +88,7 @@
 		<dependency>
 			<groupId>org.vpac.grisu</groupId>
 			<artifactId>grisu-core</artifactId>
-			<version>0.3-SNAPSHOT</version>
+			<version>${grisu.dependency.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>external.globus</groupId>

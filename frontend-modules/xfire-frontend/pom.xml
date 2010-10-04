@@ -33,12 +33,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.vpac.grisu</groupId>
-			<artifactId>grisu-commons</artifactId>
-			<version>0.3-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
 			<version>1.4</version>
