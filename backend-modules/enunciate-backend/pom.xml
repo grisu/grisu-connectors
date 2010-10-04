@@ -136,13 +136,13 @@
 		<dependency>
 			<groupId>org.vpac.grisu</groupId>
 			<artifactId>grisu-commons</artifactId>
-			<version>${project.parent.parent.grisu.dependency.version}</version>
+			<version>${grisu.dependency.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.vpac.grisu</groupId>
 			<artifactId>grisu-commons</artifactId>
-			<version>${project.parent.parent.grisu.dependency.version}</version>
+			<version>${grisu.dependency.version}</version>
 			<classifier>sources</classifier>
 			<scope>compile</scope>
 		</dependency>
