@@ -13,5 +13,6 @@
   	<module>xfire-backend</module>
   	<module>cxf-backend</module>
   	<module>enunciate-backend</module>
+  	<module>desktop-proxy-backend</module>
   </modules>
 </project>

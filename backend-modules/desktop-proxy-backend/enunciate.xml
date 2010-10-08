@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<enunciate label="Grisu" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://enunciate.codehaus.org/schemas/enunciate-1.15.xsd">
+	<deployment host="ngportal.vpac.org" context="api" />
+	<namespaces>
+		<namespace id="api" uri="http://api.grisu.arcs.org.au/" />
+		<namespace id="dto" uri="http://api.grisu.arcs.org.au/dto" />
+	</namespaces>
+
+
+	<api-import pattern="org.vpac.grisu.model.MountPoint" />
+	<api-import pattern="org.vpac.grisu.model.dto.*" />
+	<api-import pattern="org.vpac.grisu.frontend.**" />
+	<api-import pattern="org.vpac.grisu.control.ServiceInterface" />
+	<api-import pattern="org.vpac.grisu.control.JobConstants" /> 
+	
+	<modules>
+	
+		<csharp disabled="true" ></csharp>
+		<jaxws-ri disabled="true"/>
+		<xfire disabled="true"/>
+		<cxf disabled="false" />
+		<jersey disabled="true" />
+		
+		<jaxws-client disabled="true" jarName="grisu-client-jaxws.jar">
+		</jaxws-client>
+		<xfire-client disabled="true" disable14Client="true" disable15Client="false"
+			jarName="grisu-client-xfire.jar">
+		</xfire-client>
+		<gwt disabled="true" rpcModuleName="org.vpac.grisu.GrisuGwt" gwtHome="/opt/gwt-2.0.4" clientJarDownloadable="true" clientJarName="Grisu-gwt-client.jar">
+		</gwt>
+
+<!--		<spring-app enableSecurity="false">-->
+<!--			<springImport file="mysecurity.xml"/>-->
+<!--			<security disableDefaultProvider="true">-->
+<!--			</security>-->
+<!--		</spring-app>-->
+
+		<docs splashPackage="org.vpac.grisu.control" title="Grisu API"
+			copyright="bestgrid.org">
+		</docs>
+
+	</modules>
+</enunciate>
