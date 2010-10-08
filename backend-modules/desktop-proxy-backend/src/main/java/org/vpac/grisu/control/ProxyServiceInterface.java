@@ -308,9 +308,11 @@ public class ProxyServiceInterface implements ServiceInterface {
 	}
 
 	public String logout() {
-		String result = si.logout();
-		si = null;
-		return result;
+
+		return null;
+		// String result = si.logout();
+		// si = null;
+		// return result;
 	}
 
 	public DtoFolder ls(String url, int recursionLevel)
