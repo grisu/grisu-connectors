@@ -124,7 +124,7 @@
 		<dependency>
 			<groupId>org.vpac.grisu</groupId>
 			<artifactId>grisu-core</artifactId>
-			<version>0.3-beta2-SNAPSHOT</version>
+			<version>${grisu.dependency.version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
