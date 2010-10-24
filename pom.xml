@@ -9,7 +9,7 @@
 	<url>http://maven.apache.org</url>
 	
 	<properties>
-		<grisu.dependency.version>${project.version}</grisu.dependency.version>
+		<grisu.dependency.version>0.3-beta2</grisu.dependency.version>
 	</properties>
 
 	<scm>
