@@ -122,13 +122,6 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>au.org.arcs.auth</groupId>
-			<artifactId>arcs-gsi</artifactId>
-			<version>1.2</version>
-			<type>pom</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.vpac.grisu</groupId>
 			<artifactId>grisu-core</artifactId>
 			<version>0.3-beta2-SNAPSHOT</version>
