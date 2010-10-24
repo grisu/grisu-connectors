@@ -4,7 +4,7 @@
 	<groupId>org.vpac.grisu</groupId>
 	<artifactId>grisu-connectors</artifactId>
 	<packaging>pom</packaging>
-	<version>0.3-beta2-SNAPSHOT</version>
+	<version>0.3-beta2</version>
 	<name>grisu-connectors Multi Project</name>
 	<url>http://maven.apache.org</url>
 	

@@ -1,14 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>backend-modules</artifactId>
 		<groupId>org.vpac.grisu</groupId>
-		<version>0.3-beta2-SNAPSHOT</version>
+		<version>0.3-beta2</version>
 	</parent>
 	<groupId>org.vpac.grisu</groupId>
 	<artifactId>desktop-proxy-backend</artifactId>
-	<version>0.3-beta2-SNAPSHOT</version>
+	<version>0.3-beta2</version>
 	<name>Desktop Proxy Grisu Backend</name>
 	<packaging>war</packaging>
 	<description>A module to run a backend on a local desktop, publishing the same API 
