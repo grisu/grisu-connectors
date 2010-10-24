@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>frontend-modules</artifactId>
 		<groupId>org.vpac.grisu</groupId>
-		<version>0.3-beta2</version>
+		<version>0.3-beta3-SNAPSHOT</version>
 	</parent>
 	<artifactId>enunciate-frontend</artifactId>
 

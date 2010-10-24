@@ -3,11 +3,11 @@
 	<parent>
 		<artifactId>backend-modules</artifactId>
 		<groupId>org.vpac.grisu</groupId>
-		<version>0.3-beta2</version>
+		<version>0.3-beta3-SNAPSHOT</version>
 	</parent>
 	<groupId>org.vpac.grisu</groupId>
 	<artifactId>desktop-proxy-backend</artifactId>
-	<version>0.3-beta2</version>
+	<version>0.3-beta3-SNAPSHOT</version>
 	<name>Desktop Proxy Grisu Backend</name>
 	<packaging>war</packaging>
 	<description>A module to run a backend on a local desktop, publishing the same API 
