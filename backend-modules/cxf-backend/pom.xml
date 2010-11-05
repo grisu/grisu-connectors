@@ -2,7 +2,7 @@
   <parent>
     <artifactId>backend-modules</artifactId>
     <groupId>org.vpac.grisu</groupId>
-    <version>0.3-beta3</version>
+    <version>0.3-beta4-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>cxf-backend</artifactId>
@@ -99,7 +99,7 @@
 		<dependency>
 			<groupId>org.vpac.grisu</groupId>
 			<artifactId>cxf-interface</artifactId>
-			<version>0.3-beta3</version>
+			<version>0.3-beta4-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-lang</groupId>
