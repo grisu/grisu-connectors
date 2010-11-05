@@ -14,7 +14,7 @@
 
 	<scm>
 		<connection>scm:git:git://code.arcs.org.au/grisu/grisu-connectors.git</connection>
-		<developerConnection>scm:git:git@code.arcs.org.au:grisu/grisu-clients.git</developerConnection>
+		<developerConnection>scm:git:git@code.arcs.org.au:grisu/grisu-connectors.git</developerConnection>
 	</scm>
 	<repositories>
 		<repository>
