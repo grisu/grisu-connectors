@@ -9,12 +9,12 @@
 	<url>http://maven.apache.org</url>
 	
 	<properties>
-		<grisu.dependency.version>0.3-beta2</grisu.dependency.version>
+		<grisu.dependency.version>0.3-beta3</grisu.dependency.version>
 	</properties>
 
 	<scm>
 		<connection>scm:git:git://code.arcs.org.au/grisu/grisu-connectors.git</connection>
-		<developerConnection>scm:git:git://code.arcs.org.au/grisu/grisu-connectors.git</developerConnection>
+		<developerConnection>scm:git:git@code.arcs.org.au:grisu/grisu-clients.git</developerConnection>
 	</scm>
 	<repositories>
 		<repository>
@@ -66,4 +66,14 @@
 		<module>backend-modules</module>
 		<module>interfaces</module>
 	</modules>
+
+	<build>               <plugins>
+                                                <plugin>
+                                  <groupId>org.apache.maven.plugins</groupId>
+                                  <artifactId>maven-release-plugin</artifactId>
+                                  <version>2.1</version>
+                        </plugin>
+	</plugins>
+	</build>
+
 </project>
