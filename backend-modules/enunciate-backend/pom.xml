@@ -181,6 +181,13 @@
 		<!-- <scope>compile</scope> -->
 		<!-- </dependency> -->
 
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>apache-log4j-extras</artifactId>
+			<version>1.0</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
