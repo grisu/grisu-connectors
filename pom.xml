@@ -62,9 +62,9 @@
 	</distributionManagement>
 
 	<modules>
-		<module>frontend-modules</module>
+<!--		<module>frontend-modules</module>-->
 		<module>backend-modules</module>
-		<module>interfaces</module>
+<!--		<module>interfaces</module>-->
 	</modules>
 
 	<build>               <plugins>

@@ -10,9 +10,9 @@
   <name>backend-modules Multi Project</name>
   <url>http://maven.apache.org</url>
   <modules>
-  	<module>xfire-backend</module>
-  	<module>cxf-backend</module>
+<!--  	<module>xfire-backend</module>-->
+<!--  	<module>cxf-backend</module>-->
   	<module>enunciate-backend</module>
-  	<module>desktop-proxy-backend</module>
+<!--  	<module>desktop-proxy-backend</module>-->
   </modules>
 </project>
