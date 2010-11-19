@@ -297,8 +297,6 @@
 						</configuration>
 					</execution>
 
-
-
 				</executions>
 
 
@@ -430,7 +428,24 @@
 					</execution>
 				</executions>
 			</plugin>
-
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jarsigner-plugin</artifactId>
+				<version>1.2</version>
+				<executions>
+					<execution>
+						<id>sign</id>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<alias>grisu</alias>
+					<storepass>FxAKs3p6</storepass>
+					<keypass>FxAKs3p6</keypass>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
