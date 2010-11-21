@@ -22,11 +22,9 @@
 		<cxf disabled="false" />
 		<jersey disabled="true" />
 		
-		<jaxws-client disabled="false" jarName="grisu-client-jaxws.jar">
-		</jaxws-client>
-		<xfire-client disabled="true" disable14Client="true" disable15Client="false"
-			jarName="grisu-client-xfire.jar">
-		</xfire-client>
+		<java-client disabled="false" jarName="grisu-client-jaxws.jar">
+		</java-client>
+
 		<gwt disabled="false" rpcModuleName="org.vpac.grisu.GrisuGwt" gwtHome="/opt/gwt-2.0.4" clientJarDownloadable="true" clientJarName="Grisu-gwt-client.jar">
 		</gwt>
 
