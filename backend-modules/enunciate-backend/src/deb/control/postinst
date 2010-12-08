@@ -59,15 +59,15 @@ case "$1" in
 		fi
 		
 		# extract a few jars into tomcat6/shared so there will be no problem if another webapp uses them as well (only security related jars)
-		unzip -uoj /var/lib/grisu/grisu-ws.war WEB-INF/lib/bcprov-jdk15-145.jar WEB-INF/lib/cryptix-asn1-1.7.0.jar WEB-INF/lib/cryptix32-1.7.0.jar WEB-INF/lib/puretls-1.7.0.jar WEB-INF/lib/globus-dependencies-0.3.jar  -d /var/lib/tomcat6/shared/
+		# unzip -uoj /var/lib/grisu/grisu-ws.war WEB-INF/lib/bcprov-jdk15-145.jar WEB-INF/lib/cryptix-asn1-1.7.0.jar WEB-INF/lib/cryptix32-1.7.0.jar WEB-INF/lib/puretls-1.7.0.jar WEB-INF/lib/globus-dependencies-0.3.jar  -d /var/lib/tomcat6/shared/
 		# now, remove those jars from war file
-		zip -d /var/lib/grisu/grisu-ws.war WEB-INF/lib/bcprov-jdk15-145.jar  WEB-INF/lib/cryptix-asn1-1.7.0.jar WEB-INF/lib/cryptix32-1.7.0.jar WEB-INF/lib/puretls-1.7.0.jar WEB-INF/lib/globus-dependencies-0.3.jar
+		# zip -d /var/lib/grisu/grisu-ws.war WEB-INF/lib/bcprov-jdk15-145.jar  WEB-INF/lib/cryptix-asn1-1.7.0.jar WEB-INF/lib/cryptix32-1.7.0.jar WEB-INF/lib/puretls-1.7.0.jar WEB-INF/lib/globus-dependencies-0.3.jar
 		
 		update-alternatives --set java /usr/lib/jvm/java-6-sun/jre/bin/java
 		update-alternatives --set javac /usr/lib/jvm/java-6-sun/bin/javac
 		
-		grep ^JAVA_HOME= /etc/default/tomcat6
-		if [ "$?" -ne "0" ]; then
+
+		if ! grep ^JAVA_HOME= /etc/default/tomcat6; then
 			echo 'JAVA_HOME=/usr/lib/jvm/java-6-sun/' >> /etc/default/tomcat6
 		fi
 		
