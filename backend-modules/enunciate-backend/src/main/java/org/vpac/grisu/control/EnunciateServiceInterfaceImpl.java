@@ -50,7 +50,7 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 		implements ServiceInterface {
 
 	static {
-		System.out.println("INHERITABLETHREAD");
+		// System.out.println("INHERITABLETHREAD");
 		SecurityContextHolder
 				.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
 	}
@@ -170,12 +170,20 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 
 		myLogger.debug("Logging out user: " + getDN());
 
-		getUser().closeFileSystems();
+		new Thread() {
+			@Override
+			public void run() {
+				myLogger.debug("Closing filesystems for user " + getDN()
+						+ "...");
+				getUser().closeFileSystems();
+				myLogger.debug("Filesystems closed for user " + getDN());
+			}
+		}.start();
+
 		// HttpServletRequest req = HTTPRequestContext.get().getRequest();
 		// req.getSession().setAttribute("credential", null);
 
 		return "Logged out.";
 
 	}
-
 }
