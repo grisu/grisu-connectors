@@ -164,13 +164,13 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 
 		getCredential();
 
-		// load archived jobs in background
-		new Thread() {
-			@Override
-			public void run() {
-				getArchivedJobs(null);
-			}
-		}.start();
+		// // load archived jobs in background
+		// new Thread() {
+		// @Override
+		// public void run() {
+		// getArchivedJobs(null);
+		// }
+		// }.start();
 
 	}
 
