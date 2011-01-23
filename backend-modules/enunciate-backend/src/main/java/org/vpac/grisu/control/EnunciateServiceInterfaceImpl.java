@@ -178,16 +178,6 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 
 		myLogger.debug("Logging out user: " + getDN());
 
-		new Thread() {
-			@Override
-			public void run() {
-				myLogger.debug("Closing filesystems for user " + getDN()
-						+ "...");
-				getUser().closeFileSystems();
-				myLogger.debug("Filesystems closed for user " + getDN());
-			}
-		}.start();
-
 		// HttpServletRequest req = HTTPRequestContext.get().getRequest();
 		// req.getSession().setAttribute("credential", null);
 
