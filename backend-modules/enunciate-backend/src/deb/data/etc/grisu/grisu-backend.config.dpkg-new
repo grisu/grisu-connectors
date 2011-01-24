@@ -1,8 +1,8 @@
 # General settings
 
 [General]
-# the directory which Grisu uses to put all jobdirectories into, default: grisu-dir
-#jobDirName = grisu-dir
+# the directory which Grisu uses to put all jobdirectories into, default: grisu-jobs
+#jobDirName = grisu-jobs
 # the minimum proxy lifetime in seconds before Grisu refreshes the credential (if that's to short, some actions may fail. if it's too long the credentials needs refreshing too often), default: 600
 # minProxyLifetime = 600
 # the lifetime of a proxy that gets delegated from MyProxy (in seconds), default: 3600
