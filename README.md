@@ -18,7 +18,7 @@ Checking out sourcecode
 
  `git clone git://github.com/grisu/grisu-connectors.git`
 
-Building Grisu using Maven
+Build grisu-connectors with Maven
 ------------------------------------------
 
 To build one of the above modules, cd into the module root directory of the module to build and execute: 
