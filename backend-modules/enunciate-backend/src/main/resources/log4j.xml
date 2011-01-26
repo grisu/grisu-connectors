@@ -40,6 +40,10 @@
 		<level value="debug"/>
 		<appender-ref ref="ROLL" />
 	</logger>
+	<logger name="org.apache.commons.vfs.provider">
+		<level value="error"/>
+		<appender-ref ref="ROLL" />
+	</logger>
 	
 
 	<root>

@@ -47,16 +47,16 @@ import org.vpac.grisu.settings.ServiceTemplateManagement;
 @MTOM(enabled = true)
 // @StreamingAttachment(parseEagerly = true, memoryThreshold = 40000L)
 public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
-		implements ServiceInterface {
+implements ServiceInterface {
 
 	static {
 		// System.out.println("INHERITABLETHREAD");
 		SecurityContextHolder
-				.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
+		.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
 	}
 
 	static final Logger myLogger = Logger
-			.getLogger(EnunciateServiceInterfaceImpl.class.getName());
+	.getLogger(EnunciateServiceInterfaceImpl.class.getName());
 
 	private String username;
 	private char[] password;
@@ -68,7 +68,7 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 
 		final GrisuUserDetails gud = getSpringUserDetails();
 		if (gud != null) {
-			myLogger.debug("Found user: " + gud.getUsername());
+			// myLogger.debug("Found user: " + gud.getUsername());
 			return gud.getProxyCredential();
 		} else {
 			myLogger.error("Couldn't find user...");
@@ -106,9 +106,9 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 	private GrisuUserDetails getSpringUserDetails() {
 
 		final SecurityContext securityContext = SecurityContextHolder
-				.getContext();
+		.getContext();
 		final Authentication authentication = securityContext
-				.getAuthentication();
+		.getAuthentication();
 
 		if (authentication != null) {
 			final Object principal = authentication.getPrincipal();
@@ -126,7 +126,7 @@ public class EnunciateServiceInterfaceImpl extends AbstractServiceInterface
 
 		final File file = new File(
 				Environment.getAvailableTemplatesDirectory(), name
-						+ ".template");
+				+ ".template");
 
 		String temp;
 		try {
