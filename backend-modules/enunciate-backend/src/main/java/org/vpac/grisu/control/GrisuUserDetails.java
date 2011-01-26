@@ -98,9 +98,9 @@ public class GrisuUserDetails implements UserDetails {
 	}
 
 	public synchronized ProxyCredential getProxyCredential()
-			throws AuthenticationException {
+	throws AuthenticationException {
 
-		myLogger.debug("Getting proxy credential...");
+		// myLogger.debug("Getting proxy credential...");
 
 		if (authentication == null) {
 			throw new AuthenticationException("No authentication token set.") {
@@ -109,7 +109,7 @@ public class GrisuUserDetails implements UserDetails {
 
 		if ((proxy != null) && proxy.isValid()) {
 
-			myLogger.debug("Old valid proxy found.");
+			// myLogger.debug("Old valid proxy found.");
 			long oldLifetime = -1;
 			try {
 				oldLifetime = proxy.getGssCredential().getRemainingLifetime();
@@ -117,13 +117,13 @@ public class GrisuUserDetails implements UserDetails {
 						.getMinProxyLifetimeBeforeGettingNewProxy()) {
 
 					// myLogger.debug("Proxy still valid and long enough lifetime.");
-					myLogger.debug("Old valid proxy still good enough. Using it.");
+					// myLogger.debug("Old valid proxy still good enough. Using it.");
 					return proxy;
 				}
 			} catch (final Exception e) {
 				e.printStackTrace();
 			}
-			myLogger.debug("Old proxy not good enough. Creating new one...");
+			// myLogger.debug("Old proxy not good enough. Creating new one...");
 		}
 
 		final ProxyCredential proxyTemp = createProxyCredential(authentication
@@ -145,10 +145,10 @@ public class GrisuUserDetails implements UserDetails {
 			// }
 
 			throw new AuthenticationException(
-					"Could not get valid myproxy credential.") {
+			"Could not get valid myproxy credential.") {
 			};
 		} else {
-			myLogger.info("Authentication successful.");
+			// myLogger.info("Authentication successful.");
 			this.proxy = proxyTemp;
 			return this.proxy;
 		}

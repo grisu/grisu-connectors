@@ -1,6 +1,5 @@
 package org.vpac.grisu.control;
 
-import org.apache.log4j.Logger;
 import org.globus.common.CoGProperties;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.userdetails.UserDetails;
@@ -9,8 +8,9 @@ import org.springframework.security.userdetails.UsernameNotFoundException;
 
 public class GrisuUserDetailsImpl implements UserDetailsService {
 
-	static final Logger myLogger = Logger.getLogger(GrisuUserDetailsImpl.class
-			.getName());
+	// static final Logger myLogger =
+	// Logger.getLogger(GrisuUserDetailsImpl.class
+	// .getName());
 
 	static {
 		CoGProperties.getDefault().setProperty(
@@ -18,9 +18,9 @@ public class GrisuUserDetailsImpl implements UserDetailsService {
 	}
 
 	public UserDetails loadUserByUsername(String arg0)
-			throws UsernameNotFoundException, DataAccessException {
+	throws UsernameNotFoundException, DataAccessException {
 
-		myLogger.debug("Authenticating....");
+		// myLogger.debug("Authenticating....");
 		return new GrisuUserDetails(arg0);
 
 	}
